@@ -92,7 +92,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                     </div>
                   </Transition.Child>
                   {/* Sidebar component, swap this element with another sidebar if you like */}
-                  <div className='flex min-h-0 flex-1 flex-col border-r border-gray-200 bg-white px-4'>
+                  <div className='flex min-h-0 flex-1 flex-col border-r border-black bg-white px-4'>
                     <div className='flex flex-1 flex-col overflow-y-auto pt-5 pb-4'>
                       <Link href='/' passHref>
                         <div className='flex flex-shrink-0 items-center '>
@@ -108,7 +108,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                                 href={item.href}
                                 className={classNames(
                                   item.current
-                                    ? 'border border-black bg-orange-50 text-yellow-900'
+                                    ? 'text-yellow-900 border border-black bg-yellow'
                                     : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                                   'group flex items-center rounded-md px-2 py-2 text-sm font-medium'
                                 )}
@@ -136,7 +136,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                                   <Disclosure.Button
                                     className={classNames(
                                       item.current
-                                        ? 'border border-black bg-orange-50 text-yellow-900'
+                                        ? 'text-yellow-900 border border-black bg-yellow'
                                         : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                                       'group flex w-full items-center rounded-md py-2 pl-2 pr-1 text-left text-sm font-medium focus:outline-none '
                                     )}
@@ -211,7 +211,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         {/* Static sidebar for desktop */}
         <div className='hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col'>
           {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className='flex min-h-0 flex-1 flex-col border-r border-gray-200 bg-white px-4'>
+          <div className='flex min-h-0 flex-1 flex-col border-r border-black bg-white px-4'>
             <div className='flex flex-1 flex-col overflow-y-auto pt-5 pb-4'>
               <Link href='/' passHref>
                 <div className='flex flex-shrink-0 items-center '>
@@ -227,7 +227,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                         href={item.href}
                         className={classNames(
                           item.current
-                            ? 'border border-black bg-orange-50 text-yellow-900'
+                            ? 'text-yellow-900 border border-black bg-yellow'
                             : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                           'group flex items-center rounded-md px-2 py-2 text-sm font-medium'
                         )}
@@ -251,7 +251,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                           <Disclosure.Button
                             className={classNames(
                               item.current
-                                ? 'border border-black bg-orange-50 text-yellow-900'
+                                ? 'text-yellow-900 border border-black bg-yellow'
                                 : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                               'group flex w-full items-center rounded-md py-2 pl-2 pr-1 text-left text-sm font-medium focus:outline-none '
                             )}
@@ -318,7 +318,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         </div>
 
         <div className='lg:pl-72'>
-          <div className='sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8'>
+          <div className='sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-black bg-white px-4 sm:gap-x-6 sm:px-6 lg:px-8'>
             <button
               type='button'
               className='-m-2.5 p-2.5 text-gray-700 lg:hidden'
@@ -333,14 +333,13 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
               className='h-6 w-px bg-gray-200 lg:hidden'
               aria-hidden='true'
             />
-
             <div className='flex flex-1 gap-x-4 self-stretch lg:gap-x-6'>
               <form className='relative flex flex-1' action='#' method='GET'>
                 <label htmlFor='search-field' className='sr-only'>
                   Sök
                 </label>
                 <HiOutlineMagnifyingGlass
-                  className='pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-gray-400'
+                  className='pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-black'
                   aria-hidden='true'
                 />
                 <input
@@ -357,15 +356,13 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                   className='-m-2.5 p-2.5 text-gray-400 hover:text-gray-500'
                 >
                   <span className='sr-only'>View notifications</span>
-                  <BsBell className='h-6 w-6' aria-hidden='true' />
+                  <BsBell className='h-6 w-6 text-black' aria-hidden='true' />
                 </button>
-
                 {/* Separator */}
                 <div
                   className='hidden lg:block lg:h-6 lg:w-px lg:bg-gray-200'
                   aria-hidden='true'
                 />
-
                 {/* Profile dropdown */}
                 <Menu as='div' className='relative'>
                   <Menu.Button className='-m-1.5 flex items-center p-1.5'>

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { DashboardCard, RoundedButton, Seo, Stats } from '@/components';
+import { DashboardCard, Seo, Stats } from '@/components';
 
 /**
  * SVGR Support
@@ -26,7 +26,7 @@ export default function HomePage() {
         <div className='py-6 px-6 sm:px-6 md:px-16 md:py-12 '>
           <div className='mx-auto max-w-7xl '>
             <h2 className=' text-4xl font-normal text-gray-900'>
-              Välkommen <span className=' text-yellow-500'>Företaget AB</span>
+              Välkommen <span className='text-yellow'>Företaget AB</span>
             </h2>
             <p className='font-l text-sm text-gray-500 '>
               Lorem ipsum dolor sit amet
@@ -55,7 +55,7 @@ export default function HomePage() {
                 <p className='text-sm text-gray-500'>
                   Lorem ipsum dolor sit amet
                 </p>
-                <RoundedButton href='#'>Uppgradera</RoundedButton>
+                Uppgradera
               </DashboardCard>
             </div>
           </div>

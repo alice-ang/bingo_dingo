@@ -4,7 +4,6 @@ export * from './DashboardCard';
 export * from './layout';
 export * from './Logo';
 export * from './NextImage';
-export * from './RoundedButton';
 export * from './Seo';
 export * from './Skeleton';
 export * from './Stats';

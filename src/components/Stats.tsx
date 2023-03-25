@@ -15,7 +15,7 @@ const stats = [
     name: 'Positiva',
     stat: '71.87%',
     icon: RiEmotionHappyFill,
-    color: 'bg-green-500',
+    color: 'bg-green',
     change: '12%',
     changeType: 'increase',
   },
@@ -24,7 +24,7 @@ const stats = [
     name: 'Neutrala',
     stat: '19.16%',
     icon: RiEmotionNormalFill,
-    color: 'bg-yellow-500',
+    color: 'bg-yellow',
     change: '5.4%',
     changeType: 'increase',
   },
@@ -33,7 +33,7 @@ const stats = [
     name: 'Negativa',
     stat: '9.57%',
     icon: RiEmotionUnhappyFill,
-    color: 'bg-red-500',
+    color: 'bg-pink',
     change: '3.2%',
     changeType: 'decrease',
   },
@@ -54,9 +54,12 @@ export const Stats = () => {
           >
             <dt>
               <div
-                className={classNames(item.color, 'absolute rounded-md  p-3')}
+                className={classNames(
+                  item.color,
+                  'absolute rounded-md  border border-black p-3'
+                )}
               >
-                <item.icon className='h-6 w-6 text-white' aria-hidden='true' />
+                <item.icon className='h-6 w-6 text-black' aria-hidden='true' />
               </div>
               <p className='ml-16 truncate text-sm font-medium text-gray-500'>
                 {item.name}
@@ -76,7 +79,7 @@ export const Stats = () => {
               >
                 {item.changeType === 'increase' ? (
                   <AiOutlineArrowUp
-                    className='h-5 w-5 flex-shrink-0 self-center text-green-500'
+                    className='text-green-500 h-5 w-5 flex-shrink-0 self-center'
                     aria-hidden='true'
                   />
                 ) : (
