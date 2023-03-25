@@ -1,7 +1,7 @@
 import Image, { ImageProps } from 'next/image';
 import * as React from 'react';
 
-import clsxm from '@/lib/clsxm';
+import { classNames } from '@/lib';
 
 type NextImageProps = {
   useSkeleton?: boolean;
@@ -19,7 +19,7 @@ type NextImageProps = {
  * @description Must set width using `w-` className
  * @param useSkeleton add background with pulse animation, don't use it if image is transparent
  */
-export default function NextImage({
+export const NextImage = ({
   useSkeleton = false,
   src,
   width,
@@ -29,7 +29,7 @@ export default function NextImage({
   imgClassName,
   blurClassName,
   ...rest
-}: NextImageProps) {
+}: NextImageProps) => {
   const [status, setStatus] = React.useState(
     useSkeleton ? 'loading' : 'complete'
   );
@@ -41,9 +41,9 @@ export default function NextImage({
       className={className}
     >
       <Image
-        className={clsxm(
+        className={classNames(
           imgClassName,
-          status === 'loading' && clsxm('animate-pulse', blurClassName)
+          status === 'loading' && classNames('animate-pulse', blurClassName)
         )}
         src={src}
         width={width}
@@ -54,4 +54,4 @@ export default function NextImage({
       />
     </figure>
   );
-}
+};

@@ -23,7 +23,7 @@ type SeoProps = {
   templateTitle?: string;
 } & Partial<typeof defaultMeta>;
 
-export default function Seo(props: SeoProps) {
+export const Seo = (props: SeoProps) => {
   const router = useRouter();
   const meta = {
     ...defaultMeta,
@@ -89,7 +89,7 @@ export default function Seo(props: SeoProps) {
       <meta name='theme-color' content='#ffffff' />
     </Head>
   );
-}
+};
 
 // !STARTERCONF this is the default favicon, you can generate your own from https://realfavicongenerator.net/
 // ! then replace the whole /public/favicon folder and favicon.ico

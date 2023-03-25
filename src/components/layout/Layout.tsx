@@ -1,6 +1,16 @@
-import * as React from 'react';
+import { BackToTop } from '@/components';
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  // Put Header or Footer Here
-  return <>{children}</>;
-}
+import { Footer } from './Footer';
+import { Header } from './Header';
+
+export const Layout = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <>
+      <Header />
+
+      {children}
+      <Footer />
+      <BackToTop />
+    </>
+  );
+};
