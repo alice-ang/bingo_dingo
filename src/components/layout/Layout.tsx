@@ -5,7 +5,14 @@ import { BsBell, BsChevronDown } from 'react-icons/bs';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { HiOutlineMagnifyingGlass } from 'react-icons/hi2';
 import { IoMdSettings } from 'react-icons/io';
-import { MdClose, MdOutlineDashboard, MdOutlineReviews } from 'react-icons/md';
+import {
+  MdBarChart,
+  MdClose,
+  MdMode,
+  MdOutlineDashboard,
+  MdOutlineQuiz,
+  MdPostAdd,
+} from 'react-icons/md';
 
 import { classNames } from '@/lib';
 
@@ -13,24 +20,24 @@ import { AdBanner, BackToTop, Logo, NextImage } from '@/components';
 import { Footer } from '@/components/layout/Footer';
 
 const navigation = [
-  { name: 'Översikt', icon: MdOutlineDashboard, href: '#', current: true },
+  { name: 'Översikt', icon: MdOutlineDashboard, href: '#', current: false },
   {
-    name: 'Omdömen',
-    icon: MdOutlineReviews,
-    href: '#',
+    name: 'Quiz',
+    icon: MdOutlineQuiz,
+    href: null,
     count: 12,
-    current: false,
+    current: true,
     children: [
-      { name: 'Visa upp omdömen', href: '#' },
-      { name: 'Samla in omdömen', href: '#' },
+      { name: 'Skapa', href: '/create', icon: MdPostAdd },
+      { name: 'Mina quiz', href: '/collection', icon: MdMode },
     ],
   },
-  { name: 'Rapporter', icon: MdOutlineDashboard, href: '#', current: false },
+  { name: 'Rapporter', icon: MdBarChart, href: '#', current: false },
 ];
 
 const userNavigation = [
-  { name: 'Your profile', href: '#' },
-  { name: 'Sign out', href: '#' },
+  { name: 'Användarprofil', href: '#' },
+  { name: 'Logga ut', href: '#' },
 ];
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
@@ -174,6 +181,14 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                                         href={subItem.href}
                                         className='group flex w-full items-center rounded-md py-2 pl-11 pr-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                                       >
+                                        <subItem.icon
+                                          className={classNames(
+                                            item.current
+                                              ? 'text-yellow-500'
+                                              : 'text-gray-400 group-hover:text-gray-500',
+                                            'mr-3 h-6 w-6 flex-shrink-0'
+                                          )}
+                                        />
                                         {subItem.name}
                                       </Disclosure.Button>
                                     ))}
@@ -194,10 +209,10 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                           className='group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                         >
                           <MdOutlineDashboard
-                            className='h-6 w-6 shrink-0 text-gray-400 group-hover:text-gray-900'
+                            className='h-6 w-6 shrink-0 text-black group-hover:text-gray-900'
                             aria-hidden='true'
                           />
-                          Settings
+                          Inställningar
                         </a>
                       </div>
                     </div>
@@ -282,15 +297,26 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                             </svg>
                           </Disclosure.Button>
                           <Disclosure.Panel className='space-y-1'>
-                            {item.children.map((subItem) => (
-                              <Disclosure.Button
-                                key={subItem.name}
-                                as='a'
-                                href={subItem.href}
-                                className='group flex w-full items-center rounded-md py-2 pl-11 pr-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                              >
-                                {subItem.name}
-                              </Disclosure.Button>
+                            {item.children.map((subItem, i) => (
+                              <span key={i}>
+                                <Disclosure.Button
+                                  key={subItem.name}
+                                  as='a'
+                                  href={subItem.href}
+                                  className='group flex w-full items-center rounded-md py-2 pl-11 pr-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                                >
+                                  <subItem.icon
+                                    className={classNames(
+                                      item.current
+                                        ? 'text-yellow-500'
+                                        : 'text-gray-400 group-hover:text-gray-500',
+                                      'mr-3 h-6 w-6 flex-shrink-0'
+                                    )}
+                                    aria-hidden='true'
+                                  />
+                                  {subItem.name}
+                                </Disclosure.Button>
+                              </span>
                             ))}
                           </Disclosure.Panel>
                         </>
@@ -308,7 +334,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                 className='group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-gray-900'
               >
                 <IoMdSettings
-                  className='group-hover:text-grey-600 h-6 w-6 shrink-0 text-gray-400'
+                  className='group-hover:text-grey-600 h-6 w-6 shrink-0 text-black'
                   aria-hidden='true'
                 />
                 Inställningar
@@ -370,7 +396,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                     <NextImage
                       height={40}
                       width={40}
-                      imgClassName='h-8 w-8 rounded-full bg-gray-50'
+                      imgClassName='h-8 w-8 rounded-full bg-gray-50 border border-black'
                       src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
                       alt=''
                     />
@@ -397,7 +423,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                     leaveFrom='transform opacity-100 scale-100'
                     leaveTo='transform opacity-0 scale-95'
                   >
-                    <Menu.Items className='absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none'>
+                    <Menu.Items className='absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md border border-black bg-white py-2 ring-1 ring-gray-900/5 focus:outline-none'>
                       {userNavigation.map((item) => (
                         <Menu.Item key={item.name}>
                           {({ active }) => (
@@ -419,8 +445,10 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
               </div>
             </div>
           </div>
+          <main className='mx-auto min-h-screen bg-slate-50 py-6 px-6 sm:px-6 md:px-16 md:py-12'>
+            {children}
+          </main>
 
-          {children}
           <Footer />
         </div>
       </div>

@@ -1,6 +1,8 @@
 import React from 'react';
 import { RiEmotionHappyFill } from 'react-icons/ri';
 
+import { RoundedButton } from './RoundedButton';
+
 export const AdBanner = () => {
   return (
     <div className='flex-col items-center justify-center rounded border border-black bg-beige p-4 text-center'>
@@ -13,7 +15,7 @@ export const AdBanner = () => {
       <p className='pb-4 text-xs font-medium'>
         Få tillgång till fler funktioner.
       </p>
-      Uppgradera
+      <RoundedButton>Uppgradera</RoundedButton>
     </div>
   );
 };

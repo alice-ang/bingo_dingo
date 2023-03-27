@@ -27,17 +27,17 @@ const navigation = [
 
 export const Footer = () => {
   return (
-    <footer className='bg-white'>
+    <footer className='border-t border-black bg-white'>
       <div className='mx-auto max-w-7xl py-12 px-6 md:flex md:items-center md:justify-between lg:px-8'>
         <div className='flex justify-center space-x-6 md:order-2'>
           {navigation.map((item) => (
             <a
               key={item.name}
               href={item.href}
-              className='text-gray-400 hover:text-yellow-500'
+              className='hover:text-yellow-500 text-gray-400'
             >
               <span className='sr-only'>{item.name}</span>
-              <item.icon className='h-6 w-6' aria-hidden='true' />
+              <item.icon className='h-6 w-6 text-black' aria-hidden='true' />
             </a>
           ))}
         </div>
