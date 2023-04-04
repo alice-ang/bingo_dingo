@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { CategoryItem, DashboardCard, Seo, Stats } from '@/components';
+import { CategoryItem, DashboardCard, Seo } from '@/components';
 
 /**
  * SVGR Support
@@ -52,9 +52,7 @@ export default function HomePage() {
             </DashboardCard>
           ))}
         </div>
-        <div className='my-4 '>
-          <Stats />
-        </div>
+
         <h3 className='py-4 text-base font-semibold leading-6 text-gray-900'>
           Runda
         </h3>

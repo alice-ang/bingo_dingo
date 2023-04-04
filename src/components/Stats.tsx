@@ -41,11 +41,9 @@ const stats = [
 export const Stats = () => {
   return (
     <div>
-      <h3 className='text-base font-semibold leading-6 text-gray-900'>
-        Reaktioner
-      </h3>
+      <h3 className='my-3 text-base font-semibold text-gray-900'>Reaktioner</h3>
 
-      <dl className='mt-5 grid grid-cols-2 gap-4 md:grid-cols-3'>
+      <dl className=' grid grid-cols-2 gap-4 md:grid-cols-3'>
         {stats.map((item, i) => (
           <DashboardCard
             key={i}

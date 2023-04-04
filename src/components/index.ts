@@ -9,3 +9,4 @@ export * from './RoundedButton';
 export * from './Seo';
 export * from './Skeleton';
 export * from './Stats';
+export * from './Tabs';
