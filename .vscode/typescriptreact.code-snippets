@@ -178,9 +178,9 @@
     "prefix": "cx",
     "body": ["{clsx([${TM_SELECTED_TEXT}$0])}"]
   },
-  "Wrap with clsxm": {
+  "Wrap with classNames": {
     "prefix": "cxm",
-    "body": ["{clsxm([${TM_SELECTED_TEXT}$0, className])}"]
+    "body": ["{classNames([${TM_SELECTED_TEXT}$0, className])}"]
   },
   //#endregion  //*======== Snippet Wrap ===========
 
