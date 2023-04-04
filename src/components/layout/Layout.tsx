@@ -6,6 +6,7 @@ import { GiHamburgerMenu } from 'react-icons/gi';
 import { HiOutlineMagnifyingGlass } from 'react-icons/hi2';
 import { IoMdSettings } from 'react-icons/io';
 import {
+  MdArrowDropDown,
   MdBarChart,
   MdClose,
   MdMode,
@@ -20,19 +21,19 @@ import { AdBanner, BackToTop, Logo, NextImage } from '@/components';
 import { Footer } from '@/components/layout/Footer';
 
 const navigation = [
-  { name: 'Översikt', icon: MdOutlineDashboard, href: '#', current: false },
+  { name: 'Översikt', icon: MdOutlineDashboard, href: '/', current: true },
   {
     name: 'Quiz',
     icon: MdOutlineQuiz,
     href: null,
     count: 12,
-    current: true,
+    current: false,
     children: [
       { name: 'Skapa', href: '/create', icon: MdPostAdd },
       { name: 'Mina quiz', href: '/collection', icon: MdMode },
     ],
   },
-  { name: 'Rapporter', icon: MdBarChart, href: '#', current: false },
+  { name: 'Rapporter', icon: MdBarChart, href: '/reports', current: false },
 ];
 
 const userNavigation = [
@@ -45,7 +46,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <>
-      <div>
+      <div className='bg-slate-50 '>
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
             as='div'
@@ -110,9 +111,10 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                         {navigation.map((item) =>
                           !item.children ? (
                             <div key={item.name}>
-                              <a
+                              <Link
                                 key={item.name}
                                 href={item.href}
+                                passHref
                                 className={classNames(
                                   item.current
                                     ? 'text-yellow-900 border border-black bg-yellow'
@@ -130,7 +132,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                                   aria-hidden='true'
                                 />
                                 {item.name}
-                              </a>
+                              </Link>
                             </div>
                           ) : (
                             <Disclosure
@@ -157,21 +159,12 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                                       )}
                                     />
                                     <span className='flex-1'>{item.name}</span>
-                                    <svg
+                                    <MdArrowDropDown
                                       className={classNames(
-                                        open
-                                          ? 'rotate-90 text-gray-400'
-                                          : 'text-gray-300',
-                                        'ml-3 h-5 w-5 flex-shrink-0 transform transition-colors duration-150 ease-in-out group-hover:text-gray-400'
+                                        open ? '' : '-rotate-90',
+                                        'ml-3 h-5 w-5 flex-shrink-0 transform transition-colors duration-150 ease-in-out '
                                       )}
-                                      viewBox='0 0 20 20'
-                                      aria-hidden='true'
-                                    >
-                                      <path
-                                        d='M6 6L14 10L6 14V6Z'
-                                        fill='currentColor'
-                                      />
-                                    </svg>
+                                    />
                                   </Disclosure.Button>
                                   <Disclosure.Panel className='space-y-1'>
                                     {item.children.map((subItem) => (
@@ -204,16 +197,17 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                     </div>
                     <div className='flex flex-shrink-0 border-t border-gray-200 p-4'>
                       <div className='flex items-center'>
-                        <a
+                        <Link
+                          passHref
                           href='#'
                           className='group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-gray-900'
                         >
-                          <MdOutlineDashboard
-                            className='h-6 w-6 shrink-0 text-black group-hover:text-gray-900'
+                          <IoMdSettings
+                            className='group-hover:text-grey-600 h-6 w-6 shrink-0 text-black'
                             aria-hidden='true'
                           />
                           Inställningar
-                        </a>
+                        </Link>
                       </div>
                     </div>
                   </div>
@@ -237,7 +231,8 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                 {navigation.map((item) =>
                   !item.children ? (
                     <div key={item.name}>
-                      <a
+                      <Link
+                        passHref
                         key={item.name}
                         href={item.href}
                         className={classNames(
@@ -257,7 +252,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                           aria-hidden='true'
                         />
                         {item.name}
-                      </a>
+                      </Link>
                     </div>
                   ) : (
                     <Disclosure as='div' key={item.name} className='space-y-1'>
@@ -280,21 +275,12 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                               )}
                             />
                             <span className='flex-1'>{item.name}</span>
-                            <svg
+                            <MdArrowDropDown
                               className={classNames(
-                                open
-                                  ? 'rotate-90 text-gray-400'
-                                  : 'text-gray-300',
-                                'ml-3 h-5 w-5 flex-shrink-0 transform transition-colors duration-150 ease-in-out group-hover:text-gray-400'
+                                open ? '' : '-rotate-90',
+                                'ml-3 h-5 w-5 flex-shrink-0 transform transition-colors duration-150 ease-in-out '
                               )}
-                              viewBox='0 0 20 20'
-                              aria-hidden='true'
-                            >
-                              <path
-                                d='M6 6L14 10L6 14V6Z'
-                                fill='currentColor'
-                              />
-                            </svg>
+                            />
                           </Disclosure.Button>
                           <Disclosure.Panel className='space-y-1'>
                             {item.children.map((subItem, i) => (
@@ -329,7 +315,8 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
               <AdBanner />
             </div>
             <div className='flex flex-shrink-0 border-t border-gray-200 p-4'>
-              <a
+              <Link
+                passHref
                 href='#'
                 className='group -mx-2 flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-gray-900'
               >
@@ -338,7 +325,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                   aria-hidden='true'
                 />
                 Inställningar
-              </a>
+              </Link>
             </div>
           </div>
         </div>
@@ -401,12 +388,18 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                       alt=''
                     />
                     <span className='hidden lg:flex lg:items-center'>
-                      <span
-                        className='ml-4 text-sm font-semibold leading-6 text-gray-900'
-                        aria-hidden='true'
-                      >
-                        Tom Cook
+                      <span className='ml-3 flex-col text-left'>
+                        <span
+                          className=' text-sm font-semibold leading-6 text-gray-900'
+                          aria-hidden='true'
+                        >
+                          Henrik Johansson
+                        </span>
+                        <p className='text-xs text-gray-700' aria-hidden='true'>
+                          Quizmaster
+                        </p>
                       </span>
+
                       <BsChevronDown
                         className='ml-2 text-gray-400'
                         aria-hidden='true'
@@ -427,7 +420,8 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                       {userNavigation.map((item) => (
                         <Menu.Item key={item.name}>
                           {({ active }) => (
-                            <a
+                            <Link
+                              passHref
                               href={item.href}
                               className={classNames(
                                 active ? 'bg-gray-50' : '',
@@ -435,7 +429,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                               )}
                             >
                               {item.name}
-                            </a>
+                            </Link>
                           )}
                         </Menu.Item>
                       ))}
@@ -445,7 +439,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
               </div>
             </div>
           </div>
-          <main className='mx-auto min-h-screen bg-slate-50 py-6 px-6 sm:px-6 md:px-16 md:py-12'>
+          <main className='mx-auto min-h-screen max-w-7xl py-6 px-6 sm:px-6 md:px-16 md:py-12 '>
             {children}
           </main>
 

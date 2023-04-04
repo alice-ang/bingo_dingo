@@ -45,7 +45,7 @@ export const Stats = () => {
         Reaktioner
       </h3>
 
-      <dl className='mt-5 grid grid-cols-2 gap-5 md:grid-cols-3'>
+      <dl className='mt-5 grid grid-cols-2 gap-4 md:grid-cols-3'>
         {stats.map((item, i) => (
           <DashboardCard
             key={i}
