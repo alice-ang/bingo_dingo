@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react';
 import { RiEmotionHappyFill } from 'react-icons/ri';
 
@@ -15,7 +16,10 @@ export const AdBanner = () => {
       <p className='pb-4 text-xs font-medium'>
         Få tillgång till fler funktioner.
       </p>
-      <RoundedButton>Uppgradera</RoundedButton>
+
+      <RoundedButton onClick={() => console.log('click')}>
+        Uppgradera
+      </RoundedButton>
     </div>
   );
 };
