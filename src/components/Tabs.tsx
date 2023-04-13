@@ -1,35 +1,45 @@
-import { useState } from 'react';
+import { Tab } from '@headlessui/react';
 
 import { classNames } from '@/lib';
 
 type Props = {
-  tabs: string[];
-  onSelect: (idx: number) => void;
-  defaultIdx?: number;
+  tabs: {
+    title: string;
+    tab: JSX.Element;
+  }[];
 };
 
-export const Tabs = ({ tabs, onSelect, defaultIdx }: Props) => {
-  const [currentIdx, setCurrentIdx] = useState(defaultIdx ?? 0);
-
+export const Tabs = ({ tabs }: Props) => {
   return (
-    <div className='my-3 flex rounded-lg border border-black bg-white py-2 '>
-      {tabs.map((tab, i) => (
-        <div
-          className={classNames(
-            currentIdx == tabs.indexOf(tab)
-              ? 'bg-black text-white'
-              : 'bg-white text-black',
-            'text mx-2 flex-1 rounded-lg px-4 py-2 text-center md:text-lg'
-          )}
-          key={i}
-          onClick={() => {
-            onSelect(tabs.indexOf(tab));
-            setCurrentIdx(tabs.indexOf(tab));
-          }}
-        >
-          {tab}
-        </div>
-      ))}
-    </div>
+    <Tab.Group>
+      <Tab.List className='my-3 flex rounded-lg border border-black bg-white py-2 '>
+        {tabs.map((tab, i) => (
+          <Tab
+            key={i}
+            className={({ selected }) =>
+              classNames(
+                selected ? 'bg-black text-white' : 'bg-white text-black',
+                'text mx-2 flex-1 rounded-lg px-4 py-2 text-center md:text-lg'
+              )
+            }
+          >
+            {tab.title}
+          </Tab>
+        ))}
+      </Tab.List>
+      <Tab.Panels className='mt-2'>
+        {tabs.map((item, idx) => (
+          <Tab.Panel
+            key={idx}
+            className={classNames(
+              'rounded-xl p-3',
+              'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
+            )}
+          >
+            {item.tab}
+          </Tab.Panel>
+        ))}
+      </Tab.Panels>
+    </Tab.Group>
   );
 };

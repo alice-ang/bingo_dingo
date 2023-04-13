@@ -5,6 +5,7 @@ export * from './CategoryItem';
 export * from './DashboardCard';
 export * from './layout';
 export * from './Logo';
+export * from './Modal';
 export * from './NextImage';
 export * from './RoundedButton';
 export * from './SeeAllHeading';

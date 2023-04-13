@@ -18,7 +18,7 @@ import {
 
 import { classNames } from '@/lib';
 
-import { AdBanner, BackToTop, Logo, NextImage } from '@/components';
+import { AdBanner, BackToTop, Logo, Modal, NextImage } from '@/components';
 import { Footer } from '@/components/layout/Footer';
 
 const navigation = [
@@ -58,7 +58,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
             as='div'
-            className='relative z-50 lg:hidden'
+            className='relative z-0 lg:hidden'
             onClose={setSidebarOpen}
           >
             <Transition.Child
@@ -447,8 +447,9 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
               </div>
             </div>
           </div>
-          <main className='mx-auto min-h-screen max-w-7xl py-6 px-6 sm:px-6 md:px-16 md:py-12 '>
+          <main className='mx-auto min-h-screen max-w-7xl py-6 px-6 sm:px-6 md:px-16 md:py-12'>
             {children}
+            <Modal />
           </main>
 
           <Footer />

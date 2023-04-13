@@ -1,4 +1,10 @@
 /* eslint-disable unused-imports/no-unused-vars */
+
+type Price = {
+  title: string;
+  isCorrect?: boolean;
+};
+
 type Option = {
   text: string;
   isCorrect?: boolean;
@@ -20,9 +26,12 @@ type Quiz = {
   time: number;
   date?: Date;
   code: string;
+  elimination: Question;
   isPublic: boolean;
   description: string;
+  type?: 'live' | 'walking';
 };
+
 export const quizzes = [
   {
     name: 'Karstorpssjön',
@@ -53,7 +62,112 @@ export const quizzes = [
 
         time: 3,
       },
+      {
+        question: 'Lorem ipsum dolor?',
+        options: [
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+            isCorrect: true,
+          },
+        ],
+        media: '',
+
+        time: 3,
+      },
+      {
+        question: 'Lorem ipsum dolor?',
+        options: [
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+            isCorrect: true,
+          },
+        ],
+        media: '',
+
+        time: 3,
+      },
+      {
+        question: 'Lorem ipsum dolor?',
+        options: [
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+            isCorrect: true,
+          },
+        ],
+        media: '',
+
+        time: 3,
+      },
+      {
+        question: 'Lorem ipsum dolor?',
+        options: [
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+            isCorrect: true,
+          },
+        ],
+        media: '',
+
+        time: 3,
+      },
     ],
+    elimination: {
+      question: 'Lorem ipsum dolor?',
+      options: [
+        {
+          text: 'lorem ipsum',
+        },
+        {
+          text: 'lorem ipsum',
+        },
+        {
+          text: 'lorem ipsum',
+        },
+        {
+          text: 'lorem ipsum',
+          isCorrect: true,
+        },
+      ],
+      media: '',
+
+      time: 3,
+    },
     creator: 'Skövdebostäder',
     logo: 'assets/skovdebostader.png',
   },
@@ -87,6 +201,27 @@ export const quizzes = [
         time: 3,
       },
     ],
+    elimination: {
+      question: 'Lorem ipsum dolor?',
+      options: [
+        {
+          text: 'lorem ipsum',
+        },
+        {
+          text: 'lorem ipsum',
+        },
+        {
+          text: 'lorem ipsum',
+        },
+        {
+          text: 'lorem ipsum',
+          isCorrect: true,
+        },
+      ],
+      media: '',
+
+      time: 3,
+    },
     creator: 'Skövdebostäder',
     logo: 'assets/skovdebostader.png',
   },
@@ -119,8 +254,184 @@ export const quizzes = [
 
         time: 3,
       },
+
+      {
+        question: 'Lorem ipsum dolor?',
+        options: [
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+            isCorrect: true,
+          },
+        ],
+        media: '',
+
+        time: 3,
+      },
+      {
+        question: 'Lorem ipsum dolor?',
+        options: [
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+            isCorrect: true,
+          },
+        ],
+        media: '',
+
+        time: 3,
+      },
+      {
+        question: 'Lorem ipsum dolor?',
+        options: [
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+            isCorrect: true,
+          },
+        ],
+        media: '',
+
+        time: 3,
+      },
+      {
+        question: 'Lorem ipsum dolor?',
+        options: [
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+            isCorrect: true,
+          },
+        ],
+        media: '',
+
+        time: 3,
+      },
+      {
+        question: 'Lorem ipsum dolor?',
+        options: [
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+            isCorrect: true,
+          },
+        ],
+        media: '',
+
+        time: 3,
+      },
+      {
+        question: 'Lorem ipsum dolor?',
+        options: [
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+            isCorrect: true,
+          },
+        ],
+        media: '',
+
+        time: 3,
+      },
+      {
+        question: 'Lorem ipsum dolor?',
+        options: [
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+          },
+          {
+            text: 'lorem ipsum',
+            isCorrect: true,
+          },
+        ],
+        media: '',
+
+        time: 3,
+      },
     ],
+    elimination: {
+      question: 'Lorem ipsum dolor?',
+      options: [
+        {
+          text: 'lorem ipsum',
+        },
+        {
+          text: 'lorem ipsum',
+        },
+        {
+          text: 'lorem ipsum',
+        },
+        {
+          text: 'lorem ipsum',
+          isCorrect: true,
+        },
+      ],
+      media: '',
+
+      time: 3,
+    },
     creator: 'Skövdebostäder',
     logo: 'assets/skovdebostader.png',
   },
+];
+
+export const quizSettings = [
+  { title: '12', subtitle: 'Kilometer', icon: '🏃‍♀️', color: 'bg-beige' },
+  { title: '8', subtitle: 'Frågor', icon: '✏️', color: 'bg-green' },
+  { title: '2', subtitle: 'Priser', icon: '🏆', color: 'bg-purple' },
+  { title: '24', subtitle: 'Deltagare', icon: '🏁', color: 'bg-pink' },
 ];

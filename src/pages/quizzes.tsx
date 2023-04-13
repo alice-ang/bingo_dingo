@@ -1,10 +1,6 @@
 import { Disclosure } from '@headlessui/react';
-import {
-  MdArrowDropDown,
-  MdDelete,
-  MdModeEdit,
-  MdOutlineQrCode2,
-} from 'react-icons/md';
+import Image from 'next/image';
+import { MdArrowDropDown, MdDelete, MdModeEdit } from 'react-icons/md';
 
 import { quizzes } from '@/lib';
 
@@ -23,7 +19,7 @@ export default function QuizzesPage() {
         <Badges items={['Aktiva', 'Arkiverade', 'Längst runda', 'A-Ö']} />
         <dl className='mt-6 space-y-6 divide-y divide-gray-900/10'>
           {quizzes.map((quiz) => (
-            <Disclosure as='div' key={quiz.name} className='my-3 '>
+            <Disclosure as='div' key={quiz.name} className='my-2'>
               {({ open }) => (
                 <>
                   <dt>
@@ -31,7 +27,7 @@ export default function QuizzesPage() {
                       <span className='flex w-full items-center justify-between text-base font-semibold text-white'>
                         <span>{quiz.name}</span>
                         <span className='text-sm'>
-                          {quiz.distance}km | {quiz.questions.length} frågor
+                          {quiz.distance}km | {quiz.questions.length + 1} frågor
                         </span>
                       </span>
                       <span className='ml-6 flex h-7 items-center'>
@@ -49,16 +45,28 @@ export default function QuizzesPage() {
                       </span>
                     </Disclosure.Button>
                   </dt>
-                  <Disclosure.Panel as='dd' className='bg-white p-4 shadow'>
+                  <Disclosure.Panel
+                    as='dd'
+                    className='bg-white p-4 shadow md:p-6'
+                  >
                     <div className='grid grid-cols-6 gap-4'>
-                      <div className='col-span-6 md:col-span-2'>
+                      {/* <div className='col-span-6 md:col-span-2'>
                         <MdOutlineQrCode2
                           className='h-48 w-full'
                           aria-hidden='true'
                         />
-                      </div>
 
-                      <p className='col-span-6 text-base leading-7 text-gray-600 md:col-span-4'>
+                      </div> */}
+                      <DashboardCard className='relative col-span-6 md:col-span-3'>
+                        <Image
+                          src='https://source.unsplash.com/1920x1080/?nature,water'
+                          alt='bild'
+                          fill
+                          className='object-cover p-4'
+                        />
+                      </DashboardCard>
+
+                      <p className='col-span-6 text-base leading-7 text-gray-600 md:col-span-3'>
                         {quiz.description}
                       </p>
                       <div className='col-span-6'>
@@ -66,22 +74,23 @@ export default function QuizzesPage() {
                           Frågor
                         </h3>
                         <div className='grid grid-cols-4 gap-4 text-center'>
-                          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((i) => (
+                          {quiz.questions.map((question, i) => (
                             <DashboardCard
                               key={i}
                               className='col-span-2 cursor-pointer hover:bg-yellow md:col-span-1'
                             >
-                              <p className='font-semibold'>{`Fråga ${i}`}</p>
+                              <p className='font-semibold'>{`Fråga ${
+                                i + 1
+                              }`}</p>
                               <p className='py-2 text-sm text-gray-700'>
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit. Nullam sed tempor odio?
+                                {question.question}
                               </p>
                             </DashboardCard>
                           ))}
-                          <DashboardCard className='col-span-2 md:col-span-1'>
+                          <DashboardCard className='col-span-2 cursor-pointer hover:bg-yellow md:col-span-1'>
                             <p className='font-semibold'>Utslagningsfråga</p>
                             <p className='py-2 text-sm text-gray-700'>
-                              Lorem ipsum dolor sit amet?
+                              {quiz.elimination.question}
                             </p>
                           </DashboardCard>
                         </div>
