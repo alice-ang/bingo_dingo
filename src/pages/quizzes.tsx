@@ -3,10 +3,13 @@ import Image from 'next/image';
 import { MdArrowDropDown, MdDelete, MdModeEdit } from 'react-icons/md';
 
 import { quizzes } from '@/lib';
+import useModal from '@/lib/useModal';
 
-import { Badges, DashboardCard, Seo, Stats } from '@/components';
+import { Badges, DashboardCard, Modal, Seo, Stats } from '@/components';
 
 export default function QuizzesPage() {
+  const { isOpen, toggle } = useModal();
+
   return (
     <>
       <Seo templateTitle='Mina quiz' />
@@ -78,6 +81,7 @@ export default function QuizzesPage() {
                             <DashboardCard
                               key={i}
                               className='col-span-2 cursor-pointer hover:bg-yellow md:col-span-1'
+                              onClick={toggle}
                             >
                               <p className='font-semibold'>{`Fråga ${
                                 i + 1
@@ -116,6 +120,9 @@ export default function QuizzesPage() {
           ))}
         </dl>
       </section>
+      <Modal isOpen={isOpen} toggle={toggle}>
+        <h2>hej</h2>
+      </Modal>
     </>
   );
 }
