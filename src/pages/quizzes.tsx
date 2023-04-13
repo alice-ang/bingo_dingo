@@ -1,0 +1,112 @@
+import { Disclosure } from '@headlessui/react';
+import {
+  MdArrowDropDown,
+  MdDelete,
+  MdModeEdit,
+  MdOutlineQrCode2,
+} from 'react-icons/md';
+
+import { quizzes } from '@/lib';
+
+import { Badges, DashboardCard, Seo, Stats } from '@/components';
+
+export default function QuizzesPage() {
+  return (
+    <>
+      <Seo templateTitle='Mina quiz' />
+
+      <section>
+        <h2 className='text-4xl font-normal text-gray-900'>Mina quiz</h2>
+        <h3 className='py-4 text-base font-semibold leading-6 text-gray-900'>
+          Lorem ipsum dolor
+        </h3>
+        <Badges items={['Aktiva', 'Arkiverade', 'Längst runda', 'A-Ö']} />
+        <dl className='mt-6 space-y-6 divide-y divide-gray-900/10'>
+          {quizzes.map((quiz) => (
+            <Disclosure as='div' key={quiz.name} className='my-3 '>
+              {({ open }) => (
+                <>
+                  <dt>
+                    <Disclosure.Button className='flex w-full items-start justify-between rounded-lg bg-black p-4 text-left'>
+                      <span className='flex w-full items-center justify-between text-base font-semibold text-white'>
+                        <span>{quiz.name}</span>
+                        <span className='text-sm'>
+                          {quiz.distance}km | {quiz.questions.length} frågor
+                        </span>
+                      </span>
+                      <span className='ml-6 flex h-7 items-center'>
+                        {open ? (
+                          <MdArrowDropDown
+                            className='h-6 w-6 text-white'
+                            aria-hidden='true'
+                          />
+                        ) : (
+                          <MdArrowDropDown
+                            className='h-6 w-6 -rotate-90 text-white'
+                            aria-hidden='true'
+                          />
+                        )}
+                      </span>
+                    </Disclosure.Button>
+                  </dt>
+                  <Disclosure.Panel as='dd' className='bg-white p-4 shadow'>
+                    <div className='grid grid-cols-6 gap-4'>
+                      <div className='col-span-6 md:col-span-2'>
+                        <MdOutlineQrCode2
+                          className='h-48 w-full'
+                          aria-hidden='true'
+                        />
+                      </div>
+
+                      <p className='col-span-6 text-base leading-7 text-gray-600 md:col-span-4'>
+                        {quiz.description}
+                      </p>
+                      <div className='col-span-6'>
+                        <h3 className='my-3 text-base font-semibold text-gray-900'>
+                          Frågor
+                        </h3>
+                        <div className='grid grid-cols-4 gap-4 text-center'>
+                          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((i) => (
+                            <DashboardCard
+                              key={i}
+                              className='col-span-2 cursor-pointer hover:bg-yellow md:col-span-1'
+                            >
+                              <p className='font-semibold'>{`Fråga ${i}`}</p>
+                              <p className='py-2 text-sm text-gray-700'>
+                                Lorem ipsum dolor sit amet, consectetur
+                                adipiscing elit. Nullam sed tempor odio?
+                              </p>
+                            </DashboardCard>
+                          ))}
+                          <DashboardCard className='col-span-2 md:col-span-1'>
+                            <p className='font-semibold'>Utslagningsfråga</p>
+                            <p className='py-2 text-sm text-gray-700'>
+                              Lorem ipsum dolor sit amet?
+                            </p>
+                          </DashboardCard>
+                        </div>
+                      </div>
+                      <div className='col-span-6'>
+                        <Stats />
+                      </div>
+                      <div className='col-span-6 flex justify-end'>
+                        <MdModeEdit
+                          className='mx-4 h-6 w-6 hover:text-green'
+                          aria-hidden='false'
+                        />
+                        <MdDelete
+                          className='h-6 w-6 hover:text-red-500'
+                          aria-hidden='false'
+                        />
+                      </div>
+                    </div>
+                  </Disclosure.Panel>
+                </>
+              )}
+            </Disclosure>
+          ))}
+        </dl>
+      </section>
+    </>
+  );
+}

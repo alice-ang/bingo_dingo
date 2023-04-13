@@ -9,6 +9,7 @@ import {
   MdArrowDropDown,
   MdBarChart,
   MdClose,
+  MdFlag,
   MdMode,
   MdOutlineDashboard,
   MdOutlineQuiz,
@@ -30,10 +31,17 @@ const navigation = [
     current: false,
     children: [
       { name: 'Skapa', href: '/create', icon: MdPostAdd },
-      { name: 'Mina quiz', href: '/collection', icon: MdMode },
+      { name: 'Mina quiz', href: '/quizzes', icon: MdMode },
     ],
   },
-  { name: 'Rapporter', icon: MdBarChart, href: '/reports', current: false },
+  {
+    name: 'Checkpoints',
+    icon: MdFlag,
+    href: '/',
+    count: 12,
+    current: false,
+  },
+  { name: 'Statistik', icon: MdBarChart, href: '/stats', current: false },
 ];
 
 const userNavigation = [
