@@ -9,6 +9,7 @@ import {
   MdArrowDropDown,
   MdBarChart,
   MdClose,
+  MdFlag,
   MdMode,
   MdOutlineDashboard,
   MdOutlineQuiz,
@@ -30,10 +31,17 @@ const navigation = [
     current: false,
     children: [
       { name: 'Skapa', href: '/create', icon: MdPostAdd },
-      { name: 'Mina quiz', href: '/collection', icon: MdMode },
+      { name: 'Mina quiz', href: '/quizzes', icon: MdMode },
     ],
   },
-  { name: 'Rapporter', icon: MdBarChart, href: '/reports', current: false },
+  {
+    name: 'Checkpoints',
+    icon: MdFlag,
+    href: '/',
+    count: 12,
+    current: false,
+  },
+  { name: 'Statistik', icon: MdBarChart, href: '/stats', current: false },
 ];
 
 const userNavigation = [
@@ -50,7 +58,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
             as='div'
-            className='relative z-50 lg:hidden'
+            className='relative z-0 lg:hidden'
             onClose={setSidebarOpen}
           >
             <Transition.Child
@@ -218,7 +226,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         </Transition.Root>
 
         {/* Static sidebar for desktop */}
-        <div className='hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col'>
+        <div className='hidden lg:fixed lg:inset-y-0 lg:flex lg:w-72 lg:flex-col'>
           {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className='flex min-h-0 flex-1 flex-col border-r border-black bg-white px-4'>
             <div className='flex flex-1 flex-col overflow-y-auto pt-5 pb-4'>
@@ -331,7 +339,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         </div>
 
         <div className='lg:pl-72'>
-          <div className='sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-black bg-white px-4 sm:gap-x-6 sm:px-6 lg:px-8'>
+          <div className='z-4 sticky top-0 flex h-16 shrink-0 items-center gap-x-4 border-b border-black bg-white px-4 sm:gap-x-6 sm:px-6 lg:px-8'>
             <button
               type='button'
               className='-m-2.5 p-2.5 text-gray-700 lg:hidden'
@@ -439,7 +447,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
               </div>
             </div>
           </div>
-          <main className='mx-auto min-h-screen max-w-7xl py-6 px-6 sm:px-6 md:px-16 md:py-12 '>
+          <main className='mx-auto min-h-screen max-w-7xl py-6 px-6 sm:px-6 md:px-16 md:py-12'>
             {children}
           </main>
 
