@@ -13,6 +13,7 @@ const nextConfig = {
       'images.unsplash.com',
       'tailwindui.com',
       'source.unsplash.com',
+      'lh3.googleusercontent.com',
     ],
   },
 

@@ -21,6 +21,8 @@ import { classNames } from '@/lib';
 import { AdBanner, BackToTop, Logo, NextImage } from '@/components';
 import { Footer } from '@/components/layout/Footer';
 
+import { auth } from '@/config/firebase';
+
 const navigation = [
   { name: 'Översikt', icon: MdOutlineDashboard, href: '/', current: true },
   {
@@ -385,6 +387,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                   aria-hidden='true'
                 />
                 {/* Profile dropdown */}
+
                 <Menu as='div' className='relative'>
                   <Menu.Button className='-m-1.5 flex items-center p-1.5'>
                     <span className='sr-only'>Open user menu</span>
@@ -392,7 +395,10 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                       height={40}
                       width={40}
                       imgClassName='h-8 w-8 rounded-full bg-gray-50 border border-black'
-                      src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+                      src={
+                        auth?.currentUser?.photoURL ??
+                        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+                      }
                       alt=''
                     />
                     <span className='hidden lg:flex lg:items-center'>
@@ -401,7 +407,8 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                           className=' text-sm font-semibold leading-6 text-gray-900'
                           aria-hidden='true'
                         >
-                          Henrik Johansson
+                          {auth?.currentUser?.displayName ??
+                            auth?.currentUser?.email}
                         </span>
                         <p className='text-xs text-gray-700' aria-hidden='true'>
                           Quizmaster

@@ -1,7 +1,13 @@
 /* eslint-disable no-console */
 import * as React from 'react';
 
-import { CategoryItem, DashboardCard, SeeAllHeading, Seo } from '@/components';
+import {
+  Auth,
+  CategoryItem,
+  DashboardCard,
+  SeeAllHeading,
+  Seo,
+} from '@/components';
 
 /**
  * SVGR Support
@@ -76,6 +82,7 @@ export default function HomePage() {
           Uppgradera
         </DashboardCard>
       </div>
+      <Auth />
     </>
   );
 }

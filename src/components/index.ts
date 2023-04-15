@@ -1,4 +1,5 @@
 export * from './AdBanner';
+export * from './Auth';
 export * from './BackToTop';
 export * from './Badges';
 export * from './CategoryItem';
