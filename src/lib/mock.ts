@@ -13,23 +13,18 @@ type Question = {
   question: string;
   options: Option[];
   media: string;
-  location?: string;
-  time: number;
 };
 
-type Quiz = {
+export type Quiz = {
+  id: string;
   name: string;
   distance: number;
   questions: Question[];
   author: string;
-  logo: string;
-  time: number;
-  date?: Date;
   code: string;
-  elimination: Question;
+  // elimination: Question;
   isPublic: boolean;
   description: string;
-  type?: 'live' | 'walking';
 };
 
 export const quizzes = [

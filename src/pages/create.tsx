@@ -6,6 +6,9 @@ import { quizSettings } from '@/lib';
 import {
   CategoryItem,
   DashboardCard,
+  FloatingInput,
+  FloatingSelect,
+  FloatingTextArea,
   RoundedButton,
   Seo,
   Stats,
@@ -17,8 +20,40 @@ const tabs = [
     title: 'Skapa',
     tab: (
       <>
+        <section className='pb-3'>
+          <span className='flex items-baseline justify-between'>
+            <h3 className='pb-2 text-2xl font-normal text-gray-900'>
+              Quiz inställningar
+            </h3>
+          </span>
+          <div className='grid grid-cols-6 gap-4'>
+            <FloatingInput
+              type='text'
+              name='Namn'
+              placeholder='Ange quiz namn'
+              className='col-span-6'
+            />
+            <FloatingInput
+              type='date'
+              name='Namn'
+              className='col-span-3'
+              placeholder='Ange quiz namn'
+            />
+
+            <FloatingSelect
+              name='Språk'
+              options={['🇸🇪 - svenska', '🇺🇸 - engelska']}
+              className='col-span-3'
+            />
+
+            <FloatingTextArea name='Beskrivning' className='col-span-6' />
+          </div>
+        </section>
+
         <span className='flex items-baseline justify-between'>
-          <h3 className='text-2xl font-normal text-gray-900'>Skapa ny fråga</h3>
+          <h3 className='pb-2 text-2xl font-normal text-gray-900'>
+            Skapa ny fråga
+          </h3>
           <p className='text-sm text-gray-500 '>Välj från quizbanken</p>
         </span>
 

@@ -1,14 +1,40 @@
+/* eslint-disable no-console */
 import { Disclosure } from '@headlessui/react';
+import { collection, getDocs } from 'firebase/firestore';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { MdArrowDropDown, MdDelete, MdModeEdit } from 'react-icons/md';
 
-import { quizzes } from '@/lib';
+import { Quiz } from '@/lib';
 import useModal from '@/lib/useModal';
 
 import { Badges, DashboardCard, Modal, Seo, Stats } from '@/components';
 
+import { db } from '@/config/firebase';
+
 export default function QuizzesPage() {
   const { isOpen, toggle } = useModal();
+  const [quizList, setQuizList] = useState<Quiz[]>([]);
+
+  const getQuizList = async () => {
+    try {
+      const data = await getDocs(collection(db, 'quizzes'));
+      const filteredData = data.docs.map(
+        (doc) =>
+          ({
+            ...doc.data(),
+            id: doc.id,
+          } as Quiz)
+      );
+      setQuizList(filteredData);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    getQuizList();
+  }, []);
 
   return (
     <>
@@ -21,7 +47,7 @@ export default function QuizzesPage() {
         </h3>
         <Badges items={['Aktiva', 'Arkiverade', 'Längst runda', 'A-Ö']} />
         <dl className='mt-6 space-y-6 divide-y divide-gray-900/10'>
-          {quizzes.map((quiz) => (
+          {quizList.map((quiz) => (
             <Disclosure as='div' key={quiz.name} className='my-2'>
               {({ open }) => (
                 <>
@@ -91,12 +117,12 @@ export default function QuizzesPage() {
                               </p>
                             </DashboardCard>
                           ))}
-                          <DashboardCard className='col-span-2 cursor-pointer hover:bg-yellow md:col-span-1'>
+                          {/* <DashboardCard className='col-span-2 cursor-pointer hover:bg-yellow md:col-span-1'>
                             <p className='font-semibold'>Utslagningsfråga</p>
                             <p className='py-2 text-sm text-gray-700'>
                               {quiz.elimination.question}
                             </p>
-                          </DashboardCard>
+                          </DashboardCard> */}
                         </div>
                       </div>
                       <div className='col-span-6'>

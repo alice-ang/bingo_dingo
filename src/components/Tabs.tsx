@@ -33,7 +33,7 @@ export const Tabs = ({ tabs }: Props) => {
             key={idx}
             className={classNames(
               'rounded-xl p-3',
-              'ring-white ring-opacity-60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
+              'ring-offset-2focus:outline-none ring-white ring-opacity-60 focus:ring-2'
             )}
           >
             {item.tab}

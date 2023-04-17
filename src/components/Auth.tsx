@@ -1,42 +1,11 @@
 /* eslint-disable no-console */
-import {
-  createUserWithEmailAndPassword,
-  signInWithPopup,
-  signOut,
-} from 'firebase/auth';
 import { useState } from 'react';
 
-import { auth, googleProvider } from '@/config/firebase';
+import { logOut, signIn, signInWithGoogle } from '@/lib';
 
 export const Auth = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const signIn = async (email: string, password: string) => {
-    try {
-      await createUserWithEmailAndPassword(auth, email, password);
-      console.log(auth?.currentUser?.email);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const signInWithGoogle = async () => {
-    try {
-      await signInWithPopup(auth, googleProvider);
-      console.log(auth?.currentUser?.email);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  const logOut = async () => {
-    try {
-      await signOut(auth);
-      console.log(auth?.currentUser?.email);
-    } catch (err) {
-      console.log(err);
-    }
-  };
 
   return (
     <div>
