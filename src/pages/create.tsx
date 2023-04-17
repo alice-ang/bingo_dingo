@@ -1,10 +1,12 @@
+/* eslint-disable unused-imports/no-unused-vars */
 /* eslint-disable no-console */
 import { addDoc } from 'firebase/firestore';
 import Image from 'next/image';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { quizSettings, quizzesCollectionRef } from '@/lib';
+import useModal from '@/lib/useModal';
 
 import {
   CategoryItem,
@@ -12,6 +14,7 @@ import {
   FloatingInput,
   FloatingLabel,
   FloatingTextArea,
+  Modal,
   RoundedButton,
   Seo,
   Stats,
@@ -20,6 +23,8 @@ import {
 } from '@/components';
 
 export default function CreatePage() {
+  const { isOpen, toggle } = useModal();
+
   const {
     register,
     handleSubmit,
@@ -28,13 +33,17 @@ export default function CreatePage() {
     formState: { errors },
   } = useForm();
 
+  const [questions, setQuestions] = useState([]);
+
   useEffect(() => {
     reset((formValues) => ({
       ...formValues,
       isContributing: false,
       isPublic: false,
+      code: 'TEST',
+      questions: questions,
     }));
-  }, [reset]);
+  }, [reset, questions]);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -46,15 +55,6 @@ export default function CreatePage() {
       console.error(error);
     }
   });
-
-  // const code = useMemo(() => {
-  //   if (getValues('code') != '') {
-  //     console.log(getValues('code'));
-  //   }
-  //   const newCode = generateString(4);
-  //   setValue('code', newCode);
-  //   return newCode;
-  // }, [setValue, getValues]);
 
   return (
     <>
@@ -135,6 +135,20 @@ export default function CreatePage() {
                           }}
                           errors={errors}
                         />
+                        <FloatingInput
+                          id='distance'
+                          type='number'
+                          name='distance'
+                          step='0.1'
+                          label='Distans (km)'
+                          placeholder='Ange distans på rundan'
+                          className='col-span-2'
+                          register={register}
+                          rules={{
+                            required: 'Ange distrans',
+                          }}
+                          errors={errors}
+                        />
                         {/* 
                         <FloatingInput
                           id='startDate'
@@ -191,59 +205,40 @@ export default function CreatePage() {
                             label='Bidra till aktivitetsbanken'
                             name='isContributing'
                           />
-                          <RoundedButton type='submit'>
+                          <RoundedButton type='submit' color='bg-green'>
                             Skapa quiz
                           </RoundedButton>
                         </div>
                       </div>
                     </form>
                   </section>
-
-                  <span className='flex items-baseline justify-between'>
-                    <h3 className='pb-2 text-2xl font-normal text-gray-900'>
-                      Skapa ny fråga
+                  <section>
+                    <h3 className='my-3 text-base font-semibold text-gray-900'>
+                      Frågor
                     </h3>
-                    <p className='text-sm text-gray-500 '>
-                      Välj från quizbanken
-                    </p>
-                  </span>
+                    {questions.length == 0 && <p>Inga frågor</p>}
 
-                  <div className='grid grid-cols-8 grid-rows-4 gap-4'>
-                    <DashboardCard className='col-span-8 row-span-4 md:col-span-4'>
-                      Lorem ipsum dolor sit amet?
-                    </DashboardCard>
-                    <DashboardCard className='relative col-span-8 md:col-span-4'>
-                      <Image
-                        src='https://source.unsplash.com/1920x1080/?nature,water'
-                        alt='bild'
-                        fill
-                        className='cursor-pointer object-cover p-4 hover:opacity-75'
-                      />
-                    </DashboardCard>
-                    <DashboardCard className='col-span-8 md:col-span-4'>
-                      <iframe
-                        src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8364.976577639782!2d13.836858432796966!3d58.38928326703061!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x465b023d3a4c413d%3A0x817d30b9033d4604!2zU2vDtnZkZQ!5e0!3m2!1ssv!2sse!4v1678730360113!5m2!1ssv!2sse'
-                        width='100%'
-                        height='100%'
-                        style={{ border: 0 }}
-                        allowFullScreen={true}
-                        aria-hidden='false'
-                        tabIndex={0}
-                      />
-                    </DashboardCard>
-                    <DashboardCard className='col-span-8 row-span-2 md:col-span-4'>
-                      <h3 className='text-base font-semibold leading-6 text-gray-900'>
-                        Språk, max antal deltagare, tillåta gäster, öppet /
-                        privat quiz, priser
-                      </h3>
-                    </DashboardCard>
-                    <DashboardCard className='col-span-8'>
-                      <h3 className='text-base font-semibold leading-6 text-gray-900'>
-                        Språk, max antal deltagare, tillåta gäster, öppet /
-                        privat quiz, priser
-                      </h3>
-                    </DashboardCard>
-                  </div>
+                    <div className='grid grid-cols-4 gap-4 text-center'>
+                      {questions.map((i) => (
+                        <FloatingLabel
+                          key={i}
+                          className='col-span-2 md:col-span-1'
+                          label={`Fråga ${i}`}
+                        >
+                          <DashboardCard>
+                            <p className='py-2 text-base text-gray-700'>
+                              Lorem ipsum dolor sit amet?
+                            </p>
+                          </DashboardCard>
+                        </FloatingLabel>
+                      ))}
+                    </div>
+                    <div className='my-4 flex justify-center'>
+                      <RoundedButton onClick={toggle}>
+                        Lägg till fråga
+                      </RoundedButton>
+                    </div>
+                  </section>
                 </>
               ),
             },
@@ -302,6 +297,103 @@ export default function CreatePage() {
           ]}
         />
       </section>
+      <Modal isOpen={isOpen} toggle={toggle}>
+        <>
+          <span className='flex items-baseline justify-between'>
+            <h3 className='pb-2 text-2xl font-normal text-gray-900'>
+              Skapa ny fråga
+            </h3>
+            <p className='text-sm text-gray-500 '>Välj från quizbanken</p>
+          </span>
+
+          <div className='grid grid-cols-8 gap-4'>
+            <FloatingInput
+              id='question'
+              type='text'
+              name='question'
+              label='Fråga'
+              placeholder='Skriv fråga'
+              className='col-span-8'
+              register={register}
+              rules={{
+                required: 'Ange fråga',
+              }}
+              errors={errors}
+            />
+            <FloatingInput
+              id='option1'
+              type='text'
+              name='option'
+              label='Alternativ 1'
+              placeholder='Skriv alternativ'
+              className='col-span-4'
+              register={register}
+              errors={errors}
+            />
+            <FloatingInput
+              id='option2'
+              type='text'
+              name='option'
+              label='Alternativ 2'
+              placeholder='Skriv alternativ'
+              className='col-span-4'
+              register={register}
+              errors={errors}
+            />
+            <FloatingInput
+              id='option3'
+              type='text'
+              name='option'
+              label='Alternativ 3'
+              placeholder='Skriv alternativ'
+              className='col-span-4'
+              register={register}
+              errors={errors}
+            />
+            <FloatingInput
+              id='option4'
+              type='text'
+              name='option'
+              label='Alternativ 4'
+              placeholder='Skriv alternativ'
+              className='col-span-4'
+              register={register}
+              errors={errors}
+            />
+            <DashboardCard className='relative col-span-8 md:col-span-4'>
+              <Image
+                src='https://source.unsplash.com/1920x1080/?nature,water'
+                alt='bild'
+                fill
+                className='cursor-pointer object-cover p-4 hover:opacity-75'
+              />
+            </DashboardCard>
+            <DashboardCard className='col-span-8 md:col-span-4'>
+              <iframe
+                src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8364.976577639782!2d13.836858432796966!3d58.38928326703061!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x465b023d3a4c413d%3A0x817d30b9033d4604!2zU2vDtnZkZQ!5e0!3m2!1ssv!2sse!4v1678730360113!5m2!1ssv!2sse'
+                width='100%'
+                height='100%'
+                style={{ border: 0 }}
+                allowFullScreen={true}
+                aria-hidden='false'
+                tabIndex={0}
+              />
+            </DashboardCard>
+            <DashboardCard className='col-span-8 row-span-2 md:col-span-4'>
+              <h3 className='text-base font-semibold leading-6 text-gray-900'>
+                Språk, max antal deltagare, tillåta gäster, öppet / privat quiz,
+                priser
+              </h3>
+            </DashboardCard>
+            <DashboardCard className='col-span-8'>
+              <h3 className='text-base font-semibold leading-6 text-gray-900'>
+                Språk, max antal deltagare, tillåta gäster, öppet / privat quiz,
+                priser
+              </h3>
+            </DashboardCard>
+          </div>
+        </>
+      </Modal>
     </>
   );
 }
