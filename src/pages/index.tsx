@@ -1,28 +1,19 @@
 /* eslint-disable no-console */
-import * as React from 'react';
 
-import { CategoryItem, DashboardCard, SeeAllHeading, Seo } from '@/components';
-
-/**
- * SVGR Support
- * Caveat: No React Props Type.
- *
- * You can override the next-env if the type is important to you
- * @see https://stackoverflow.com/questions/68103844/how-to-override-next-js-svg-module-declaration
- */
+import {
+  Auth,
+  CategoryItem,
+  DashboardCard,
+  SeeAllHeading,
+  Seo,
+} from '@/components';
 
 // !STARTERCONF -> Select !STARTERCONF and CMD + SHIFT + F
-// Before you begin editing, follow all comments with `STARTERCONF`,
-// to customize the default configuration.
 
 export default function HomePage() {
   return (
     <>
-      <Seo templateTitle='Home' />
-      <Seo />
-
       <Seo templateTitle='Översikt' />
-
       <h2 className=' text-4xl font-normal text-gray-900'>
         Välkommen <span className='text-green'>Företaget AB</span>
       </h2>
@@ -76,6 +67,7 @@ export default function HomePage() {
           Uppgradera
         </DashboardCard>
       </div>
+      <Auth />
     </>
   );
 }

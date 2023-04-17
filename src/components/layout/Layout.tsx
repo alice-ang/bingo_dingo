@@ -16,10 +16,12 @@ import {
   MdPostAdd,
 } from 'react-icons/md';
 
-import { classNames } from '@/lib';
+import { classNames, logOut } from '@/lib';
 
 import { AdBanner, BackToTop, Logo, NextImage } from '@/components';
 import { Footer } from '@/components/layout/Footer';
+
+import { auth } from '@/config/firebase';
 
 const navigation = [
   { name: 'Översikt', icon: MdOutlineDashboard, href: '/', current: true },
@@ -46,7 +48,7 @@ const navigation = [
 
 const userNavigation = [
   { name: 'Användarprofil', href: '#' },
-  { name: 'Logga ut', href: '#' },
+  { name: 'Logga ut', href: '#', clicked: logOut },
 ];
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
@@ -339,7 +341,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         </div>
 
         <div className='lg:pl-72'>
-          <div className='z-4 sticky top-0 flex h-16 shrink-0 items-center gap-x-4 border-b border-black bg-white px-4 sm:gap-x-6 sm:px-6 lg:px-8'>
+          <div className='sticky top-0 flex h-16 shrink-0 items-center gap-x-4 border-b border-black bg-white px-4 sm:gap-x-6 sm:px-6 lg:px-8'>
             <button
               type='button'
               className='-m-2.5 p-2.5 text-gray-700 lg:hidden'
@@ -385,6 +387,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                   aria-hidden='true'
                 />
                 {/* Profile dropdown */}
+
                 <Menu as='div' className='relative'>
                   <Menu.Button className='-m-1.5 flex items-center p-1.5'>
                     <span className='sr-only'>Open user menu</span>
@@ -392,7 +395,10 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                       height={40}
                       width={40}
                       imgClassName='h-8 w-8 rounded-full bg-gray-50 border border-black'
-                      src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+                      src={
+                        auth?.currentUser?.photoURL ??
+                        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+                      }
                       alt=''
                     />
                     <span className='hidden lg:flex lg:items-center'>
@@ -401,7 +407,8 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                           className=' text-sm font-semibold leading-6 text-gray-900'
                           aria-hidden='true'
                         >
-                          Henrik Johansson
+                          {auth?.currentUser?.displayName ??
+                            auth?.currentUser?.email}
                         </span>
                         <p className='text-xs text-gray-700' aria-hidden='true'>
                           Quizmaster
@@ -428,16 +435,30 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                       {userNavigation.map((item) => (
                         <Menu.Item key={item.name}>
                           {({ active }) => (
-                            <Link
-                              passHref
-                              href={item.href}
-                              className={classNames(
-                                active ? 'bg-gray-50' : '',
-                                'block px-3 py-1 text-sm leading-6 text-gray-900'
+                            <>
+                              {item.clicked ? (
+                                <div
+                                  onClick={item.clicked}
+                                  className={classNames(
+                                    active ? 'bg-gray-50' : '',
+                                    'block cursor-pointer px-3 py-1 text-sm leading-6 text-gray-900'
+                                  )}
+                                >
+                                  {item.name}
+                                </div>
+                              ) : (
+                                <Link
+                                  passHref
+                                  href={item.href}
+                                  className={classNames(
+                                    active ? 'bg-gray-50' : '',
+                                    'block px-3 py-1 text-sm leading-6 text-gray-900'
+                                  )}
+                                >
+                                  {item.name}
+                                </Link>
                               )}
-                            >
-                              {item.name}
-                            </Link>
+                            </>
                           )}
                         </Menu.Item>
                       ))}
