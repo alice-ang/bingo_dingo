@@ -307,6 +307,16 @@ export default function CreatePage() {
           </span>
 
           <div className='grid grid-cols-8 gap-4'>
+            <FloatingLabel label='Media' className=' col-span-8 '>
+              <DashboardCard className='min-h-[200px]'>
+                <Image
+                  src='https://source.unsplash.com/1920x1080/?forrest'
+                  alt='bild'
+                  fill
+                  className=' cursor-pointer object-cover p-4 hover:opacity-75'
+                />
+              </DashboardCard>
+            </FloatingLabel>
             <FloatingInput
               id='question'
               type='text'
@@ -360,37 +370,19 @@ export default function CreatePage() {
               register={register}
               errors={errors}
             />
-            <DashboardCard className='relative col-span-8 md:col-span-4'>
-              <Image
-                src='https://source.unsplash.com/1920x1080/?nature,water'
-                alt='bild'
-                fill
-                className='cursor-pointer object-cover p-4 hover:opacity-75'
-              />
-            </DashboardCard>
-            <DashboardCard className='col-span-8 md:col-span-4'>
-              <iframe
-                src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8364.976577639782!2d13.836858432796966!3d58.38928326703061!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x465b023d3a4c413d%3A0x817d30b9033d4604!2zU2vDtnZkZQ!5e0!3m2!1ssv!2sse!4v1678730360113!5m2!1ssv!2sse'
-                width='100%'
-                height='100%'
-                style={{ border: 0 }}
-                allowFullScreen={true}
-                aria-hidden='false'
-                tabIndex={0}
-              />
-            </DashboardCard>
-            <DashboardCard className='col-span-8 row-span-2 md:col-span-4'>
-              <h3 className='text-base font-semibold leading-6 text-gray-900'>
-                Språk, max antal deltagare, tillåta gäster, öppet / privat quiz,
-                priser
-              </h3>
-            </DashboardCard>
-            <DashboardCard className='col-span-8'>
-              <h3 className='text-base font-semibold leading-6 text-gray-900'>
-                Språk, max antal deltagare, tillåta gäster, öppet / privat quiz,
-                priser
-              </h3>
-            </DashboardCard>
+            <FloatingLabel label='Kartpunkt' className=' col-span-8 '>
+              <DashboardCard>
+                <iframe
+                  src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8364.976577639782!2d13.836858432796966!3d58.38928326703061!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x465b023d3a4c413d%3A0x817d30b9033d4604!2zU2vDtnZkZQ!5e0!3m2!1ssv!2sse!4v1678730360113!5m2!1ssv!2sse'
+                  width='100%'
+                  height='100%'
+                  style={{ border: 0 }}
+                  allowFullScreen={true}
+                  aria-hidden='false'
+                  tabIndex={0}
+                />
+              </DashboardCard>
+            </FloatingLabel>
           </div>
         </>
       </Modal>
