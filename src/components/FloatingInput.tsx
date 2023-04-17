@@ -6,7 +6,7 @@ import {
   UseFormRegister,
 } from 'react-hook-form';
 
-export type FormInputProps<TFormValues> = {
+type FormInputProps<TFormValues> = {
   name: Path<TFormValues>;
   rules?: RegisterOptions;
   register?: UseFormRegister<FieldValues>;

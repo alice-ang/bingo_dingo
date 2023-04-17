@@ -95,31 +95,55 @@ export default function CreatePage() {
                           className='col-span-6'
                           register={register}
                           rules={{
-                            required: 'Du måste ange ett namn',
+                            required: 'Ange ett namn',
                           }}
                           errors={errors}
                         />
-                        {/* <FloatingInput
+
+                        <FloatingInput
+                          id='startDate'
                           type='date'
+                          name='startDate'
                           label='Start'
-              
                           className='col-span-3'
+                          register={register}
+                          errors={errors}
                         />
                         <FloatingInput
+                          id='endDate'
                           type='date'
+                          name='endDate'
                           label='Slut'
                           className='col-span-3'
-                 
-                        /> */}
+                          register={register}
+                          errors={errors}
+                        />
                         <FloatingSelect
-                          name='Språk'
-                          options={['🇸🇪 - svenska', '🇺🇸 - engelska']}
+                          options={[
+                            { value: 'sv', text: '🇸🇪 - svenska' },
+                            { value: 'en', text: '🇺🇸 - engelska' },
+                          ]}
+                          id='lang'
+                          name='lang'
+                          label='Språk'
                           className='col-span-3'
+                          register={register}
+                          rules={{
+                            required: 'Välj språk',
+                          }}
+                          errors={errors}
                         />
 
                         <FloatingTextArea
-                          name='Beskrivning'
+                          id='description'
+                          name='description'
+                          label='Beskrivning'
                           className='col-span-6'
+                          register={register}
+                          rules={{
+                            required: 'Ange en beskrivning',
+                          }}
+                          errors={errors}
                         />
                         <div className='col-span-6 flex flex-wrap items-center justify-between'>
                           <Toggle label='Öppet' />{' '}
