@@ -1,9 +1,11 @@
 /* eslint-disable unused-imports/no-unused-vars */
 /* eslint-disable no-console */
 import { addDoc } from 'firebase/firestore';
+import { ref, uploadBytes } from 'firebase/storage';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { MdPhotoCamera } from 'react-icons/md';
 
 import { quizSettings, quizzesCollectionRef } from '@/lib';
 import useModal from '@/lib/useModal';
@@ -22,6 +24,8 @@ import {
   Toggle,
 } from '@/components';
 
+import { auth, storage } from '@/config/firebase';
+
 export default function CreatePage() {
   const { isOpen, toggle } = useModal();
 
@@ -34,6 +38,8 @@ export default function CreatePage() {
   } = useForm();
 
   const [questions, setQuestions] = useState([]);
+  const [coverImg, setCoverImg] = useState<File | undefined>(undefined);
+  const inputFileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     reset((formValues) => ({
@@ -49,12 +55,29 @@ export default function CreatePage() {
     try {
       const doc = await addDoc(quizzesCollectionRef, {
         ...data,
+        userId: auth.currentUser?.uid,
       });
-      console.log(doc);
+      console.log({
+        ...data,
+        userId: auth.currentUser?.uid,
+      });
     } catch (error) {
       console.error(error);
     }
   });
+
+  const uploadFile = async () => {
+    if (!coverImg) return;
+    const filesFolderRef = ref(
+      storage,
+      `quizFiles/${coverImg.name.toLowerCase().trim()}`
+    );
+    try {
+      await uploadBytes(filesFolderRef, coverImg);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <>
@@ -96,12 +119,53 @@ export default function CreatePage() {
                           className=' col-span-6 '
                         >
                           <DashboardCard className='min-h-[200px]'>
-                            <Image
-                              src='https://source.unsplash.com/1920x1080/?forrest'
-                              alt='bild'
-                              fill
-                              className=' cursor-pointer object-cover p-4 hover:opacity-75'
-                            />
+                            {coverImg ? (
+                              <>
+                                <Image
+                                  src={URL.createObjectURL(coverImg)}
+                                  alt='bild'
+                                  fill
+                                  className=' cursor-pointer object-contain p-4 hover:opacity-75'
+                                  onClick={() => {
+                                    if (inputFileRef.current) {
+                                      inputFileRef.current.click;
+                                    }
+                                  }}
+                                />
+                              </>
+                            ) : (
+                              <div className='flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10'>
+                                <div className='text-center'>
+                                  <MdPhotoCamera
+                                    className='mx-auto h-12 w-12 text-gray-300'
+                                    aria-hidden='true'
+                                  />
+                                  <div className='mt-4 flex text-sm leading-6 text-gray-600'>
+                                    <label
+                                      htmlFor='file-upload'
+                                      className='hover:text-grey-700 relative cursor-pointer rounded-md bg-white font-semibold text-green focus-within:outline-none focus-within:ring-2 focus-within:ring-green focus-within:ring-offset-2'
+                                    >
+                                      <span>Upload a file</span>
+
+                                      <input
+                                        id='file-upload'
+                                        name='file-upload'
+                                        ref={inputFileRef}
+                                        onChange={(e) =>
+                                          setCoverImg(e?.target?.files?.[0])
+                                        }
+                                        type='file'
+                                        className='sr-only'
+                                      />
+                                    </label>
+                                    <p className='pl-1'>or drag and drop</p>
+                                  </div>
+                                  <p className='text-xs leading-5 text-gray-600'>
+                                    PNG, JPG, GIF up to 10MB
+                                  </p>
+                                </div>
+                              </div>
+                            )}
                           </DashboardCard>
                         </FloatingLabel>
 
@@ -140,9 +204,9 @@ export default function CreatePage() {
                           type='number'
                           name='distance'
                           step='0.1'
-                          label='Distans (km)'
-                          placeholder='Ange distans på rundan'
-                          className='col-span-2'
+                          label='Distans'
+                          placeholder='Distans i km'
+                          className='col-span-3 md:col-span-2'
                           register={register}
                           rules={{
                             required: 'Ange distrans',

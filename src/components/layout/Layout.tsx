@@ -387,88 +387,84 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                   aria-hidden='true'
                 />
                 {/* Profile dropdown */}
-                {auth?.currentUser?.email != undefined && (
-                  <Menu as='div' className='relative'>
-                    <Menu.Button className='-m-1.5 flex items-center p-1.5'>
-                      <span className='sr-only'>Open user menu</span>
-                      <NextImage
-                        height={40}
-                        width={40}
-                        imgClassName='h-8 w-8 rounded-full bg-gray-50 border border-black'
-                        src={
-                          auth?.currentUser?.photoURL ??
-                          'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                        }
-                        alt=''
-                      />
-                      <span className='hidden lg:flex lg:items-center'>
-                        <span className='ml-3 flex-col text-left'>
-                          <span
-                            className=' text-sm font-semibold leading-6 text-gray-900'
-                            aria-hidden='true'
-                          >
-                            {auth?.currentUser?.displayName ??
-                              auth?.currentUser?.email}
-                          </span>
-                          <p
-                            className='text-xs text-gray-700'
-                            aria-hidden='true'
-                          >
-                            Quizmaster
-                          </p>
-                        </span>
 
-                        <BsChevronDown
-                          className='ml-2 text-gray-400'
+                <Menu as='div' className='relative'>
+                  <Menu.Button className='-m-1.5 flex items-center p-1.5'>
+                    <span className='sr-only'>Open user menu</span>
+                    <NextImage
+                      height={40}
+                      width={40}
+                      imgClassName='h-8 w-8 rounded-full bg-gray-50 border border-black'
+                      src={
+                        auth?.currentUser?.photoURL ??
+                        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+                      }
+                      alt=''
+                    />
+                    <span className='hidden lg:flex lg:items-center'>
+                      <span className='ml-3 flex-col text-left'>
+                        <span
+                          className=' text-sm font-semibold leading-6 text-gray-900'
                           aria-hidden='true'
-                          size={14}
-                        />
+                        >
+                          {auth?.currentUser?.displayName ??
+                            auth?.currentUser?.email}
+                        </span>
+                        <p className='text-xs text-gray-700' aria-hidden='true'>
+                          Quizmaster
+                        </p>
                       </span>
-                    </Menu.Button>
-                    <Transition
-                      as={Fragment}
-                      enter='transition ease-out duration-100'
-                      enterFrom='transform opacity-0 scale-95'
-                      enterTo='transform opacity-100 scale-100'
-                      leave='transition ease-in duration-75'
-                      leaveFrom='transform opacity-100 scale-100'
-                      leaveTo='transform opacity-0 scale-95'
-                    >
-                      <Menu.Items className='absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md border border-black bg-white py-2 ring-1 ring-gray-900/5 focus:outline-none'>
-                        {userNavigation.map((item) => (
-                          <Menu.Item key={item.name}>
-                            {({ active }) => (
-                              <>
-                                {item.clicked ? (
-                                  <div
-                                    onClick={item.clicked}
-                                    className={classNames(
-                                      active ? 'bg-gray-50' : '',
-                                      'block cursor-pointer px-3 py-1 text-sm leading-6 text-gray-900'
-                                    )}
-                                  >
-                                    {item.name}
-                                  </div>
-                                ) : (
-                                  <Link
-                                    passHref
-                                    href={item.href}
-                                    className={classNames(
-                                      active ? 'bg-gray-50' : '',
-                                      'block px-3 py-1 text-sm leading-6 text-gray-900'
-                                    )}
-                                  >
-                                    {item.name}
-                                  </Link>
-                                )}
-                              </>
-                            )}
-                          </Menu.Item>
-                        ))}
-                      </Menu.Items>
-                    </Transition>
-                  </Menu>
-                )}
+
+                      <BsChevronDown
+                        className='ml-2 text-gray-400'
+                        aria-hidden='true'
+                        size={14}
+                      />
+                    </span>
+                  </Menu.Button>
+                  <Transition
+                    as={Fragment}
+                    enter='transition ease-out duration-100'
+                    enterFrom='transform opacity-0 scale-95'
+                    enterTo='transform opacity-100 scale-100'
+                    leave='transition ease-in duration-75'
+                    leaveFrom='transform opacity-100 scale-100'
+                    leaveTo='transform opacity-0 scale-95'
+                  >
+                    <Menu.Items className='absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md border border-black bg-white py-2 ring-1 ring-gray-900/5 focus:outline-none'>
+                      {userNavigation.map((item) => (
+                        <Menu.Item key={item.name}>
+                          {({ active }) => (
+                            <>
+                              {item.clicked ? (
+                                <div
+                                  onClick={item.clicked}
+                                  className={classNames(
+                                    active ? 'bg-gray-50' : '',
+                                    'block cursor-pointer px-3 py-1 text-sm leading-6 text-gray-900'
+                                  )}
+                                >
+                                  {item.name}
+                                </div>
+                              ) : (
+                                <Link
+                                  passHref
+                                  href={item.href}
+                                  className={classNames(
+                                    active ? 'bg-gray-50' : '',
+                                    'block px-3 py-1 text-sm leading-6 text-gray-900'
+                                  )}
+                                >
+                                  {item.name}
+                                </Link>
+                              )}
+                            </>
+                          )}
+                        </Menu.Item>
+                      ))}
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
               </div>
             </div>
           </div>
