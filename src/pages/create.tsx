@@ -21,7 +21,7 @@ export default function CreatePage() {
   const {
     register,
     handleSubmit,
-
+    control,
     formState: { errors },
   } = useForm();
 
@@ -121,9 +121,8 @@ export default function CreatePage() {
                         <FloatingSelect
                           options={[
                             { value: 'sv', text: '🇸🇪 - svenska' },
-                            { value: 'en', text: '🇺🇸 - engelska' },
+                            { value: 'en', text: '🇺🇸 - english' },
                           ]}
-                          id='lang'
                           name='lang'
                           label='Språk'
                           className='col-span-3'
@@ -146,8 +145,16 @@ export default function CreatePage() {
                           errors={errors}
                         />
                         <div className='col-span-6 flex flex-wrap items-center justify-between'>
-                          <Toggle label='Öppet' />{' '}
-                          <Toggle label='Bidra till aktivitetsbanken' />
+                          <Toggle
+                            control={control}
+                            label='Öppet'
+                            name='isPublic'
+                          />
+                          <Toggle
+                            control={control}
+                            label='Bidra till aktivitetsbanken'
+                            name='isContributing'
+                          />
                           <RoundedButton type='submit'>
                             Skapa quiz
                           </RoundedButton>

@@ -8,10 +8,9 @@ import {
 type FormInputProps<TFormValues> = {
   name: Path<TFormValues>;
   rules?: RegisterOptions;
-  register?: UseFormRegister<FieldValues>;
+  register: UseFormRegister<FieldValues>;
   errors?: FieldValues;
   className?: string;
-  id: string;
   label?: string;
   placeholder?: string;
   options: {
@@ -40,13 +39,11 @@ export const FloatingSelect = <TFormValues extends Record<string, unknown>>({
         </label>
 
         <select
-          {...(register && register(name, rules))}
-          id={name.toLowerCase()}
-          name={name.toLowerCase()}
+          {...register(name, rules)}
           className='block  w-full rounded-md border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-black placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-yellow sm:text-sm sm:leading-6'
         >
-          {options.map((option, i) => (
-            <option key={i} value={option.value}>
+          {options.map((option) => (
+            <option key={option.value} value={option.value}>
               {option.text}
             </option>
           ))}
