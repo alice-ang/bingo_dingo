@@ -4,8 +4,12 @@ import {
   signInWithPopup,
   signOut,
 } from 'firebase/auth';
+import { collection } from 'firebase/firestore';
 
+import { db } from '@/config/firebase';
 import { auth, googleProvider } from '@/config/firebase';
+
+export const quizzesCollectionRef = collection(db, 'quizzes');
 
 export const signIn = async (email: string, password: string) => {
   try {
@@ -33,4 +37,16 @@ export const signInWithGoogle = async () => {
   } catch (err) {
     console.log(err);
   }
+};
+const characters =
+  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+export const generateString = (length: number) => {
+  let result = ' ';
+  const charactersLength = characters.length;
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+
+  return result;
 };

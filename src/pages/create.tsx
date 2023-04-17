@@ -1,14 +1,16 @@
 /* eslint-disable no-console */
+import { addDoc } from 'firebase/firestore';
 import Image from 'next/image';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { quizSettings } from '@/lib';
+import { quizSettings, quizzesCollectionRef } from '@/lib';
 
 import {
   CategoryItem,
   DashboardCard,
   FloatingInput,
-  FloatingSelect,
+  FloatingLabel,
   FloatingTextArea,
   RoundedButton,
   Seo,
@@ -22,12 +24,37 @@ export default function CreatePage() {
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm();
 
+  useEffect(() => {
+    reset((formValues) => ({
+      ...formValues,
+      isContributing: false,
+      isPublic: false,
+    }));
+  }, [reset]);
+
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
+    try {
+      const doc = await addDoc(quizzesCollectionRef, {
+        ...data,
+      });
+      console.log(doc);
+    } catch (error) {
+      console.error(error);
+    }
   });
+
+  // const code = useMemo(() => {
+  //   if (getValues('code') != '') {
+  //     console.log(getValues('code'));
+  //   }
+  //   const newCode = generateString(4);
+  //   setValue('code', newCode);
+  //   return newCode;
+  // }, [setValue, getValues]);
 
   return (
     <>
@@ -63,28 +90,37 @@ export default function CreatePage() {
                             </CategoryItem>
                           ))}
                         </div>
-                        <div className=' col-span-6 '>
-                          <h3 className='text-base font-semibold text-gray-900'>
-                            Omslagsbild
-                          </h3>
-                          <DashboardCard className='relative min-h-[250px]'>
+
+                        <FloatingLabel
+                          label='Omslagsbild'
+                          className=' col-span-6 '
+                        >
+                          <DashboardCard className='min-h-[200px]'>
                             <Image
                               src='https://source.unsplash.com/1920x1080/?forrest'
                               alt='bild'
                               fill
-                              className='cursor-pointer object-cover p-4 hover:opacity-75'
+                              className=' cursor-pointer object-cover p-4 hover:opacity-75'
                             />
                           </DashboardCard>
-                        </div>
+                        </FloatingLabel>
 
-                        {/* <FloatingInput
-                          type='text'
-                          placeholder='Ange quiz namn'iel
-                          className='col-span-6'
-                          
-                          label='Namn'
-                   
-                        /> */}
+                        {/* <FloatingLabel label='QR Kod' className='col-span-3'>
+                          <DashboardCard>QR code</DashboardCard>
+                        </FloatingLabel>
+                        <FloatingLabel label='Kod' className='col-span-3'>
+                          <DashboardCard>
+                            <h3 className='text-2xl font-normal text-gray-900'>
+                              <input
+                                {...register('code')}
+                                type='hidden'
+                                id='code'
+                                name='code'
+                              />
+                              {code}
+                            </h3>
+                          </DashboardCard>
+                        </FloatingLabel> */}
 
                         <FloatingInput
                           id='name'
@@ -99,7 +135,7 @@ export default function CreatePage() {
                           }}
                           errors={errors}
                         />
-
+                        {/* 
                         <FloatingInput
                           id='startDate'
                           type='date'
@@ -131,7 +167,7 @@ export default function CreatePage() {
                             required: 'Välj språk',
                           }}
                           errors={errors}
-                        />
+                        /> */}
 
                         <FloatingTextArea
                           id='description'

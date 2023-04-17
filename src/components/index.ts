@@ -5,6 +5,7 @@ export * from './Badges';
 export * from './CategoryItem';
 export * from './DashboardCard';
 export * from './FloatingInput';
+export * from './FloatingLabel';
 export * from './FloatingSelect';
 export * from './FloatingTextArea';
 export * from './layout';

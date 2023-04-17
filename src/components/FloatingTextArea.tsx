@@ -5,6 +5,8 @@ import {
   UseFormRegister,
 } from 'react-hook-form';
 
+import { FloatingLabel } from '@/components';
+
 type FormInputProps<TFormValues> = {
   name: Path<TFormValues>;
   rules?: RegisterOptions;
@@ -28,14 +30,7 @@ export const FloatingTextArea = <TFormValues extends Record<string, unknown>>({
 }: FormInputProps<TFormValues>): JSX.Element => {
   return (
     <div className={className}>
-      <div className='relative'>
-        <label
-          htmlFor={name}
-          className='absolute -top-2 left-2 inline-block bg-slate-50 px-1 text-sm font-medium text-gray-900'
-        >
-          {props.label}
-        </label>
-
+      <FloatingLabel label={props.label} name={name}>
         <textarea
           rows={4}
           name={name}
@@ -44,7 +39,7 @@ export const FloatingTextArea = <TFormValues extends Record<string, unknown>>({
           defaultValue={defaultValue}
           {...(register && register(name, rules))}
         />
-      </div>
+      </FloatingLabel>
       {errors && (
         <p className='text-sm text-red-500'> {errors[name]?.message}</p>
       )}

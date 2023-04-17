@@ -1,16 +1,14 @@
 /* eslint-disable no-console */
 import { Disclosure } from '@headlessui/react';
-import { collection, getDocs } from 'firebase/firestore';
+import { getDocs } from 'firebase/firestore';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { MdArrowDropDown, MdDelete, MdModeEdit } from 'react-icons/md';
 
-import { Quiz } from '@/lib';
+import { Quiz, quizzesCollectionRef } from '@/lib';
 import useModal from '@/lib/useModal';
 
 import { Badges, DashboardCard, Modal, Seo, Stats } from '@/components';
-
-import { db } from '@/config/firebase';
 
 export default function QuizzesPage() {
   const { isOpen, toggle } = useModal();
@@ -18,7 +16,7 @@ export default function QuizzesPage() {
 
   const getQuizList = async () => {
     try {
-      const data = await getDocs(collection(db, 'quizzes'));
+      const data = await getDocs(quizzesCollectionRef);
       const filteredData = data.docs.map(
         (doc) =>
           ({
