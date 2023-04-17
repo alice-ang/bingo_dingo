@@ -13,7 +13,7 @@ export const FloatingSelect = ({ name, options, className }: Props) => {
     <div className={classNames(className, 'relative')}>
       <label
         htmlFor={name}
-        className=' absolute -top-2 left-2 inline-block bg-white px-1 font-medium text-gray-900'
+        className=' absolute -top-2 left-2 inline-block  bg-slate-50 px-1 font-medium text-gray-900'
       >
         {name}
       </label>

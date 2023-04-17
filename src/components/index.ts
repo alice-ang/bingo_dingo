@@ -17,3 +17,4 @@ export * from './Seo';
 export * from './Skeleton';
 export * from './Stats';
 export * from './Tabs';
+export * from './Toggle';

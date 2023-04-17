@@ -5,12 +5,19 @@ import { classNames } from '@/lib';
 type Props = {
   children: ReactNode;
   className?: string;
-  onClick: () => void;
+  onClick?: () => void;
+  type?: 'button' | 'submit' | 'reset';
 };
 
-export const RoundedButton = ({ children, className, onClick }: Props) => {
+export const RoundedButton = ({
+  children,
+  className,
+  onClick,
+  type = 'button',
+}: Props) => {
   return (
     <button
+      type={type}
       onClick={onClick}
       className={classNames(
         className,
