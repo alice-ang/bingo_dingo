@@ -41,7 +41,7 @@ export const Toggle = ({ name, control, label, rules }: Props): JSX.Element => {
             <span className='sr-only'>{label}</span>
             <span
               aria-hidden='true'
-              className='pointer-events-none absolute h-full w-full rounded-md  bg-white'
+              className='pointer-events-none absolute h-full w-full rounded-md bg-white'
             />
 
             <span
@@ -54,7 +54,7 @@ export const Toggle = ({ name, control, label, rules }: Props): JSX.Element => {
             <span
               aria-hidden='true'
               className={classNames(
-                value ? 'translate-x-5' : '-translate-x-1',
+                value ? 'translate-x-5' : '-translate-x-0',
                 'pointer-events-none absolute left-0 inline-flex h-6 w-6 transform items-center justify-center rounded-full border border-black bg-white shadow ring-0 transition-transform duration-200 ease-in-out'
               )}
             >

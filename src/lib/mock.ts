@@ -1,15 +1,11 @@
 /* eslint-disable unused-imports/no-unused-vars */
 
-type Price = {
-  title: string;
-  isCorrect?: boolean;
-};
-
-type Option = {
+export type Option = {
   text: string;
   isCorrect?: boolean;
 };
-type Question = {
+export type Question = {
+  id: string;
   question: string;
   options: Option[];
   media: string;

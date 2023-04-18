@@ -6,9 +6,15 @@ type Props = {
 
   isOpen: boolean;
   toggle: () => void;
+  onSubmit?: () => void;
 };
 
-export const Modal = ({ isOpen = false, toggle, children }: Props) => {
+export const Modal = ({
+  isOpen = false,
+  toggle,
+  children,
+  onSubmit,
+}: Props) => {
   return (
     <Transition.Root show={isOpen} as={Fragment}>
       <Dialog as='div' className='z-100 absolute' onClose={toggle}>
@@ -39,11 +45,16 @@ export const Modal = ({ isOpen = false, toggle, children }: Props) => {
                 {children}
                 <div className='mt-5 sm:mt-6'>
                   <button
-                    type='button'
+                    type={onSubmit ? 'submit' : 'button'}
                     className='inline-flex w-full justify-center rounded-md border border-black bg-yellow px-3 py-2  text-sm  font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2'
-                    onClick={toggle}
+                    onClick={() => {
+                      if (onSubmit) {
+                        onSubmit();
+                      }
+                      toggle();
+                    }}
                   >
-                    Tillbaka{' '}
+                    Klar{' '}
                   </button>
                 </div>
               </Dialog.Panel>

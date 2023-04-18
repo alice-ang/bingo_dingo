@@ -21,7 +21,7 @@ import { classNames, logOut } from '@/lib';
 import { AdBanner, BackToTop, Logo, NextImage } from '@/components';
 import { Footer } from '@/components/layout/Footer';
 
-import { auth } from '@/config/firebase';
+import { useAuth } from '@/context/auth';
 
 const navigation = [
   { name: 'Översikt', icon: MdOutlineDashboard, href: '/', current: true },
@@ -53,6 +53,7 @@ const userNavigation = [
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const user = useAuth();
 
   return (
     <>
@@ -396,7 +397,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                       width={40}
                       imgClassName='h-8 w-8 rounded-full bg-gray-50 border border-black'
                       src={
-                        auth?.currentUser?.photoURL ??
+                        user?.photoURL ??
                         'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
                       }
                       alt=''
@@ -407,8 +408,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                           className=' text-sm font-semibold leading-6 text-gray-900'
                           aria-hidden='true'
                         >
-                          {auth?.currentUser?.displayName ??
-                            auth?.currentUser?.email}
+                          {user?.displayName ?? user?.email}
                         </span>
                         <p className='text-xs text-gray-700' aria-hidden='true'>
                           Quizmaster
