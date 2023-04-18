@@ -37,8 +37,8 @@ export const FloatingSelect = <TFormValues extends Record<string, unknown>>({
           {...register(name, rules)}
           className='block  w-full rounded-md border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-black placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-yellow sm:text-sm sm:leading-6'
         >
-          {options.map((option, i) => (
-            <option key={option.value} value={option.value} selected={i == 0}>
+          {options.map((option) => (
+            <option key={option.value} value={option.value}>
               {option.text}
             </option>
           ))}

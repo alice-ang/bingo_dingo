@@ -1,14 +1,19 @@
 /* eslint-disable unused-imports/no-unused-vars */
 /* eslint-disable no-console */
 import { addDoc, getDocs, query, where } from 'firebase/firestore';
-import { ref, uploadBytes } from 'firebase/storage';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { FieldValues, useForm } from 'react-hook-form';
 import { MdPhotoCamera } from 'react-icons/md';
 import { v4 } from 'uuid';
 
-import { Question, quizSettings, quizzesCollectionRef } from '@/lib';
+import {
+  questionsCollectionRef,
+  Quiz,
+  quizSettings,
+  quizzesCollectionRef,
+} from '@/lib';
 import useModal from '@/lib/useModal';
 
 import {
@@ -24,15 +29,18 @@ import {
   Toggle,
 } from '@/components';
 
-import { auth, storage } from '@/config/firebase';
+import { storage } from '@/config/firebase';
+import { useAuth } from '@/context/auth';
 
 export default function CreatePage() {
   const { isOpen, toggle } = useModal();
-
+  const [coverImg, setCoverImg] = useState<File | null>();
+  const [media, setMedia] = useState<File | null>();
+  const [userQuizzes, setUserQuizzes] = useState<Quiz[]>([]);
+  const user = useAuth();
   const {
     register: registerQuestion,
     handleSubmit: handleSubmitQuestion,
-    control: controlQuestion,
     getValues,
     formState: { errors: errorsQuestion },
   } = useForm();
@@ -45,52 +53,40 @@ export default function CreatePage() {
     formState: { errors },
   } = useForm();
 
-  const [questions, setQuestions] = useState<Question[]>([]);
-  const [coverImg, setCoverImg] = useState<File | undefined>();
-  const [questionMedia, setQuestionMedia] = useState<File | undefined>();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [userQuizzes, setUserQuizzes] = useState<any[]>([]);
-
   const inputFileRef = useRef<HTMLInputElement>(null);
-  const q = query(
-    quizzesCollectionRef,
-    where('userId', '==', 'iJyrn4qOLkP3M7l5bnlP5wIBHFH3')
-  );
+
+  const getQuizzes = async () => {
+    try {
+      const data = await getDocs(
+        query(quizzesCollectionRef, where('userId', '==', user?.uid))
+      );
+      const filtered = data.docs.map(
+        (doc) =>
+          ({
+            ...doc.data(),
+            id: doc.id,
+          } as Quiz)
+      );
+      setUserQuizzes(filtered);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
     reset((formValues) => ({
       ...formValues,
       isContributing: false,
-
       isPublic: false,
       code: 'TEST',
     }));
-    const getQuizzes = async () => {
-      try {
-        const data = await getDocs(q);
-        const filtered = data.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }));
-        setUserQuizzes(filtered);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    getQuizzes();
-  }, [reset, questions, q]);
+  }, [reset]);
 
   const onSubmitQuiz = handleSubmit(async (data: FieldValues) => {
     try {
-      const doc = await addDoc(quizzesCollectionRef, {
+      await addDoc(quizzesCollectionRef, {
         ...data,
-        userId: auth.currentUser?.uid,
-      });
-      console.log(doc);
-      console.log({
-        ...data,
-        userId: auth.currentUser?.uid,
+        userId: user?.uid,
       });
     } catch (error) {
       console.error(error);
@@ -100,24 +96,63 @@ export default function CreatePage() {
   const onSubmitQuestion = handleSubmitQuestion(async (data: FieldValues) => {
     try {
       if (data.media) {
-        uploadBytes(
-          ref(storage, `quiz/images/iJyrn4qOLkP3M7l5bnlP5wIBHFH3/${v4()}`),
-          data.media
-        ).then((snapshot) => {
-          console.log('Uploaded a blob or file!');
-          console.log(snapshot);
-        });
-      }
-      // const doc = await addDoc(questionsCollectionRef, {
-      //   ...data,
-      //   userId: auth.currentUser?.uid,
-      // });
+        const uploadTask = uploadBytesResumable(
+          ref(storage, `quiz/images/${user?.uid}/${v4()}`),
+          data.media[0]
+        );
 
-      // console.log({
-      //   media: data.media,
-      //   options: [data.option1, data.option2, data.option3, data.option4],
-      //   userId: auth.currentUser?.uid,
-      // });
+        uploadTask.on(
+          'state_changed',
+          (snapshot) => {
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            console.log('Upload is ' + progress + '% done');
+            switch (snapshot.state) {
+              case 'paused':
+                console.log('Upload is paused');
+                break;
+              case 'running':
+                console.log('Upload is running');
+                break;
+            }
+          },
+          (error) => {
+            // Handle unsuccessful uploads
+            console.error(error);
+          },
+          () => {
+            getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+              console.log('File available at', downloadURL);
+              addDoc(questionsCollectionRef, {
+                media: downloadURL,
+                options: [
+                  data.option1,
+                  data.option2,
+                  data.option3,
+                  data.option4,
+                ],
+                userId: user?.uid,
+                quizParent: data.quizParent,
+              }).then((res) => console.log('created: ', res));
+            });
+          }
+        );
+      }
+
+      //       uploadBytes(
+      //         ref(storage, `quiz/images/${user?.uid}/${v4()}`),
+      //         data.media[0]
+      //       ).then((snapshot) => {
+      //         console.log('Uploaded a blob or file!');
+
+      //         addDoc(questionsCollectionRef, {
+      //           media: getDownloadURL(snapshot.ref),
+      //           options: [data.option1, data.option2, data.option3, data.option4],
+      //           userId: user?.uid,
+      //           quizParent: data.quizParent,
+      //         }).then((res) => console.log('created: ', res));
+      //       });
+      //     }
     } catch (error) {
       console.error(error);
     }
@@ -160,12 +195,8 @@ export default function CreatePage() {
                         src={URL.createObjectURL(coverImg)}
                         alt='bild'
                         fill
-                        className=' cursor-pointer object-contain p-4 hover:opacity-75'
-                        onClick={() => {
-                          if (inputFileRef.current) {
-                            inputFileRef.current.click;
-                          }
-                        }}
+                        className=' cursor-pointer object-cover p-4 hover:opacity-75'
+                        onClick={() => setCoverImg(null)}
                       />
                     </>
                   ) : (
@@ -186,11 +217,11 @@ export default function CreatePage() {
                               id='file-upload'
                               name='file-upload'
                               ref={inputFileRef}
+                              type='file'
+                              className='sr-only'
                               onChange={(e) =>
                                 setCoverImg(e?.target?.files?.[0])
                               }
-                              type='file'
-                              className='sr-only'
                             />
                           </label>
                           <p className='pl-1'>or drag and drop</p>
@@ -306,7 +337,7 @@ export default function CreatePage() {
 
           <section>
             <h3 className='pb-2 text-2xl font-normal text-gray-900'>Frågor</h3>
-            {questions.length == 0 && <p>Inga frågor</p>}
+            {/* {questions.length == 0 && <p>Inga frågor</p>}
 
             <div className='grid grid-cols-4 gap-4 text-center'>
               {questions.map((question, i) => (
@@ -322,9 +353,16 @@ export default function CreatePage() {
                   </DashboardCard>
                 </FloatingLabel>
               ))}
-            </div>
+            </div> */}
             <div className='my-4 flex justify-center'>
-              <RoundedButton onClick={toggle}>Lägg till fråga</RoundedButton>
+              <RoundedButton
+                onClick={() => {
+                  toggle();
+                  getQuizzes();
+                }}
+              >
+                Lägg till fråga
+              </RoundedButton>
             </div>
           </section>
           <div className='mx-auto w-full md:w-1/2'>
@@ -350,18 +388,14 @@ export default function CreatePage() {
             <div className='grid grid-cols-8 gap-4'>
               <FloatingLabel label='Media' className=' col-span-8 '>
                 <DashboardCard className='min-h-[200px]'>
-                  {coverImg ? (
+                  {media ? (
                     <>
                       <Image
-                        src=''
+                        src={URL.createObjectURL(media)}
                         alt='bild'
                         fill
-                        className=' cursor-pointer object-contain p-4 hover:opacity-75'
-                        onClick={() => {
-                          if (inputFileRef.current) {
-                            inputFileRef.current.click;
-                          }
-                        }}
+                        className=' cursor-pointer object-cover p-4 hover:opacity-75'
+                        onClick={() => setMedia(null)}
                       />
                     </>
                   ) : (
@@ -383,6 +417,7 @@ export default function CreatePage() {
                               {...registerQuestion('media')}
                               type='file'
                               className='sr-only'
+                              onChange={(e) => setMedia(e?.target?.files?.[0])}
                             />
                           </label>
                           <p className='pl-1'>or drag and drop</p>
@@ -518,9 +553,6 @@ export default function CreatePage() {
                 errors={errorsQuestion}
               />
             </div>
-            <button type='submit' className='bg-red-500'>
-              SUBMIT
-            </button>
           </>
         </Modal>
       </form>

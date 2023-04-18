@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { Disclosure } from '@headlessui/react';
-import { getDocs } from 'firebase/firestore';
+import { getDocs, query, where } from 'firebase/firestore';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { MdArrowDropDown, MdDelete, MdModeEdit } from 'react-icons/md';
@@ -10,29 +10,34 @@ import useModal from '@/lib/useModal';
 
 import { Badges, DashboardCard, Modal, Seo, Stats } from '@/components';
 
+import { useAuth } from '@/context/auth';
+
 export default function QuizzesPage() {
+  const user = useAuth();
   const { isOpen, toggle } = useModal();
   const [quizList, setQuizList] = useState<Quiz[]>([]);
 
-  const getQuizList = async () => {
-    try {
-      const data = await getDocs(quizzesCollectionRef);
-      const filteredData = data.docs.map(
-        (doc) =>
-          ({
-            ...doc.data(),
-            id: doc.id,
-          } as Quiz)
-      );
-      setQuizList(filteredData);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   useEffect(() => {
+    const getQuizList = async () => {
+      try {
+        const quiz = await getDocs(
+          query(quizzesCollectionRef, where('userId', '==', user?.uid))
+        );
+
+        const filteredData = quiz.docs.map(
+          (doc) =>
+            ({
+              ...doc.data(),
+              id: doc.id,
+            } as Quiz)
+        );
+        setQuizList(filteredData);
+      } catch (err) {
+        console.error(err);
+      }
+    };
     getQuizList();
-  }, []);
+  }, [user]);
 
   return (
     <>
@@ -54,7 +59,8 @@ export default function QuizzesPage() {
                       <span className='flex w-full items-center justify-between text-base font-semibold text-white'>
                         <span>{quiz.name}</span>
                         <span className='text-sm'>
-                          {quiz.distance}km | {quiz.questions.length + 1} frågor
+                          {quiz.distance}km | {quiz?.questions.length ?? 0}{' '}
+                          frågor
                         </span>
                       </span>
                       <span className='ml-6 flex h-7 items-center'>
@@ -101,20 +107,21 @@ export default function QuizzesPage() {
                           Frågor
                         </h3>
                         <div className='grid grid-cols-4 gap-4 text-center'>
-                          {quiz.questions.map((question, i) => (
-                            <DashboardCard
-                              key={i}
-                              className='col-span-2 cursor-pointer hover:bg-yellow md:col-span-1'
-                              onClick={toggle}
-                            >
-                              <p className='font-semibold'>{`Fråga ${
-                                i + 1
-                              }`}</p>
-                              <p className='py-2 text-sm text-gray-700'>
-                                {question.question}
-                              </p>
-                            </DashboardCard>
-                          ))}
+                          {quiz.questions.length > 0 &&
+                            quiz.questions.map((question, i) => (
+                              <DashboardCard
+                                key={i}
+                                className='col-span-2 cursor-pointer hover:bg-yellow md:col-span-1'
+                                onClick={toggle}
+                              >
+                                <p className='font-semibold'>{`Fråga ${
+                                  i + 1
+                                }`}</p>
+                                <p className='py-2 text-sm text-gray-700'>
+                                  {question.question}
+                                </p>
+                              </DashboardCard>
+                            ))}
                           {/* <DashboardCard className='col-span-2 cursor-pointer hover:bg-yellow md:col-span-1'>
                             <p className='font-semibold'>Utslagningsfråga</p>
                             <p className='py-2 text-sm text-gray-700'>

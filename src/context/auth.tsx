@@ -23,6 +23,7 @@ export const AuthProvider: FC<AuthProvider> = ({ children }) => {
       if (!user) {
         setUser(null);
       }
+
       setUser(firebaseUser);
     });
   }, [user]);
