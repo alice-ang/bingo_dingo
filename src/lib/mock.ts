@@ -6,9 +6,11 @@ export type Option = {
 };
 export type Question = {
   id: string;
-  question: string;
+  title: string;
   options: Option[];
   media: string;
+  quizParent: string;
+  userId: string;
 };
 
 export type Quiz = {

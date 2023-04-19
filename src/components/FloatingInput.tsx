@@ -19,6 +19,7 @@ type FormInputProps<TFormValues> = {
   label?: string;
   placeholder?: string;
   step?: number | string;
+  defaultValue?: string;
 };
 
 export const FloatingInput = <TFormValues extends Record<string, unknown>>({
@@ -28,12 +29,14 @@ export const FloatingInput = <TFormValues extends Record<string, unknown>>({
   errors,
   className,
   step,
+  defaultValue,
   ...props
 }: FormInputProps<TFormValues>): JSX.Element => {
   return (
     <div className={className}>
       <FloatingLabel label={props.label} name={name}>
         <input
+          defaultValue={defaultValue}
           step={step}
           name={name}
           aria-invalid={!!errors}

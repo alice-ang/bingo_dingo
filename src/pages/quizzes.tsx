@@ -118,7 +118,7 @@ export default function QuizzesPage() {
                                   i + 1
                                 }`}</p>
                                 <p className='py-2 text-sm text-gray-700'>
-                                  {question.question}
+                                  {question.title}
                                 </p>
                               </DashboardCard>
                             ))}

@@ -62,14 +62,6 @@ export const ImageUpload = <TFormValues extends Record<string, unknown>>({
                   htmlFor={name}
                   className='hover:text-grey-700 relative cursor-pointer rounded-md bg-white font-semibold text-green focus-within:outline-none focus-within:ring-2 focus-within:ring-green focus-within:ring-offset-2'
                 >
-                  {/* <input
-                    id='file-upload'
-                    name='file-upload'
-                    type='file'
-                    className='sr-only'
-                    onChange={(e) => setMedia(e?.target?.files?.[0])}
-                  /> */}
-
                   <input
                     type='file'
                     id={name}
