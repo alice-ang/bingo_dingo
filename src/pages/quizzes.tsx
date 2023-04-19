@@ -1,38 +1,43 @@
 /* eslint-disable no-console */
 import { Disclosure } from '@headlessui/react';
-import { getDocs } from 'firebase/firestore';
+import { getDocs, query, where } from 'firebase/firestore';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { MdArrowDropDown, MdDelete, MdModeEdit } from 'react-icons/md';
+import { MdArrowDropDown, MdCheck, MdDelete, MdModeEdit } from 'react-icons/md';
 
-import { Quiz, quizzesCollectionRef } from '@/lib';
+import { classNames, Quiz, quizzesCollectionRef } from '@/lib';
 import useModal from '@/lib/useModal';
 
-import { Badges, DashboardCard, Modal, Seo, Stats } from '@/components';
+import { DashboardCard, Modal, Seo, Stats } from '@/components';
+
+import { useAuth } from '@/context/auth';
 
 export default function QuizzesPage() {
+  const user = useAuth();
   const { isOpen, toggle } = useModal();
   const [quizList, setQuizList] = useState<Quiz[]>([]);
 
-  const getQuizList = async () => {
-    try {
-      const data = await getDocs(quizzesCollectionRef);
-      const filteredData = data.docs.map(
-        (doc) =>
-          ({
-            ...doc.data(),
-            id: doc.id,
-          } as Quiz)
-      );
-      setQuizList(filteredData);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
   useEffect(() => {
+    const getQuizList = async () => {
+      try {
+        const quiz = await getDocs(
+          query(quizzesCollectionRef, where('userId', '==', user?.uid))
+        );
+
+        const filteredData = quiz.docs.map(
+          (doc) =>
+            ({
+              ...doc.data(),
+            } as Quiz)
+        );
+
+        setQuizList(filteredData);
+      } catch (err) {
+        console.error(err);
+      }
+    };
     getQuizList();
-  }, []);
+  }, [user?.uid]);
 
   return (
     <>
@@ -43,10 +48,10 @@ export default function QuizzesPage() {
         <h3 className='py-4 text-base font-semibold leading-6 text-gray-900'>
           Lorem ipsum dolor
         </h3>
-        <Badges items={['Aktiva', 'Arkiverade', 'Längst runda', 'A-Ö']} />
+        {/* <Badges items={['Aktiva', 'Arkiverade', 'Längst runda', 'A-Ö']} /> */}
         <dl className='mt-6 space-y-6 divide-y divide-gray-900/10'>
-          {quizList.map((quiz) => (
-            <Disclosure as='div' key={quiz.name} className='my-2'>
+          {quizList.map((quiz, i) => (
+            <Disclosure as='div' key={i} className='my-2'>
               {({ open }) => (
                 <>
                   <dt>
@@ -54,7 +59,8 @@ export default function QuizzesPage() {
                       <span className='flex w-full items-center justify-between text-base font-semibold text-white'>
                         <span>{quiz.name}</span>
                         <span className='text-sm'>
-                          {quiz.distance}km | {quiz.questions.length + 1} frågor
+                          {quiz.distance}km | {quiz?.questions.length ?? 0}{' '}
+                          frågor
                         </span>
                       </span>
                       <span className='ml-6 flex h-7 items-center'>
@@ -77,16 +83,9 @@ export default function QuizzesPage() {
                     className='bg-white p-4 shadow md:p-6'
                   >
                     <div className='grid grid-cols-6 gap-4'>
-                      {/* <div className='col-span-6 md:col-span-2'>
-                        <MdOutlineQrCode2
-                          className='h-48 w-full'
-                          aria-hidden='true'
-                        />
-
-                      </div> */}
-                      <DashboardCard className='relative col-span-6 md:col-span-3'>
+                      <DashboardCard className='relative col-span-6 min-h-[280px] md:col-span-3'>
                         <Image
-                          src='https://source.unsplash.com/1920x1080/?nature,water'
+                          src={quiz.media}
                           alt='bild'
                           fill
                           className='object-cover p-4'
@@ -101,20 +100,52 @@ export default function QuizzesPage() {
                           Frågor
                         </h3>
                         <div className='grid grid-cols-4 gap-4 text-center'>
-                          {quiz.questions.map((question, i) => (
-                            <DashboardCard
-                              key={i}
-                              className='col-span-2 cursor-pointer hover:bg-yellow md:col-span-1'
-                              onClick={toggle}
-                            >
-                              <p className='font-semibold'>{`Fråga ${
-                                i + 1
-                              }`}</p>
-                              <p className='py-2 text-sm text-gray-700'>
-                                {question.question}
-                              </p>
-                            </DashboardCard>
-                          ))}
+                          {quiz.questions.length > 0 ? (
+                            quiz.questions.map((question) => (
+                              <DashboardCard
+                                key={question.id}
+                                className='col-span-4 shadow md:col-span-1'
+                              >
+                                {question.media && (
+                                  <DashboardCard className='relative min-h-[180px] '>
+                                    <Image
+                                      src={question.media}
+                                      alt='bild'
+                                      fill
+                                      className='object-cover p-4'
+                                    />
+                                  </DashboardCard>
+                                )}
+
+                                <p className='font-semibold'>{`${question.title}`}</p>
+
+                                {question.options.map((option) => (
+                                  <div
+                                    key={option.text}
+                                    className={classNames(
+                                      'flex items-center justify-between border-b text-left'
+                                    )}
+                                  >
+                                    <p
+                                      className={classNames(
+                                        option.isCorrect
+                                          ? 'font-semibold text-green'
+                                          : '',
+                                        ''
+                                      )}
+                                    >
+                                      {option.text}
+                                    </p>
+                                    {option.isCorrect && (
+                                      <MdCheck className='text-green' />
+                                    )}
+                                  </div>
+                                ))}
+                              </DashboardCard>
+                            ))
+                          ) : (
+                            <h3>Inga quiz</h3>
+                          )}
                           {/* <DashboardCard className='col-span-2 cursor-pointer hover:bg-yellow md:col-span-1'>
                             <p className='font-semibold'>Utslagningsfråga</p>
                             <p className='py-2 text-sm text-gray-700'>

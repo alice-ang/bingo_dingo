@@ -10,7 +10,7 @@ import { db } from '@/config/firebase';
 import { auth, googleProvider } from '@/config/firebase';
 
 export const quizzesCollectionRef = collection(db, 'quizzes');
-
+export const questionsCollectionRef = collection(db, 'questions');
 export const signIn = async (email: string, password: string) => {
   try {
     await createUserWithEmailAndPassword(auth, email, password);

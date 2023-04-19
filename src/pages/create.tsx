@@ -1,33 +1,29 @@
-/* eslint-disable unused-imports/no-unused-vars */
 /* eslint-disable no-console */
-import { addDoc } from 'firebase/firestore';
-import { ref, uploadBytes } from 'firebase/storage';
-import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { MdPhotoCamera } from 'react-icons/md';
+/* eslint-disable unused-imports/no-unused-vars */
+import { Disclosure } from '@headlessui/react';
+import { addDoc, arrayUnion, doc, updateDoc } from 'firebase/firestore';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
+import { MdArrowDropDown, MdDelete } from 'react-icons/md';
+import { v4 } from 'uuid';
 
-import { quizSettings, quizzesCollectionRef } from '@/lib';
-import useModal from '@/lib/useModal';
+import { classNames, quizzesCollectionRef } from '@/lib';
 
 import {
-  CategoryItem,
   DashboardCard,
   FloatingInput,
   FloatingLabel,
   FloatingTextArea,
-  Modal,
-  RoundedButton,
+  ImageUpload,
+  QuestionOptions,
   Seo,
-  Stats,
-  Tabs,
   Toggle,
 } from '@/components';
 
-import { auth, storage } from '@/config/firebase';
-
+import { db, storage } from '@/config/firebase';
+import { useAuth } from '@/context/auth';
 export default function CreatePage() {
-  const { isOpen, toggle } = useModal();
+  const user = useAuth();
 
   const {
     register,
@@ -35,421 +31,313 @@ export default function CreatePage() {
     control,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({});
 
-  const [questions, setQuestions] = useState([]);
-  const [coverImg, setCoverImg] = useState<File | undefined>(undefined);
-  const inputFileRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    reset((formValues) => ({
-      ...formValues,
-      isContributing: false,
-      isPublic: false,
-      code: 'TEST',
-      questions: questions,
-    }));
-  }, [reset, questions]);
-
-  const onSubmit = handleSubmit(async (data) => {
-    try {
-      const doc = await addDoc(quizzesCollectionRef, {
-        ...data,
-        userId: auth.currentUser?.uid,
-      });
-      console.log({
-        ...data,
-        userId: auth.currentUser?.uid,
-      });
-    } catch (error) {
-      console.error(error);
-    }
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'questions',
+    rules: { minLength: 1 },
   });
 
-  const uploadFile = async () => {
-    if (!coverImg) return;
-    const filesFolderRef = ref(
-      storage,
-      `quizFiles/${coverImg.name.toLowerCase().trim()}`
-    );
-    try {
-      await uploadBytes(filesFolderRef, coverImg);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const onSubmitQuiz = handleSubmit(async (data: FieldValues) => {
+    const imageRef = ref(storage, `quiz/images/${user?.uid}/${v4()}`);
+
+    uploadBytes(imageRef, data.media[0]).then(async () => {
+      const downloadURL = await getDownloadURL(imageRef);
+      await addDoc(quizzesCollectionRef, {
+        media: downloadURL,
+        name: data.name,
+        distance: data.distance,
+        description: data.description,
+        isPublic: data.isPublic,
+        isContributing: data.isContributing,
+        userId: user?.uid,
+      }).then(async (document) => {
+        await Promise.all(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          data.questions.map((question: any) => {
+            const mediaRef = ref(storage, `quiz/images/${user?.uid}/${v4()}`);
+            // TODO: Fix this if - puts questions in wrong order
+            if (question.media.length > 0) {
+              uploadBytes(mediaRef, question.media[0]).then(async () => {
+                const mediaUrl = await getDownloadURL(mediaRef);
+                await updateDoc(doc(db, 'quizzes', document.id), {
+                  questions: arrayUnion({
+                    media: mediaUrl,
+                    title: question.title,
+                    options: question.options,
+                  }),
+                });
+              });
+            } else {
+              updateDoc(doc(db, 'quizzes', document.id), {
+                questions: arrayUnion({
+                  media: '',
+                  title: question.title,
+                  options: question.options,
+                }),
+              });
+            }
+          })
+        ).finally(() => {
+          // reset();
+          console.log('Quiz uploaded!');
+        });
+      });
+    });
+
+    //     try {
+    //       if (data.media) {
+    //         const uploadTask = uploadBytesResumable(
+    //           ref(storage, `quiz/images/${user?.uid}/${v4()}`),
+    //           data.media[0]
+    //         );
+
+    //         uploadTask.on(
+    //           'state_changed',
+    //           (snapshot) => {
+    //             const progress =
+    //               (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+    //             console.log('Upload is ' + progress + '% done');
+
+    //             switch (snapshot.state) {
+    //               case 'paused':
+    //                 console.log('Upload is paused');
+    //                 break;
+    //               case 'running':
+    //                 console.log('Upload is running');
+    //                 break;
+    //             }
+    //           },
+    //           (error) => {
+    //             // Handle unsuccessful uploads
+    //             console.error(error);
+    //           },
+    //           () => {
+    //             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+    //               console.log('File available at', downloadURL);
+    //               addDoc(quizzesCollectionRef, {
+    //                 media: downloadURL,
+    //                 name: data.name,
+    //                 distance: data.distance,
+    //                 description: data.description,
+    //                 isPublic: data.isPublic,
+    //                 isContributing: data.isContributing,
+
+    //                 userId: user?.uid,
+    //               }).then((res) => {
+    //                 const docRef = doc(db, 'quizzes', res.id);
+
+    //                  Promise.all(
+    //                      data.questions.map((question) => {
+    // updateDoc()
+    //                 })
+    //                 )
+
+    //                 updateDoc(docRef, data)
+    //                   .then((docRef) => {
+    //                     console.log(
+    //                       'A New Document Field has been added to an existing document'
+    //                     );
+    //                   })
+    //                   .catch((error) => {
+    //                     console.log(error);
+    //                   });
+    //               });
+    //             });
+    //           }
+    //         );
+    //       }
+    //     } catch (error) {
+    //       console.error(error);
+    //     }
+  });
 
   return (
     <>
       <Seo templateTitle='Skapa quiz' />
 
       <section>
-        <h2 className='text-4xl font-normal text-gray-900'>Skapa quiz</h2>
-        <p className='text-sm text-gray-500 '>Lorem ipsum dolor sit amet</p>
+        <h2 className='text-center text-4xl font-normal text-gray-900'>
+          Skapa quiz
+        </h2>
+        <p className='text-center text-sm text-gray-500'>
+          Lorem ipsum dolor sit amet
+        </p>
+        <form onSubmit={onSubmitQuiz}>
+          <section className='pb-3'>
+            <span className='flex items-baseline justify-between'>
+              <h3 className='pb-2 text-2xl font-normal text-gray-900'>Quiz</h3>
+            </span>
+            <div className='grid grid-cols-6 gap-4'>
+              <FloatingLabel label='Omslagsbild' className=' col-span-6 '>
+                <DashboardCard className='min-h-[100px]'>
+                  <ImageUpload
+                    name='media'
+                    register={register}
+                    errors={errors}
+                  />
+                </DashboardCard>
+              </FloatingLabel>
 
-        <Tabs
-          tabs={[
-            {
-              title: 'Skapa',
-              tab: (
-                <>
-                  <section className='pb-3'>
-                    <span className='flex items-baseline justify-between'>
-                      <h3 className='pb-2 text-2xl font-normal text-gray-900'>
-                        Quiz inställningar
-                      </h3>
-                    </span>
-                    <form onSubmit={onSubmit}>
-                      <div className='grid grid-cols-6 gap-4'>
-                        <div className='col-span-6 grid grid-cols-3 gap-4 md:grid-cols-4'>
-                          {quizSettings.map((item) => (
-                            <CategoryItem
-                              className={item.color}
-                              key={item.title}
-                              subtitle={item.subtitle}
-                              title={item.title}
-                            >
-                              {item.icon}
-                            </CategoryItem>
-                          ))}
-                        </div>
+              <FloatingInput
+                id='name'
+                type='text'
+                name='name'
+                label='Namn'
+                placeholder='Ange quiz namn'
+                className='col-span-6'
+                register={register}
+                rules={{
+                  required: 'Ange ett namn',
+                }}
+                errors={errors}
+              />
+              <FloatingInput
+                id='distance'
+                type='number'
+                name='distance'
+                step='0.1'
+                label='Distans'
+                placeholder='Distans i km'
+                className='col-span-3 md:col-span-2'
+                register={register}
+                rules={{
+                  required: 'Ange distrans',
+                }}
+                errors={errors}
+              />
 
-                        <FloatingLabel
-                          label='Omslagsbild'
-                          className=' col-span-6 '
-                        >
-                          <DashboardCard className='min-h-[200px]'>
-                            {coverImg ? (
-                              <>
-                                <Image
-                                  src={URL.createObjectURL(coverImg)}
-                                  alt='bild'
-                                  fill
-                                  className=' cursor-pointer object-contain p-4 hover:opacity-75'
-                                  onClick={() => {
-                                    if (inputFileRef.current) {
-                                      inputFileRef.current.click;
-                                    }
-                                  }}
-                                />
-                              </>
-                            ) : (
-                              <div className='flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10'>
-                                <div className='text-center'>
-                                  <MdPhotoCamera
-                                    className='mx-auto h-12 w-12 text-gray-300'
-                                    aria-hidden='true'
-                                  />
-                                  <div className='mt-4 flex text-sm leading-6 text-gray-600'>
-                                    <label
-                                      htmlFor='file-upload'
-                                      className='hover:text-grey-700 relative cursor-pointer rounded-md bg-white font-semibold text-green focus-within:outline-none focus-within:ring-2 focus-within:ring-green focus-within:ring-offset-2'
-                                    >
-                                      <span>Upload a file</span>
+              <FloatingTextArea
+                id='description'
+                name='description'
+                label='Beskrivning'
+                className='col-span-6'
+                register={register}
+                rules={{
+                  required: 'Ange en beskrivning',
+                }}
+                errors={errors}
+              />
+            </div>
+            <div className='col-span-6 flex flex-wrap items-center justify-between pt-3'>
+              <Toggle control={control} label='Öppet' name='isPublic' />
+              <Toggle
+                control={control}
+                label='Bidra till aktivitetsbanken'
+                name='isContributing'
+              />
+            </div>
+          </section>
 
-                                      <input
-                                        id='file-upload'
-                                        name='file-upload'
-                                        ref={inputFileRef}
-                                        onChange={(e) =>
-                                          setCoverImg(e?.target?.files?.[0])
-                                        }
-                                        type='file'
-                                        className='sr-only'
-                                      />
-                                    </label>
-                                    <p className='pl-1'>or drag and drop</p>
-                                  </div>
-                                  <p className='text-xs leading-5 text-gray-600'>
-                                    PNG, JPG, GIF up to 10MB
-                                  </p>
-                                </div>
-                              </div>
-                            )}
-                          </DashboardCard>
-                        </FloatingLabel>
+          <section className='my-3 border-y border-black py-3'>
+            <h3 className='text-2xl font-normal text-gray-900'>Frågor</h3>
 
-                        {/* <FloatingLabel label='QR Kod' className='col-span-3'>
-                          <DashboardCard>QR code</DashboardCard>
-                        </FloatingLabel>
-                        <FloatingLabel label='Kod' className='col-span-3'>
-                          <DashboardCard>
-                            <h3 className='text-2xl font-normal text-gray-900'>
-                              <input
-                                {...register('code')}
-                                type='hidden'
-                                id='code'
-                                name='code'
+            {fields.map((item, index) => {
+              return (
+                <Disclosure as='div' key={item.id} className='my-2' defaultOpen>
+                  {({ open }) => (
+                    <>
+                      <dt>
+                        <Disclosure.Button className='flex w-full items-start justify-between rounded-lg bg-black p-4 text-left'>
+                          <span className='flex w-full items-center justify-between text-base font-semibold text-white'>
+                            {`Fråga ${index + 1}`}
+                          </span>
+                          <span className='ml-6 flex h-7 items-center'>
+                            {open ? (
+                              <MdArrowDropDown
+                                className='h-6 w-6 text-white'
+                                aria-hidden='true'
                               />
-                              {code}
-                            </h3>
-                          </DashboardCard>
-                        </FloatingLabel> */}
-
+                            ) : (
+                              <MdArrowDropDown
+                                className='h-6 w-6 -rotate-90 text-white'
+                                aria-hidden='true'
+                              />
+                            )}
+                          </span>
+                        </Disclosure.Button>
+                      </dt>
+                      <Disclosure.Panel
+                        as='dd'
+                        className='grid grid-cols-8 gap-4 bg-white p-4 shadow md:p-6'
+                      >
                         <FloatingInput
-                          id='name'
+                          id='question'
                           type='text'
-                          name='name'
-                          label='Namn'
-                          placeholder='Ange quiz namn'
-                          className='col-span-6'
+                          name={`questions[${index}].title`}
+                          label='Fråga'
+                          placeholder='Skriv fråga'
+                          className='col-span-8'
                           register={register}
                           rules={{
-                            required: 'Ange ett namn',
+                            required: 'Ange fråga',
                           }}
                           errors={errors}
                         />
-                        <FloatingInput
-                          id='distance'
-                          type='number'
-                          name='distance'
-                          step='0.1'
-                          label='Distans'
-                          placeholder='Distans i km'
-                          className='col-span-3 md:col-span-2'
-                          register={register}
-                          rules={{
-                            required: 'Ange distrans',
-                          }}
-                          errors={errors}
-                        />
-                        {/* 
-                        <FloatingInput
-                          id='startDate'
-                          type='date'
-                          name='startDate'
-                          label='Start'
-                          className='col-span-3'
-                          register={register}
-                          errors={errors}
-                        />
-                        <FloatingInput
-                          id='endDate'
-                          type='date'
-                          name='endDate'
-                          label='Slut'
-                          className='col-span-3'
-                          register={register}
-                          errors={errors}
-                        />
-                        <FloatingSelect
-                          options={[
-                            { value: 'sv', text: '🇸🇪 - svenska' },
-                            { value: 'en', text: '🇺🇸 - english' },
-                          ]}
-                          name='lang'
-                          label='Språk'
-                          className='col-span-3'
-                          register={register}
-                          rules={{
-                            required: 'Välj språk',
-                          }}
-                          errors={errors}
-                        /> */}
 
-                        <FloatingTextArea
-                          id='description'
-                          name='description'
-                          label='Beskrivning'
-                          className='col-span-6'
-                          register={register}
-                          rules={{
-                            required: 'Ange en beskrivning',
-                          }}
-                          errors={errors}
-                        />
-                        <div className='col-span-6 flex flex-wrap items-center justify-between'>
-                          <Toggle
-                            control={control}
-                            label='Öppet'
-                            name='isPublic'
-                          />
-                          <Toggle
-                            control={control}
-                            label='Bidra till aktivitetsbanken'
-                            name='isContributing'
-                          />
-                          <RoundedButton type='submit' color='bg-green'>
-                            Skapa quiz
-                          </RoundedButton>
-                        </div>
-                      </div>
-                    </form>
-                  </section>
-                  <section>
-                    <h3 className='my-3 text-base font-semibold text-gray-900'>
-                      Frågor
-                    </h3>
-                    {questions.length == 0 && <p>Inga frågor</p>}
-
-                    <div className='grid grid-cols-4 gap-4 text-center'>
-                      {questions.map((i) => (
-                        <FloatingLabel
-                          key={i}
-                          className='col-span-2 md:col-span-1'
-                          label={`Fråga ${i}`}
-                        >
-                          <DashboardCard>
-                            <p className='py-2 text-base text-gray-700'>
-                              Lorem ipsum dolor sit amet?
-                            </p>
+                        <FloatingLabel label='Media' className=' col-span-8 '>
+                          <DashboardCard className='min-h-[100px]'>
+                            <ImageUpload
+                              name={`questions[${index}].media`}
+                              register={register}
+                              errors={errors}
+                            />
                           </DashboardCard>
                         </FloatingLabel>
-                      ))}
-                    </div>
-                    <div className='my-4 flex justify-center'>
-                      <RoundedButton onClick={toggle}>
-                        Lägg till fråga
-                      </RoundedButton>
-                    </div>
-                  </section>
-                </>
-              ),
-            },
-            {
-              title: 'Översikt',
-              tab: (
-                <>
-                  <h3 className='my-3 text-2xl font-normal text-gray-900'>
-                    Quiz namn
-                  </h3>
-                  <div className='mt-5 grid grid-cols-3 gap-4 md:grid-cols-4'>
-                    {quizSettings.map((item) => (
-                      <CategoryItem
-                        className={item.color}
-                        key={item.title}
-                        subtitle={item.subtitle}
-                        title={item.title}
-                      >
-                        {item.icon}
-                      </CategoryItem>
-                    ))}
-                  </div>
-                  <div className='my-3 '>
-                    <Stats />
-                  </div>
-                  <h3 className='my-3 text-base font-semibold text-gray-900'>
-                    Frågor
-                  </h3>
-                  <div className='grid grid-cols-4 gap-4 text-center'>
-                    {[1, 2, 3].map((i) => (
-                      <DashboardCard
-                        key={i}
-                        className='col-span-2 md:col-span-1'
-                      >
-                        <p className='font-semibold'>{`Fråga ${i}`}</p>
-                        <p className='py-2 text-base text-gray-700'>
-                          Lorem ipsum dolor sit amet?
-                        </p>
-                      </DashboardCard>
-                    ))}
-                    <DashboardCard className='col-span-2 md:col-span-1'>
-                      <p className='font-semibold'>Utslagningsfråga</p>
-                      <p className='py-2 text-base text-gray-700'>
-                        Lorem ipsum dolor sit amet?
-                      </p>
-                    </DashboardCard>
-                  </div>
-                  <div className='my-4 flex justify-center'>
-                    <RoundedButton onClick={() => console.log('hej')}>
-                      Lägg till fråga
-                    </RoundedButton>
-                  </div>
-                </>
-              ),
-            },
-          ]}
-        />
-      </section>
-      <Modal isOpen={isOpen} toggle={toggle}>
-        <>
-          <span className='flex items-baseline justify-between'>
-            <h3 className='pb-2 text-2xl font-normal text-gray-900'>
-              Skapa ny fråga
-            </h3>
-            <p className='text-sm text-gray-500 '>Välj från quizbanken</p>
-          </span>
 
-          <div className='grid grid-cols-8 gap-4'>
-            <FloatingLabel label='Media' className=' col-span-8 '>
-              <DashboardCard className='min-h-[200px]'>
-                <Image
-                  src='https://source.unsplash.com/1920x1080/?forrest'
-                  alt='bild'
-                  fill
-                  className=' cursor-pointer object-cover p-4 hover:opacity-75'
-                />
-              </DashboardCard>
-            </FloatingLabel>
-            <FloatingInput
-              id='question'
-              type='text'
-              name='question'
-              label='Fråga'
-              placeholder='Skriv fråga'
-              className='col-span-8'
-              register={register}
-              rules={{
-                required: 'Ange fråga',
-              }}
-              errors={errors}
-            />
-            <FloatingInput
-              id='option1'
-              type='text'
-              name='option'
-              label='Alternativ 1'
-              placeholder='Skriv alternativ'
-              className='col-span-4'
-              register={register}
-              errors={errors}
-            />
-            <FloatingInput
-              id='option2'
-              type='text'
-              name='option'
-              label='Alternativ 2'
-              placeholder='Skriv alternativ'
-              className='col-span-4'
-              register={register}
-              errors={errors}
-            />
-            <FloatingInput
-              id='option3'
-              type='text'
-              name='option'
-              label='Alternativ 3'
-              placeholder='Skriv alternativ'
-              className='col-span-4'
-              register={register}
-              errors={errors}
-            />
-            <FloatingInput
-              id='option4'
-              type='text'
-              name='option'
-              label='Alternativ 4'
-              placeholder='Skriv alternativ'
-              className='col-span-4'
-              register={register}
-              errors={errors}
-            />
-            <FloatingLabel label='Kartpunkt' className=' col-span-8 '>
-              <DashboardCard>
-                <iframe
-                  src='https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8364.976577639782!2d13.836858432796966!3d58.38928326703061!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x465b023d3a4c413d%3A0x817d30b9033d4604!2zU2vDtnZkZQ!5e0!3m2!1ssv!2sse!4v1678730360113!5m2!1ssv!2sse'
-                  width='100%'
-                  height='100%'
-                  style={{ border: 0 }}
-                  allowFullScreen={true}
-                  aria-hidden='false'
-                  tabIndex={0}
-                />
-              </DashboardCard>
-            </FloatingLabel>
+                        <QuestionOptions
+                          nestIndex={index}
+                          {...{ control, register, errors }}
+                          className='col-span-8'
+                          rules={{
+                            required: 'Ange svarsalternativ',
+                            minLength: 2,
+                          }}
+                          errors={errors}
+                        />
+                        <div className='col-span-8 flex justify-end'>
+                          <button
+                            className='flex items-center rounded-md border border-black bg-red-500 px-4 py-2 hover:bg-red-600'
+                            onClick={() => remove(index)}
+                          >
+                            <p className='mr-2 text-sm font-semibold'>
+                              Ta bort fråga
+                            </p>
+                            <MdDelete className='text-black ' size={22} />
+                          </button>
+                        </div>
+                      </Disclosure.Panel>
+                    </>
+                  )}
+                </Disclosure>
+              );
+            })}
+
+            <div className='my-4 flex justify-center '>
+              <button
+                type='button'
+                className={classNames(
+                  'w-fit justify-center text-center underline hover:text-green'
+                )}
+                onClick={() => {
+                  append({});
+                }}
+              >
+                Lägg till fråga
+              </button>
+            </div>
+          </section>
+          <div className='mx-auto w-full md:w-1/2'>
+            <button
+              type='submit'
+              className='text-medium inline-flex w-full justify-center rounded-md border border-black bg-yellow px-4 py-3 font-semibold shadow-sm hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2'
+            >
+              Skapa quiz
+            </button>
           </div>
-        </>
-      </Modal>
+        </form>
+      </section>
     </>
   );
 }
