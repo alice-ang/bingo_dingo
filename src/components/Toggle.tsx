@@ -31,8 +31,10 @@ export const Toggle = ({ name, control, label, rules }: Props): JSX.Element => {
         rules={rules}
         control={control}
         name={name}
+        defaultValue={false}
         render={({ field: { value, onChange, ref } }) => (
           <Switch
+            defaultChecked={false}
             checked={value}
             onChange={onChange}
             ref={ref}
