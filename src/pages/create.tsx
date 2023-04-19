@@ -41,7 +41,8 @@ export default function CreatePage() {
 
   const onSubmitQuiz = handleSubmit(async (data: FieldValues) => {
     const imageRef = ref(storage, `quiz/images/${user?.uid}/${v4()}`);
-    const image = uploadBytes(imageRef, data.media[0]).then(async () => {
+
+    uploadBytes(imageRef, data.media[0]).then(async () => {
       const downloadURL = await getDownloadURL(imageRef);
       await addDoc(quizzesCollectionRef, {
         media: downloadURL,
@@ -56,6 +57,7 @@ export default function CreatePage() {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           data.questions.map((question: any) => {
             const mediaRef = ref(storage, `quiz/images/${user?.uid}/${v4()}`);
+            // TODO: Fix this if - puts questions in wrong order
             if (question.media.length > 0) {
               uploadBytes(mediaRef, question.media[0]).then(async () => {
                 const mediaUrl = await getDownloadURL(mediaRef);
