@@ -1,36 +1,35 @@
 /* eslint-disable no-console */
 /* eslint-disable unused-imports/no-unused-vars */
 import { Disclosure } from '@headlessui/react';
-import { useState } from 'react';
+import { addDoc, arrayUnion, doc, updateDoc } from 'firebase/firestore';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
 import { MdArrowDropDown, MdDelete } from 'react-icons/md';
+import { v4 } from 'uuid';
 
-import { quizSettings } from '@/lib';
+import { classNames, quizzesCollectionRef } from '@/lib';
 
 import {
-  CategoryItem,
   DashboardCard,
   FloatingInput,
   FloatingLabel,
   FloatingTextArea,
   ImageUpload,
   QuestionOptions,
-  RoundedButton,
   Seo,
   Toggle,
 } from '@/components';
 
+import { db, storage } from '@/config/firebase';
 import { useAuth } from '@/context/auth';
-
 export default function CreatePage() {
   const user = useAuth();
-  const [uploadProgress, setUploadProgress] = useState(0);
 
   const {
     register,
     handleSubmit,
     control,
-
+    reset,
     formState: { errors },
   } = useForm({});
 
@@ -41,100 +40,136 @@ export default function CreatePage() {
   });
 
   const onSubmitQuiz = handleSubmit(async (data: FieldValues) => {
-    try {
-      console.log(data);
-      // await addDoc(quizzesCollectionRef, {
-      //   ...data,
-      //   userId: user?.uid,
-      // });
-    } catch (error) {
-      console.error(error);
-    }
+    const imageRef = ref(storage, `quiz/images/${user?.uid}/${v4()}`);
+    const image = uploadBytes(imageRef, data.media[0]).then(async () => {
+      const downloadURL = await getDownloadURL(imageRef);
+      await addDoc(quizzesCollectionRef, {
+        media: downloadURL,
+        name: data.name,
+        distance: data.distance,
+        description: data.description,
+        isPublic: data.isPublic,
+        isContributing: data.isContributing,
+      }).then(async (document) => {
+        await Promise.all(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          data.questions.map((question: any) => {
+            const mediaRef = ref(storage, `quiz/images/${user?.uid}/${v4()}`);
+            if (question.media.length > 0) {
+              uploadBytes(mediaRef, question.media[0]).then(async () => {
+                const mediaUrl = await getDownloadURL(mediaRef);
+                await updateDoc(doc(db, 'quizzes', document.id), {
+                  questions: arrayUnion({
+                    media: mediaUrl,
+                    title: question.title,
+                    options: question.options,
+                  }),
+                });
+              });
+            } else {
+              updateDoc(doc(db, 'quizzes', document.id), {
+                questions: arrayUnion({
+                  media: '',
+                  title: question.title,
+                  options: question.options,
+                }),
+              });
+            }
+          })
+        ).finally(() => {
+          // reset();
+          console.log('Quiz uploaded!');
+        });
+      });
+    });
+
+    //     try {
+    //       if (data.media) {
+    //         const uploadTask = uploadBytesResumable(
+    //           ref(storage, `quiz/images/${user?.uid}/${v4()}`),
+    //           data.media[0]
+    //         );
+
+    //         uploadTask.on(
+    //           'state_changed',
+    //           (snapshot) => {
+    //             const progress =
+    //               (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+    //             console.log('Upload is ' + progress + '% done');
+
+    //             switch (snapshot.state) {
+    //               case 'paused':
+    //                 console.log('Upload is paused');
+    //                 break;
+    //               case 'running':
+    //                 console.log('Upload is running');
+    //                 break;
+    //             }
+    //           },
+    //           (error) => {
+    //             // Handle unsuccessful uploads
+    //             console.error(error);
+    //           },
+    //           () => {
+    //             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+    //               console.log('File available at', downloadURL);
+    //               addDoc(quizzesCollectionRef, {
+    //                 media: downloadURL,
+    //                 name: data.name,
+    //                 distance: data.distance,
+    //                 description: data.description,
+    //                 isPublic: data.isPublic,
+    //                 isContributing: data.isContributing,
+
+    //                 userId: user?.uid,
+    //               }).then((res) => {
+    //                 const docRef = doc(db, 'quizzes', res.id);
+
+    //                  Promise.all(
+    //                      data.questions.map((question) => {
+    // updateDoc()
+    //                 })
+    //                 )
+
+    //                 updateDoc(docRef, data)
+    //                   .then((docRef) => {
+    //                     console.log(
+    //                       'A New Document Field has been added to an existing document'
+    //                     );
+    //                   })
+    //                   .catch((error) => {
+    //                     console.log(error);
+    //                   });
+    //               });
+    //             });
+    //           }
+    //         );
+    //       }
+    //     } catch (error) {
+    //       console.error(error);
+    //     }
   });
-
-  // const onSubmitQuestion = handleSubmitQuestion(async (data: FieldValues) => {
-  //   try {
-  //     if (data.media) {
-  //       const uploadTask = uploadBytesResumable(
-  //         ref(storage, `quiz/images/${user?.uid}/${v4()}`),
-  //         data.media[0]
-  //       );
-
-  //       uploadTask.on(
-  //         'state_changed',
-  //         (snapshot) => {
-  //           const progress =
-  //             (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-  //           console.log('Upload is ' + progress + '% done');
-  //           setUploadProgress(progress);
-  //           switch (snapshot.state) {
-  //             case 'paused':
-  //               console.log('Upload is paused');
-  //               break;
-  //             case 'running':
-  //               console.log('Upload is running');
-  //               break;
-  //           }
-  //         },
-  //         (error) => {
-  //           // Handle unsuccessful uploads
-  //           console.error(error);
-  //         },
-  //         () => {
-  //           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-  //             console.log('File available at', downloadURL);
-  //             addDoc(questionsCollectionRef, {
-  //               media: downloadURL,
-  //               options: [
-  //                 data.option1,
-  //                 data.option2,
-  //                 data.option3,
-  //                 data.option4,
-  //               ],
-  //               userId: user?.uid,
-  //               quizParent: data.quizParent,
-  //             }).then((res) => console.log('created: ', res));
-  //           });
-  //         }
-  //       );
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // });
 
   return (
     <>
       <Seo templateTitle='Skapa quiz' />
 
       <section>
-        <h2 className='text-4xl font-normal text-gray-900'>Skapa quiz</h2>
-        <p className='text-sm text-gray-500 '>Lorem ipsum dolor sit amet</p>
+        <h2 className='text-center text-4xl font-normal text-gray-900'>
+          Skapa quiz
+        </h2>
+        <p className='text-center text-sm text-gray-500'>
+          Lorem ipsum dolor sit amet
+        </p>
         <form onSubmit={onSubmitQuiz}>
           <section className='pb-3'>
             <span className='flex items-baseline justify-between'>
-              <h3 className='pb-2 text-2xl font-normal text-gray-900'>
-                Quiz inställningar
-              </h3>
+              <h3 className='pb-2 text-2xl font-normal text-gray-900'>Quiz</h3>
             </span>
             <div className='grid grid-cols-6 gap-4'>
-              <div className='col-span-6 grid grid-cols-3 gap-4 md:grid-cols-4'>
-                {quizSettings.map((item) => (
-                  <CategoryItem
-                    className={item.color}
-                    key={item.title}
-                    subtitle={item.subtitle}
-                    title={item.title}
-                  >
-                    {item.icon}
-                  </CategoryItem>
-                ))}
-              </div>
-
               <FloatingLabel label='Omslagsbild' className=' col-span-6 '>
-                <DashboardCard className='min-h-[200px]'>
+                <DashboardCard className='min-h-[100px]'>
                   <ImageUpload
-                    upload={uploadProgress}
                     name='media'
                     register={register}
                     errors={errors}
@@ -181,23 +216,23 @@ export default function CreatePage() {
                 }}
                 errors={errors}
               />
-              <div className='col-span-6 flex flex-wrap items-center justify-between'>
-                <Toggle control={control} label='Öppet' name='isPublic' />
-                <Toggle
-                  control={control}
-                  label='Bidra till aktivitetsbanken'
-                  name='isContributing'
-                />
-              </div>
+            </div>
+            <div className='col-span-6 flex flex-wrap items-center justify-between pt-3'>
+              <Toggle control={control} label='Öppet' name='isPublic' />
+              <Toggle
+                control={control}
+                label='Bidra till aktivitetsbanken'
+                name='isContributing'
+              />
             </div>
           </section>
 
-          <section>
-            <h3 className='pb-2 text-2xl font-normal text-gray-900'>Frågor</h3>
+          <section className='my-3 border-y border-black py-3'>
+            <h3 className='text-2xl font-normal text-gray-900'>Frågor</h3>
 
             {fields.map((item, index) => {
               return (
-                <Disclosure as='div' key={item.id} className='my-2'>
+                <Disclosure as='div' key={item.id} className='my-2' defaultOpen>
                   {({ open }) => (
                     <>
                       <dt>
@@ -235,14 +270,12 @@ export default function CreatePage() {
                           rules={{
                             required: 'Ange fråga',
                           }}
-                          defaultValue={item.title}
                           errors={errors}
                         />
 
                         <FloatingLabel label='Media' className=' col-span-8 '>
-                          <DashboardCard className='min-h-[200px]'>
+                          <DashboardCard className='min-h-[100px]'>
                             <ImageUpload
-                              upload={uploadProgress}
                               name={`questions[${index}].media`}
                               register={register}
                               errors={errors}
@@ -254,16 +287,22 @@ export default function CreatePage() {
                           nestIndex={index}
                           {...{ control, register, errors }}
                           className='col-span-8'
+                          rules={{
+                            required: 'Ange svarsalternativ',
+                            minLength: 2,
+                          }}
+                          errors={errors}
                         />
                         <div className='col-span-8 flex justify-end'>
-                          <span className='flex items-center'>
-                            <p className='mr-2 text-sm'>Ta bort fråga</p>
-                            <MdDelete
-                              className='text-gray-600 hover:text-red-600'
-                              size={22}
-                              onClick={() => remove(index)}
-                            />
-                          </span>
+                          <button
+                            className='flex items-center rounded-md border border-black bg-red-500 px-4 py-2 hover:bg-red-600'
+                            onClick={() => remove(index)}
+                          >
+                            <p className='mr-2 text-sm font-semibold'>
+                              Ta bort fråga
+                            </p>
+                            <MdDelete className='text-black ' size={22} />
+                          </button>
                         </div>
                       </Disclosure.Panel>
                     </>
@@ -272,22 +311,24 @@ export default function CreatePage() {
               );
             })}
 
-            <div className='my-4 flex justify-center'>
-              <RoundedButton
+            <div className='my-4 flex justify-center '>
+              <button
+                type='button'
+                className={classNames(
+                  'w-fit justify-center text-center underline hover:text-green'
+                )}
                 onClick={() => {
-                  append({
-                    title: 'Din fråga',
-                  });
+                  append({});
                 }}
               >
                 Lägg till fråga
-              </RoundedButton>
+              </button>
             </div>
           </section>
           <div className='mx-auto w-full md:w-1/2'>
             <button
               type='submit'
-              className='text-medium inline-flex w-full justify-center rounded-md border border-black bg-black px-4 py-3 font-semibold text-white shadow-sm hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2'
+              className='text-medium inline-flex w-full justify-center rounded-md border border-black bg-yellow px-4 py-3 font-semibold shadow-sm hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2'
             >
               Skapa quiz
             </button>

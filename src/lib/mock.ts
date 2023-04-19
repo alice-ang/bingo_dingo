@@ -8,7 +8,7 @@ export type Question = {
   id: string;
   title: string;
   options: Option[];
-  media: string;
+  media: File;
   quizParent: string;
   userId: string;
 };
