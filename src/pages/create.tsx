@@ -50,6 +50,7 @@ export default function CreatePage() {
         description: data.description,
         isPublic: data.isPublic,
         isContributing: data.isContributing,
+        userId: user?.uid,
       }).then(async (document) => {
         await Promise.all(
           // eslint-disable-next-line @typescript-eslint/no-explicit-any

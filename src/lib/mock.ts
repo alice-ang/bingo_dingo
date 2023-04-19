@@ -8,7 +8,7 @@ export type Question = {
   id: string;
   title: string;
   options: Option[];
-  media: File;
+  media: string;
   quizParent: string;
   userId: string;
 };
@@ -19,6 +19,7 @@ export type Quiz = {
   distance: number;
   questions: Question[];
   author: string;
+  media: string;
   code: string;
   // elimination: Question;
   isPublic: boolean;

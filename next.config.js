@@ -14,6 +14,7 @@ const nextConfig = {
       'tailwindui.com',
       'source.unsplash.com',
       'lh3.googleusercontent.com',
+      'firebasestorage.googleapis.com',
     ],
   },
 

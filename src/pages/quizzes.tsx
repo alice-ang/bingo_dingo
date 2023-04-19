@@ -8,7 +8,7 @@ import { MdArrowDropDown, MdDelete, MdModeEdit } from 'react-icons/md';
 import { Quiz, quizzesCollectionRef } from '@/lib';
 import useModal from '@/lib/useModal';
 
-import { Badges, DashboardCard, Modal, Seo, Stats } from '@/components';
+import { DashboardCard, Modal, Seo, Stats } from '@/components';
 
 import { useAuth } from '@/context/auth';
 
@@ -28,16 +28,16 @@ export default function QuizzesPage() {
           (doc) =>
             ({
               ...doc.data(),
-              id: doc.id,
             } as Quiz)
         );
+
         setQuizList(filteredData);
       } catch (err) {
         console.error(err);
       }
     };
     getQuizList();
-  }, [user]);
+  }, [user?.uid]);
 
   return (
     <>
@@ -48,10 +48,10 @@ export default function QuizzesPage() {
         <h3 className='py-4 text-base font-semibold leading-6 text-gray-900'>
           Lorem ipsum dolor
         </h3>
-        <Badges items={['Aktiva', 'Arkiverade', 'Längst runda', 'A-Ö']} />
+        {/* <Badges items={['Aktiva', 'Arkiverade', 'Längst runda', 'A-Ö']} /> */}
         <dl className='mt-6 space-y-6 divide-y divide-gray-900/10'>
-          {quizList.map((quiz) => (
-            <Disclosure as='div' key={quiz.name} className='my-2'>
+          {quizList.map((quiz, i) => (
+            <Disclosure as='div' key={i} className='my-2'>
               {({ open }) => (
                 <>
                   <dt>
@@ -83,16 +83,9 @@ export default function QuizzesPage() {
                     className='bg-white p-4 shadow md:p-6'
                   >
                     <div className='grid grid-cols-6 gap-4'>
-                      {/* <div className='col-span-6 md:col-span-2'>
-                        <MdOutlineQrCode2
-                          className='h-48 w-full'
-                          aria-hidden='true'
-                        />
-
-                      </div> */}
-                      <DashboardCard className='relative col-span-6 md:col-span-3'>
+                      <DashboardCard className='relative col-span-6 min-h-[280px] md:col-span-3'>
                         <Image
-                          src='https://source.unsplash.com/1920x1080/?nature,water'
+                          src={quiz.media}
                           alt='bild'
                           fill
                           className='object-cover p-4'
@@ -107,21 +100,22 @@ export default function QuizzesPage() {
                           Frågor
                         </h3>
                         <div className='grid grid-cols-4 gap-4 text-center'>
-                          {quiz.questions.length > 0 &&
-                            quiz.questions.map((question, i) => (
+                          {quiz.questions.length > 0 ? (
+                            quiz.questions.map((question) => (
                               <DashboardCard
-                                key={i}
+                                key={question.id}
                                 className='col-span-2 cursor-pointer hover:bg-yellow md:col-span-1'
                                 onClick={toggle}
                               >
-                                <p className='font-semibold'>{`Fråga ${
-                                  i + 1
-                                }`}</p>
+                                <p className='font-semibold'>{`${question.title}`}</p>
                                 <p className='py-2 text-sm text-gray-700'>
                                   {question.title}
                                 </p>
                               </DashboardCard>
-                            ))}
+                            ))
+                          ) : (
+                            <h3>Inga quiz</h3>
+                          )}
                           {/* <DashboardCard className='col-span-2 cursor-pointer hover:bg-yellow md:col-span-1'>
                             <p className='font-semibold'>Utslagningsfråga</p>
                             <p className='py-2 text-sm text-gray-700'>
