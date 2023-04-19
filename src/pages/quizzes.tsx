@@ -3,9 +3,9 @@ import { Disclosure } from '@headlessui/react';
 import { getDocs, query, where } from 'firebase/firestore';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { MdArrowDropDown, MdDelete, MdModeEdit } from 'react-icons/md';
+import { MdArrowDropDown, MdCheck, MdDelete, MdModeEdit } from 'react-icons/md';
 
-import { Quiz, quizzesCollectionRef } from '@/lib';
+import { classNames, Quiz, quizzesCollectionRef } from '@/lib';
 import useModal from '@/lib/useModal';
 
 import { DashboardCard, Modal, Seo, Stats } from '@/components';
@@ -104,13 +104,45 @@ export default function QuizzesPage() {
                             quiz.questions.map((question) => (
                               <DashboardCard
                                 key={question.id}
-                                className='col-span-2 cursor-pointer hover:bg-yellow md:col-span-1'
-                                onClick={toggle}
+                                className='col-span-4 md:col-span-1 '
                               >
+                                {question.media && (
+                                  <DashboardCard className='relative min-h-[180px] '>
+                                    <Image
+                                      src={question.media}
+                                      alt='bild'
+                                      fill
+                                      className='object-cover p-4'
+                                    />
+                                  </DashboardCard>
+                                )}
+
                                 <p className='font-semibold'>{`${question.title}`}</p>
                                 <p className='py-2 text-sm text-gray-700'>
                                   {question.title}
                                 </p>
+                                {question.options.map((option) => (
+                                  <div
+                                    key={option.text}
+                                    className={classNames(
+                                      'flex items-center justify-between border-b text-left'
+                                    )}
+                                  >
+                                    <p
+                                      className={classNames(
+                                        option.isCorrect
+                                          ? 'font-semibold text-green'
+                                          : '',
+                                        ''
+                                      )}
+                                    >
+                                      {option.text}
+                                    </p>
+                                    {option.isCorrect && (
+                                      <MdCheck className='text-green' />
+                                    )}
+                                  </div>
+                                ))}
                               </DashboardCard>
                             ))
                           ) : (
