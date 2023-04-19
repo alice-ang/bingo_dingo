@@ -104,7 +104,7 @@ export default function QuizzesPage() {
                             quiz.questions.map((question) => (
                               <DashboardCard
                                 key={question.id}
-                                className='col-span-4 md:col-span-1 '
+                                className='col-span-4 shadow md:col-span-1'
                               >
                                 {question.media && (
                                   <DashboardCard className='relative min-h-[180px] '>
@@ -118,9 +118,7 @@ export default function QuizzesPage() {
                                 )}
 
                                 <p className='font-semibold'>{`${question.title}`}</p>
-                                <p className='py-2 text-sm text-gray-700'>
-                                  {question.title}
-                                </p>
+
                                 {question.options.map((option) => (
                                   <div
                                     key={option.text}
