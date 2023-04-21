@@ -11,6 +11,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <AuthProvider>
       <Layout>
         <Component {...pageProps} />
+        <div id='modal'></div>
       </Layout>
     </AuthProvider>
   );

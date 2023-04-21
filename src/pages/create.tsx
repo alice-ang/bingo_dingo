@@ -80,77 +80,12 @@ export default function CreatePage() {
             }
           })
         ).finally(() => {
+          // TODO: add this back in
           // reset();
           console.log('Quiz uploaded!');
         });
       });
     });
-
-    //     try {
-    //       if (data.media) {
-    //         const uploadTask = uploadBytesResumable(
-    //           ref(storage, `quiz/images/${user?.uid}/${v4()}`),
-    //           data.media[0]
-    //         );
-
-    //         uploadTask.on(
-    //           'state_changed',
-    //           (snapshot) => {
-    //             const progress =
-    //               (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-    //             console.log('Upload is ' + progress + '% done');
-
-    //             switch (snapshot.state) {
-    //               case 'paused':
-    //                 console.log('Upload is paused');
-    //                 break;
-    //               case 'running':
-    //                 console.log('Upload is running');
-    //                 break;
-    //             }
-    //           },
-    //           (error) => {
-    //             // Handle unsuccessful uploads
-    //             console.error(error);
-    //           },
-    //           () => {
-    //             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-    //               console.log('File available at', downloadURL);
-    //               addDoc(quizzesCollectionRef, {
-    //                 media: downloadURL,
-    //                 name: data.name,
-    //                 distance: data.distance,
-    //                 description: data.description,
-    //                 isPublic: data.isPublic,
-    //                 isContributing: data.isContributing,
-
-    //                 userId: user?.uid,
-    //               }).then((res) => {
-    //                 const docRef = doc(db, 'quizzes', res.id);
-
-    //                  Promise.all(
-    //                      data.questions.map((question) => {
-    // updateDoc()
-    //                 })
-    //                 )
-
-    //                 updateDoc(docRef, data)
-    //                   .then((docRef) => {
-    //                     console.log(
-    //                       'A New Document Field has been added to an existing document'
-    //                     );
-    //                   })
-    //                   .catch((error) => {
-    //                     console.log(error);
-    //                   });
-    //               });
-    //             });
-    //           }
-    //         );
-    //       }
-    //     } catch (error) {
-    //       console.error(error);
-    //     }
   });
 
   return (
