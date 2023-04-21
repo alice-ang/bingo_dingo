@@ -33,6 +33,7 @@ export default function QuizzesPage() {
           (doc) =>
             ({
               ...doc.data(),
+              id: doc.id,
             } as Quiz)
         );
 
@@ -96,7 +97,6 @@ export default function QuizzesPage() {
                           className='object-cover p-4'
                         />
                       </DashboardCard>
-
                       <p className='col-span-6 text-base leading-7 text-gray-600 md:col-span-3'>
                         {quiz.description}
                       </p>
@@ -182,7 +182,7 @@ export default function QuizzesPage() {
                       <div className='col-span-8 flex justify-end'>
                         <button
                           className='mr-3 flex items-center rounded-md border border-black bg-yellow px-4 py-2 hover:opacity-75'
-                          onClick={() => console.log('update doc')}
+                          onClick={() => console.log(quiz.id)}
                         >
                           <p className='mr-2 text-sm font-semibold'>
                             Uppdatera
@@ -191,9 +191,7 @@ export default function QuizzesPage() {
                         </button>
                         <button
                           className='flex items-center rounded-md border border-black bg-red-500 px-4 py-2 hover:bg-red-600'
-                          onClick={() =>
-                            deleteItem('quizzes', 'PgO0ul7rbqr3eFSM87Zb')
-                          }
+                          onClick={() => deleteItem('quizzes', quiz.id)}
                         >
                           <p className='mr-2 text-sm font-semibold'>Ta bort</p>
                           <MdDelete className='text-black ' size={22} />

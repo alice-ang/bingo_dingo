@@ -471,7 +471,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                 ) : (
                   <button
                     onClick={() => signInWithGoogle()}
-                    className='hover:font-semibold '
+                    className='font-semibold hover:text-green '
                   >
                     Logga in
                   </button>

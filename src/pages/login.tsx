@@ -2,7 +2,7 @@ import { useModal } from '@/lib/useModal';
 
 import { Modal } from '@/components';
 
-export default function SignIn() {
+export default function Login() {
   const { isShown, toggle } = useModal();
 
   return (

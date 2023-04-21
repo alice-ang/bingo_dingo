@@ -45,6 +45,7 @@ export default function CreatePage() {
 
     uploadBytes(imageRef, data.media[0]).then(async () => {
       const downloadURL = await getDownloadURL(imageRef);
+      console.log(data.id);
       await addDoc(quizzesCollectionRef, {
         media: downloadURL,
         name: data.name,
@@ -83,6 +84,7 @@ export default function CreatePage() {
         ).finally(() => {
           // TODO: add this back in
           // reset();
+
           console.log('Quiz uploaded!');
         });
       });
