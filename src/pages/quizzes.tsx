@@ -18,7 +18,7 @@ import { DashboardCard, Modal, Seo } from '@/components';
 import { useAuth } from '@/context/auth';
 
 export default function QuizzesPage() {
-  const user = useAuth();
+  const { user } = useAuth();
   const [quizList, setQuizList] = useState<Quiz[]>([]);
   const { isShown, toggle } = useModal();
 
@@ -114,14 +114,14 @@ export default function QuizzesPage() {
                                   onClick={toggle}
                                 >
                                   {question.media && (
-                                    <DashboardCard className='relative min-h-[180px] '>
+                                    <div className='relative min-h-[180px]'>
                                       <Image
                                         src={question.media}
-                                        alt='bild'
+                                        alt={question.title}
                                         fill
-                                        className='object-cover p-4'
+                                        className=' object-cover'
                                       />
-                                    </DashboardCard>
+                                    </div>
                                   )}
 
                                   <p className='font-semibold'>{`${question.title}`}</p>
@@ -159,11 +159,10 @@ export default function QuizzesPage() {
                                           src={question.media}
                                           alt='bild'
                                           fill
-                                          className='object-cover p-4'
+                                          className='object-contain p-4'
                                         />
                                       </DashboardCard>
                                       <h2>{question.title}</h2>
-                                      <p>hehehdkewuhf weiufh iwu</p>
                                     </>
                                   }
                                 />

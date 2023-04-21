@@ -4,15 +4,17 @@ import '@/styles/globals.css';
 
 import { Layout } from '@/components';
 
-import { AuthProvider } from '@/context/auth';
+import { AuthProvider, ProtectedRoute } from '@/context/auth';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
-      <Layout>
-        <Component {...pageProps} />
-        <div id='modal'></div>
-      </Layout>
+      <ProtectedRoute>
+        <Layout>
+          <Component {...pageProps} />
+          <div id='modal'></div>
+        </Layout>
+      </ProtectedRoute>
     </AuthProvider>
   );
 }

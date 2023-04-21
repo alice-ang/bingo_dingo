@@ -13,6 +13,7 @@ import {
   DashboardCard,
   FloatingInput,
   FloatingLabel,
+  FloatingSelect,
   FloatingTextArea,
   ImageUpload,
   QuestionOptions,
@@ -23,7 +24,7 @@ import {
 import { db, storage } from '@/config/firebase';
 import { useAuth } from '@/context/auth';
 export default function CreatePage() {
-  const user = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
 
   const {
     register,
@@ -138,8 +139,25 @@ export default function CreatePage() {
                 className='col-span-3 md:col-span-2'
                 register={register}
                 rules={{
-                  required: 'Ange distrans',
+                  required: 'Ange distans',
                 }}
+                errors={errors}
+              />
+              <FloatingSelect
+                name='type'
+                label='Typ'
+                placeholder='Typ av runda'
+                className='col-span-3 md:col-span-2'
+                register={register}
+                rules={{
+                  required: 'Ange typ',
+                }}
+                options={[
+                  { value: 'map', text: 'Karta' },
+                  { value: 'distance', text: 'Distans' },
+                  { value: 'live', text: 'Live' },
+                  { value: 'sitting', text: 'Stilla sittande' },
+                ]}
                 errors={errors}
               />
 
@@ -161,6 +179,11 @@ export default function CreatePage() {
                 control={control}
                 label='Bidra till aktivitetsbanken'
                 name='isContributing'
+              />
+              <Toggle
+                control={control}
+                label='Dela inom organisationen'
+                name='isShared'
               />
             </div>
           </section>

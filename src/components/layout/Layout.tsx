@@ -53,7 +53,7 @@ const userNavigation = [
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const user = useAuth();
+  const { user } = useAuth();
 
   return (
     <>
@@ -469,7 +469,12 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                     </Transition>
                   </Menu>
                 ) : (
-                  <button onClick={() => signInWithGoogle()}>Logga in</button>
+                  <button
+                    onClick={() => signInWithGoogle()}
+                    className='hover:font-semibold '
+                  >
+                    Logga in
+                  </button>
                 )}
               </div>
             </div>
