@@ -16,6 +16,7 @@ import {
   FloatingSelect,
   FloatingTextArea,
   ImageUpload,
+  Layout,
   QuestionOptions,
   Seo,
   Toggle,
@@ -92,7 +93,7 @@ export default function CreatePage() {
   });
 
   return (
-    <>
+    <Layout>
       <Seo templateTitle='Skapa quiz' />
 
       <section>
@@ -278,7 +279,7 @@ export default function CreatePage() {
               <button
                 type='button'
                 className={classNames(
-                  'w-fit justify-center text-center underline hover:text-green'
+                  'hover:text-green w-fit justify-center text-center underline'
                 )}
                 onClick={() => {
                   append({});
@@ -291,13 +292,13 @@ export default function CreatePage() {
           <div className='mx-auto w-full md:w-1/2'>
             <button
               type='submit'
-              className='text-medium inline-flex w-full justify-center rounded-md border border-black bg-yellow px-4 py-3 font-semibold shadow-sm hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2'
+              className='text-medium inline-flex w-full justify-center rounded-md border border-black bg-palette-yellow px-4 py-3 font-semibold shadow-sm hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2'
             >
               Skapa quiz
             </button>
           </div>
         </form>
       </section>
-    </>
+    </Layout>
   );
 }

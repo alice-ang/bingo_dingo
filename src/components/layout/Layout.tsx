@@ -128,7 +128,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                                 passHref
                                 className={classNames(
                                   item.current
-                                    ? 'text-yellow-900 border border-black bg-yellow'
+                                    ? 'border border-black bg-palette-yellow text-black'
                                     : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                                   'group flex items-center rounded-md px-2 py-2 text-sm font-medium'
                                 )}
@@ -156,7 +156,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                                   <Disclosure.Button
                                     className={classNames(
                                       item.current
-                                        ? 'text-yellow-900 border border-black bg-yellow'
+                                        ? 'border border-black bg-palette-yellow text-black'
                                         : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                                       'group flex w-full items-center rounded-md py-2 pl-2 pr-1 text-left text-sm font-medium focus:outline-none '
                                     )}
@@ -164,7 +164,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                                     <item.icon
                                       className={classNames(
                                         item.current
-                                          ? 'text-yellow-500'
+                                          ? 'text-black'
                                           : 'text-gray-400 group-hover:text-gray-500',
                                         'mr-3 h-6 w-6 flex-shrink-0'
                                       )}
@@ -188,7 +188,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                                         <subItem.icon
                                           className={classNames(
                                             item.current
-                                              ? 'text-yellow-500'
+                                              ? 'text-black'
                                               : 'text-gray-400 group-hover:text-gray-500',
                                             'mr-3 h-6 w-6 flex-shrink-0'
                                           )}
@@ -248,7 +248,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                         href={item.href}
                         className={classNames(
                           item.current
-                            ? 'text-yellow-900 border border-black bg-yellow'
+                            ? 'border border-black bg-palette-yellow text-black'
                             : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                           'group flex items-center rounded-md px-2 py-2 text-sm font-medium'
                         )}
@@ -256,7 +256,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                         <item.icon
                           className={classNames(
                             item.current
-                              ? 'text-yellow-500'
+                              ? 'text-black'
                               : 'text-gray-400 group-hover:text-gray-500',
                             'mr-3 h-6 w-6 flex-shrink-0'
                           )}
@@ -272,7 +272,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                           <Disclosure.Button
                             className={classNames(
                               item.current
-                                ? 'text-yellow-900 border border-black bg-yellow'
+                                ? 'border border-black bg-palette-yellow text-black'
                                 : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                               'group flex w-full items-center rounded-md py-2 pl-2 pr-1 text-left text-sm font-medium focus:outline-none '
                             )}
@@ -471,7 +471,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                 ) : (
                   <button
                     onClick={() => signInWithGoogle()}
-                    className='font-semibold hover:text-green '
+                    className='hover:text-green font-semibold '
                   >
                     Logga in
                   </button>

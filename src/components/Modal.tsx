@@ -40,7 +40,7 @@ export const Modal: FC<ModalProps> = ({ isShown, toggle, modalContent }) => {
                 <div className='mt-5 sm:mt-6'>
                   <button
                     type='button'
-                    className='inline-flex w-full justify-center rounded-md border border-black bg-yellow px-3 py-2  text-sm  font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2'
+                    className='inline-flex w-full justify-center rounded-md border border-black bg-palette-yellow px-3 py-2  text-sm  font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2'
                     onClick={() => toggle()}
                   >
                     Klar{' '}

@@ -27,8 +27,8 @@ export type Quiz = {
 };
 
 export const quizSettings = [
-  { title: '12', subtitle: 'Kilometer', icon: '🏃‍♀️', color: 'bg-beige' },
-  { title: '8', subtitle: 'Frågor', icon: '✏️', color: 'bg-green' },
-  { title: '2', subtitle: 'Priser', icon: '🏆', color: 'bg-purple' },
-  { title: '24', subtitle: 'Deltagare', icon: '🏁', color: 'bg-pink' },
+  { title: '12', subtitle: 'Kilometer', icon: '🏃‍♀️', color: 'bg-palette-beige' },
+  { title: '8', subtitle: 'Frågor', icon: '✏️', color: 'bg-palette-green' },
+  { title: '2', subtitle: 'Priser', icon: '🏆', color: 'bg-palette-purple' },
+  { title: '24', subtitle: 'Deltagare', icon: '🏁', color: 'bg-palette-pink' },
 ];

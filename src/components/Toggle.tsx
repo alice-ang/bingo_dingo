@@ -39,7 +39,7 @@ export const Toggle = ({ name, control, label, rules }: Props): JSX.Element => {
               checked={value}
               onChange={onChange}
               ref={ref}
-              className='group relative inline-flex h-5 w-11 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-green focus:ring-offset-4 '
+              className='focus:ring-green group relative inline-flex h-5 w-11 flex-shrink-0 cursor-pointer items-center justify-center rounded-full focus:outline-none focus:ring-2 focus:ring-offset-4 '
             >
               <span className='sr-only'>{label}</span>
               <span
@@ -50,7 +50,7 @@ export const Toggle = ({ name, control, label, rules }: Props): JSX.Element => {
               <span
                 aria-hidden='true'
                 className={classNames(
-                  value ? 'bg-green' : 'bg-gray-200',
+                  value ? 'bg-palette-green' : 'bg-gray-200',
                   'pointer-events-none absolute mx-auto h-5 w-11 rounded-full border border-black transition-colors duration-200 ease-in-out'
                 )}
               />

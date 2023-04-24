@@ -23,7 +23,7 @@ export const RoundedButton = ({
       onClick={onClick}
       className={classNames(
         className,
-        color ? color : 'bg-yellow',
+        color ? color : 'bg-palette-yellow',
         'cursor-pointer rounded-full border border-black py-2 px-4 font-medium transition delay-100 ease-in-out hover:bg-black hover:text-white'
       )}
     >

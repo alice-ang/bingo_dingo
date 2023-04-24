@@ -4,6 +4,7 @@ import {
   Auth,
   CategoryItem,
   DashboardCard,
+  Layout,
   SeeAllHeading,
   Seo,
 } from '@/components';
@@ -12,7 +13,7 @@ import {
 
 export default function HomePage() {
   return (
-    <>
+    <Layout>
       <Seo templateTitle='Översikt' />
       <h2 className=' text-4xl font-normal text-gray-900'>
         Välkommen <span className='text-green'>Företaget AB</span>
@@ -68,6 +69,6 @@ export default function HomePage() {
         </DashboardCard>
       </div>
       <Auth />
-    </>
+    </Layout>
   );
 }

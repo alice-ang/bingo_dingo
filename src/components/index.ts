@@ -2,6 +2,7 @@ export * from './AdBanner';
 export * from './Auth';
 export * from './BackToTop';
 export * from './Badges';
+export * from './Browser';
 export * from './CategoryItem';
 export * from './DashboardCard';
 export * from './FloatingInput';

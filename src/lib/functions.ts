@@ -4,7 +4,17 @@ import {
   signInWithPopup,
   signOut,
 } from 'firebase/auth';
-import { addDoc, collection, deleteDoc, doc } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  CollectionReference,
+  deleteDoc,
+  doc,
+  DocumentData,
+  getDocs,
+  query,
+  where,
+} from 'firebase/firestore';
 import { FieldValues } from 'react-hook-form';
 
 import { db } from '@/config/firebase';
@@ -78,4 +88,22 @@ export const deleteItem = async (collectionName: string, docId: string) => {
     .catch((error) => {
       console.log(error);
     });
+};
+
+export const getDocumentsByUser = async (
+  collectionRef: CollectionReference<DocumentData>,
+  uid?: string
+) => {
+  try {
+    const quiz = await getDocs(
+      query(collectionRef, where('userId', '==', uid))
+    );
+
+    return quiz.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+  } catch (err) {
+    console.error(err);
+  }
 };

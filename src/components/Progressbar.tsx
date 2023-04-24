@@ -18,7 +18,7 @@ export const Progressbar = ({ progress }: Props) => {
       <div
         className={classNames(
           `w-[${updated}%]`,
-          'h-3  translate-x-0.5 rounded-l-full border-r border-black bg-green'
+          'h-3  translate-x-0.5 rounded-l-full border-r border-black bg-palette-green'
         )}
       />
     </div>

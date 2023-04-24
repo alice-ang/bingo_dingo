@@ -13,7 +13,7 @@ import {
 import { classNames, deleteItem, Quiz, quizzesCollectionRef } from '@/lib';
 import { useModal } from '@/lib/useModal';
 
-import { DashboardCard, Modal, Seo } from '@/components';
+import { DashboardCard, Layout, Modal, Seo } from '@/components';
 
 import { useAuth } from '@/context/auth';
 
@@ -46,7 +46,7 @@ export default function QuizzesPage() {
   }, [user?.uid]);
 
   return (
-    <>
+    <Layout>
       <Seo templateTitle='Mina quiz' />
 
       <section>
@@ -90,12 +90,24 @@ export default function QuizzesPage() {
                   >
                     <div className='grid grid-cols-6 gap-4'>
                       <DashboardCard className='relative col-span-6 min-h-[280px] md:col-span-3'>
-                        <Image
+                        {/* <Image
                           src={quiz.media}
                           alt='bild'
                           fill
                           className='object-cover p-4'
-                        />
+
+                        /> */}
+
+                        {quiz.media && (
+                          <Image
+                            src={quiz.media}
+                            alt={quiz.name}
+                            width='0'
+                            height='0'
+                            sizes='100vw'
+                            className='h-auto w-full'
+                          />
+                        )}
                       </DashboardCard>
                       <p className='col-span-6 text-base leading-7 text-gray-600 md:col-span-3'>
                         {quiz.description}
@@ -118,8 +130,10 @@ export default function QuizzesPage() {
                                       <Image
                                         src={question.media}
                                         alt={question.title}
-                                        fill
-                                        className=' object-cover'
+                                        width='0'
+                                        height='0'
+                                        sizes='100vw'
+                                        className='h-auto w-full'
                                       />
                                     </div>
                                   )}
@@ -136,7 +150,7 @@ export default function QuizzesPage() {
                                       <p
                                         className={classNames(
                                           option.isCorrect
-                                            ? 'font-semibold text-green'
+                                            ? 'text-green font-semibold'
                                             : '',
                                           ''
                                         )}
@@ -154,12 +168,14 @@ export default function QuizzesPage() {
                                   toggle={toggle}
                                   modalContent={
                                     <>
-                                      <DashboardCard className='relative min-h-[180px] '>
+                                      <DashboardCard className=''>
                                         <Image
                                           src={question.media}
-                                          alt='bild'
-                                          fill
-                                          className='object-contain p-4'
+                                          alt={question.title}
+                                          width='0'
+                                          height='0'
+                                          sizes='100vw'
+                                          className='h-auto w-full '
                                         />
                                       </DashboardCard>
                                       <h2>{question.title}</h2>
@@ -171,17 +187,11 @@ export default function QuizzesPage() {
                           ) : (
                             <h3>Inga quiz</h3>
                           )}
-                          {/* <DashboardCard className='col-span-2 cursor-pointer hover:bg-yellow md:col-span-1'>
-                            <p className='font-semibold'>Utslagningsfråga</p>
-                            <p className='py-2 text-sm text-gray-700'>
-                              {quiz.elimination.question}
-                            </p>
-                          </DashboardCard> */}
                         </div>
                       </div>
-                      <div className='col-span-8 flex justify-end'>
+                      <div className='col-span-8 flex justify-center md:justify-end'>
                         <button
-                          className='mr-3 flex items-center rounded-md border border-black bg-yellow px-4 py-2 hover:opacity-75'
+                          className='mr-3 flex items-center rounded-md border border-black bg-palette-yellow px-4 py-2 hover:opacity-75'
                           onClick={() => console.log(quiz.id)}
                         >
                           <p className='mr-2 text-sm font-semibold'>
@@ -205,6 +215,6 @@ export default function QuizzesPage() {
           ))}
         </dl>
       </section>
-    </>
+    </Layout>
   );
 }
