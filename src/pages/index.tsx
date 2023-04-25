@@ -3,7 +3,6 @@ import {
   CategoryItem,
   DashboardCard,
   Layout,
-  MapContainer,
   SeeAllHeading,
   Seo,
 } from '@/components';
@@ -39,7 +38,7 @@ export default function HomePage() {
           </DashboardCard>
         ))}
         <DashboardCard className='col-span-6 min-h-[260px]'>
-          <MapContainer />
+          {/* <MapContainer /> */}
         </DashboardCard>
 
         <DashboardCard className='col-span-6 md:col-span-2'>

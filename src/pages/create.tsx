@@ -1,13 +1,13 @@
 /* eslint-disable no-console */
 /* eslint-disable unused-imports/no-unused-vars */
 import { Disclosure } from '@headlessui/react';
-import { addDoc, arrayUnion, doc, updateDoc } from 'firebase/firestore';
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { ref } from 'firebase/storage';
+import { useState } from 'react';
 import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
 import { MdArrowDropDown, MdDelete } from 'react-icons/md';
 import { v4 } from 'uuid';
 
-import { classNames, quizzesCollectionRef } from '@/lib';
+import { classNames, Question } from '@/lib';
 
 import {
   DashboardCard,
@@ -17,23 +17,28 @@ import {
   FloatingTextArea,
   ImageUpload,
   Layout,
+  MapContainer,
   QuestionOptions,
   Seo,
   Toggle,
 } from '@/components';
 
-import { db, storage } from '@/config/firebase';
+import { storage } from '@/config/firebase';
 import { useAuth } from '@/context/auth';
 export default function CreatePage() {
   const { user, isAuthenticated, isLoading } = useAuth();
-
+  const [markers, setMarkers] = useState([]);
   const {
     register,
     handleSubmit,
     control,
     reset,
+    watch,
+    getValues,
     formState: { errors },
   } = useForm({});
+
+  const watchQuestions = watch('questions') as Question[];
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -44,52 +49,52 @@ export default function CreatePage() {
   const onSubmitQuiz = handleSubmit(async (data: FieldValues) => {
     const imageRef = ref(storage, `quiz/images/${user?.uid}/${v4()}`);
 
-    uploadBytes(imageRef, data.media[0]).then(async () => {
-      const downloadURL = await getDownloadURL(imageRef);
-      console.log(data.id);
-      await addDoc(quizzesCollectionRef, {
-        media: downloadURL,
-        name: data.name,
-        distance: data.distance,
-        description: data.description,
-        isPublic: data.isPublic,
-        isContributing: data.isContributing,
-        userId: user?.uid,
-      }).then(async (document) => {
-        await Promise.all(
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          data.questions.map((question: any) => {
-            const mediaRef = ref(storage, `quiz/images/${user?.uid}/${v4()}`);
-            // TODO: Fix this if - puts questions in wrong order
-            if (question.media.length > 0) {
-              uploadBytes(mediaRef, question.media[0]).then(async () => {
-                const mediaUrl = await getDownloadURL(mediaRef);
-                await updateDoc(doc(db, 'quizzes', document.id), {
-                  questions: arrayUnion({
-                    media: mediaUrl,
-                    title: question.title,
-                    options: question.options,
-                  }),
-                });
-              });
-            } else {
-              updateDoc(doc(db, 'quizzes', document.id), {
-                questions: arrayUnion({
-                  media: '',
-                  title: question.title,
-                  options: question.options,
-                }),
-              });
-            }
-          })
-        ).finally(() => {
-          // TODO: add this back in
-          // reset();
+    //   uploadBytes(imageRef, data.media[0]).then(async () => {
+    //     const downloadURL = await getDownloadURL(imageRef);
 
-          console.log('Quiz uploaded!');
-        });
-      });
-    });
+    //     await addDoc(quizzesCollectionRef, {
+    //       media: downloadURL,
+    //       name: data.name,
+    //       distance: data.distance,
+    //       description: data.description,
+    //       isPublic: data.isPublic,
+    //       isContributing: data.isContributing,
+    //       userId: user?.uid,
+    //     }).then(async (document) => {
+    //       await Promise.all(
+    //         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    //         data.questions.map((question: any) => {
+    //           const mediaRef = ref(storage, `quiz/images/${user?.uid}/${v4()}`);
+    //           // TODO: Fix this if - puts questions in wrong order
+    //           if (question.media.length > 0) {
+    //             uploadBytes(mediaRef, question.media[0]).then(async () => {
+    //               const mediaUrl = await getDownloadURL(mediaRef);
+    //               await updateDoc(doc(db, 'quizzes', document.id), {
+    //                 questions: arrayUnion({
+    //                   media: mediaUrl,
+    //                   title: question.title,
+    //                   options: question.options,
+    //                 }),
+    //               });
+    //             });
+    //           } else {
+    //             updateDoc(doc(db, 'quizzes', document.id), {
+    //               questions: arrayUnion({
+    //                 media: '',
+    //                 title: question.title,
+    //                 options: question.options,
+    //               }),
+    //             });
+    //           }
+    //         })
+    //       ).finally(() => {
+    //         // TODO: add this back in
+    //         // reset();
+
+    //         console.log('Quiz uploaded!');
+    //       });
+    //     });
+    //   });
   });
 
   return (
@@ -257,6 +262,21 @@ export default function CreatePage() {
                           }}
                           errors={errors}
                         />
+                        <DashboardCard className='col-span-8 min-h-[360px]'>
+                          <MapContainer
+                            control={control}
+                            name={`questions[${index}].marker`}
+                            onMapChange={(point) => console.log(point)}
+                            markers={watchQuestions
+                              .filter((item) => !!item.marker)
+                              .map((question) => ({
+                                location: new window.google.maps.LatLng({
+                                  ...question.marker,
+                                }),
+                              }))}
+                          />
+                        </DashboardCard>
+
                         <div className='col-span-8 flex justify-end'>
                           <button
                             className='flex items-center rounded-md border border-black bg-red-500 px-4 py-2 hover:bg-red-600'

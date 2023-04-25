@@ -11,6 +11,7 @@ export type Question = {
   media: string;
   quizParent: string;
   userId: string;
+  marker: Point;
 };
 
 export type Quiz = {
@@ -26,6 +27,11 @@ export type Quiz = {
   description: string;
 };
 
+export const libraries = String(['places']);
+export type Point = {
+  lat: number;
+  lng: number;
+};
 export type LatLngLiteral = google.maps.LatLngLiteral;
 export type DirectionsResult = google.maps.DirectionsResult;
 export type MapOptions = google.maps.MapOptions;
