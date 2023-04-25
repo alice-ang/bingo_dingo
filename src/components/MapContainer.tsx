@@ -70,20 +70,20 @@ export const MapContainer = ({
   }
 
   const fetchDirections = (newMark: LatLngLiteral) => {
-    if (!mapRef || markers != undefined) {
+    if (!mapRef && !markers) {
       return;
     }
     const service = new google.maps.DirectionsService();
     service.route(
       {
-        origin: markers?.[0] ?? marker ?? newMark,
+        origin: markers?.[0].location ?? marker ?? newMark,
         waypoints: markers,
         destination: newMark,
         travelMode: google.maps.TravelMode.WALKING,
       },
-      (result, status) => {
-        if (status === 'OK' && result) {
-          setDirections(result);
+      (response, status) => {
+        if (status === 'OK' && response) {
+          setDirections(response);
         }
       }
     );
@@ -122,7 +122,7 @@ export const MapContainer = ({
               options={{
                 polylineOptions: {
                   zIndex: 50,
-                  strokeColor: '#0000',
+                  strokeColor: '#1976D2',
                   strokeWeight: 5,
                 },
               }}
