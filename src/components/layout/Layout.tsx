@@ -57,7 +57,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <>
-      <div className='bg-slate-50 '>
+      <div className='bg-zinc-50 '>
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
             as='div'

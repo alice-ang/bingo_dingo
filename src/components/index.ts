@@ -12,6 +12,7 @@ export * from './FloatingTextArea';
 export * from './ImageUpload';
 export * from './layout';
 export * from './Logo';
+export * from './MapContainer';
 export * from './Modal';
 export * from './NextImage';
 export * from './Progressbar';

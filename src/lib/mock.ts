@@ -26,6 +26,10 @@ export type Quiz = {
   description: string;
 };
 
+export type LatLngLiteral = google.maps.LatLngLiteral;
+export type DirectionsResult = google.maps.DirectionsResult;
+export type MapOptions = google.maps.MapOptions;
+
 export const quizSettings = [
   { title: '12', subtitle: 'Kilometer', icon: '🏃‍♀️', color: 'bg-palette-beige' },
   { title: '8', subtitle: 'Frågor', icon: '✏️', color: 'bg-palette-green' },
