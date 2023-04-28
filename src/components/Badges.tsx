@@ -21,8 +21,8 @@ export const Badges = ({ items, onClick }: Props) => {
                 setSelected(item);
               }}
               className={classNames(
-                selected == item ? 'bg-yellow font-bold' : 'bg-white',
-                ' my-2 mr-3 rounded-full border border-black py-1 px-4 hover:bg-yellow'
+                selected == item ? 'bg-palette-yellow font-bold' : 'bg-white',
+                ' my-2 mr-3 rounded-full border border-black py-1 px-4 hover:bg-palette-yellow'
               )}
             >
               {item}

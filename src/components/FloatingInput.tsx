@@ -20,6 +20,7 @@ type FormInputProps<TFormValues> = {
   placeholder?: string;
   step?: number | string;
   defaultValue?: string;
+  description?: string;
 };
 
 export const FloatingInput = <TFormValues extends Record<string, unknown>>({
@@ -30,24 +31,25 @@ export const FloatingInput = <TFormValues extends Record<string, unknown>>({
   className,
   step,
   defaultValue,
+  description,
   ...props
 }: FormInputProps<TFormValues>): JSX.Element => {
   return (
-    <div className={className}>
-      <FloatingLabel label={props.label} name={name}>
-        <input
-          defaultValue={defaultValue}
-          step={step}
-          aria-invalid={!!errors}
-          className='block w-full rounded-md border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-black placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-yellow sm:text-sm sm:leading-6'
-          {...props}
-          {...register(name, rules)}
-          min={0}
-        />
-      </FloatingLabel>
-      {errors && (
-        <p className='text-sm text-red-500'> {errors[name]?.message}</p>
-      )}
-    </div>
+    <>
+      <div className={className}>
+        <FloatingLabel label={props.label} name={name}>
+          <input
+            defaultValue={defaultValue}
+            step={step}
+            aria-invalid={!!errors}
+            className='block w-full rounded-md border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-black placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-yellow sm:text-sm sm:leading-6'
+            {...props}
+            {...register(name, rules)}
+            min={0}
+          />
+        </FloatingLabel>
+        {description && <p className='text-sm text-gray-800'> {description}</p>}
+      </div>
+    </>
   );
 };

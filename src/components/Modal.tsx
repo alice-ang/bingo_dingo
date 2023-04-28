@@ -1,22 +1,16 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, ReactNode } from 'react';
+import { FC, Fragment } from 'react';
+import ReactDOM from 'react-dom';
 
-type Props = {
-  children?: ReactNode;
-
-  isOpen: boolean;
+export type ModalProps = {
+  isShown: boolean;
   toggle: () => void;
-  onSubmit?: () => void;
+  modalContent: JSX.Element;
 };
 
-export const Modal = ({
-  isOpen = false,
-  toggle,
-  children,
-  onSubmit,
-}: Props) => {
-  return (
-    <Transition.Root show={isOpen} as={Fragment}>
+export const Modal: FC<ModalProps> = ({ isShown, toggle, modalContent }) => {
+  const modal = (
+    <Transition.Root show={isShown} as={Fragment}>
       <Dialog as='div' className='z-100 absolute' onClose={toggle}>
         <Transition.Child
           as={Fragment}
@@ -42,17 +36,12 @@ export const Modal = ({
               leaveTo='opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95'
             >
               <Dialog.Panel className='relative w-full transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:p-6 md:max-w-xl'>
-                {children}
+                {modalContent}
                 <div className='mt-5 sm:mt-6'>
                   <button
-                    type={onSubmit ? 'submit' : 'button'}
-                    className='inline-flex w-full justify-center rounded-md border border-black bg-yellow px-3 py-2  text-sm  font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2'
-                    onClick={() => {
-                      if (onSubmit) {
-                        onSubmit();
-                      }
-                      toggle();
-                    }}
+                    type='button'
+                    className='inline-flex w-full justify-center rounded-md border border-black bg-palette-yellow px-3 py-2  text-sm  font-semibold shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2'
+                    onClick={() => toggle()}
                   >
                     Klar{' '}
                   </button>
@@ -64,4 +53,6 @@ export const Modal = ({
       </Dialog>
     </Transition.Root>
   );
+
+  return isShown ? ReactDOM.createPortal(modal, document.body) : null;
 };

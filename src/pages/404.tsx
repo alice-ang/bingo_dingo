@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import * as React from 'react';
 
-import { Seo } from '@/components';
+import { Layout, Seo } from '@/components';
 
 export default function NotFoundPage() {
   return (
-    <>
+    <Layout>
       <Seo templateTitle='Not Found' />
 
       <section className='bg-white'>
@@ -16,6 +16,6 @@ export default function NotFoundPage() {
           </Link>
         </div>
       </section>
-    </>
+    </Layout>
   );
 }

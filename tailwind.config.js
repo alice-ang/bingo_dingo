@@ -4,21 +4,24 @@ const { fontFamily } = require('tailwindcss/defaultTheme');
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx}'],
+  darkMode: 'class',
   theme: {
     extend: {
       fontFamily: {
         primary: ['Inter', ...fontFamily.sans],
       },
       colors: {
-        green: '#77b39d',
-        yellow: '#ffdc9a',
-        pink: '#e8acc1',
-        beige: '#fff9eb',
-        purple: '#c1befb',
-        lightGrey: '#f1f1f1',
-        transparent: 'transparent',
-        current: 'currentColor',
-        white: '#ffffff',
+        palette: {
+          green: '#77b39d',
+          yellow: '#ffdc9a',
+          pink: '#e8acc1',
+          beige: '#fff9eb',
+          purple: '#c1befb',
+          lightGrey: '#f1f1f1',
+          transparent: 'transparent',
+          current: 'currentColor',
+          white: '#ffffff',
+        },
       },
       keyframes: {
         flicker: {

@@ -16,7 +16,7 @@ import {
   MdPostAdd,
 } from 'react-icons/md';
 
-import { classNames, logOut } from '@/lib';
+import { classNames, logOut, signInWithGoogle } from '@/lib';
 
 import { AdBanner, BackToTop, Logo, NextImage } from '@/components';
 import { Footer } from '@/components/layout/Footer';
@@ -53,15 +53,15 @@ const userNavigation = [
 
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const user = useAuth();
+  const { user } = useAuth();
 
   return (
     <>
-      <div className='bg-slate-50 '>
+      <div className='bg-zinc-50 '>
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
             as='div'
-            className='relative z-0 lg:hidden'
+            className='relative z-10 lg:hidden'
             onClose={setSidebarOpen}
           >
             <Transition.Child
@@ -128,7 +128,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                                 passHref
                                 className={classNames(
                                   item.current
-                                    ? 'text-yellow-900 border border-black bg-yellow'
+                                    ? 'border border-black bg-palette-yellow text-black'
                                     : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                                   'group flex items-center rounded-md px-2 py-2 text-sm font-medium'
                                 )}
@@ -156,7 +156,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                                   <Disclosure.Button
                                     className={classNames(
                                       item.current
-                                        ? 'text-yellow-900 border border-black bg-yellow'
+                                        ? 'border border-black bg-palette-yellow text-black'
                                         : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                                       'group flex w-full items-center rounded-md py-2 pl-2 pr-1 text-left text-sm font-medium focus:outline-none '
                                     )}
@@ -164,7 +164,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                                     <item.icon
                                       className={classNames(
                                         item.current
-                                          ? 'text-yellow-500'
+                                          ? 'text-black'
                                           : 'text-gray-400 group-hover:text-gray-500',
                                         'mr-3 h-6 w-6 flex-shrink-0'
                                       )}
@@ -188,7 +188,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                                         <subItem.icon
                                           className={classNames(
                                             item.current
-                                              ? 'text-yellow-500'
+                                              ? 'text-black'
                                               : 'text-gray-400 group-hover:text-gray-500',
                                             'mr-3 h-6 w-6 flex-shrink-0'
                                           )}
@@ -248,7 +248,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                         href={item.href}
                         className={classNames(
                           item.current
-                            ? 'text-yellow-900 border border-black bg-yellow'
+                            ? 'border border-black bg-palette-yellow text-black'
                             : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                           'group flex items-center rounded-md px-2 py-2 text-sm font-medium'
                         )}
@@ -256,7 +256,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                         <item.icon
                           className={classNames(
                             item.current
-                              ? 'text-yellow-500'
+                              ? 'text-black'
                               : 'text-gray-400 group-hover:text-gray-500',
                             'mr-3 h-6 w-6 flex-shrink-0'
                           )}
@@ -272,7 +272,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                           <Disclosure.Button
                             className={classNames(
                               item.current
-                                ? 'text-yellow-900 border border-black bg-yellow'
+                                ? 'border border-black bg-palette-yellow text-black'
                                 : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                               'group flex w-full items-center rounded-md py-2 pl-2 pr-1 text-left text-sm font-medium focus:outline-none '
                             )}
@@ -342,7 +342,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         </div>
 
         <div className='lg:pl-72'>
-          <div className='sticky top-0 flex h-16 shrink-0 items-center gap-x-4 border-b border-black bg-white px-4 sm:gap-x-6 sm:px-6 lg:px-8'>
+          <div className='sticky top-0 z-10 flex h-16 shrink-0 items-center gap-x-4 border-b border-black bg-white px-4 sm:gap-x-6 sm:px-6 lg:px-8'>
             <button
               type='button'
               className='-m-2.5 p-2.5 text-gray-700 lg:hidden'
@@ -388,83 +388,94 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                   aria-hidden='true'
                 />
                 {/* Profile dropdown */}
-
-                <Menu as='div' className='relative'>
-                  <Menu.Button className='-m-1.5 flex items-center p-1.5'>
-                    <span className='sr-only'>Open user menu</span>
-                    <NextImage
-                      height={40}
-                      width={40}
-                      imgClassName='h-8 w-8 rounded-full bg-gray-50 border border-black'
-                      src={
-                        user?.photoURL ??
-                        'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                      }
-                      alt=''
-                    />
-                    <span className='hidden lg:flex lg:items-center'>
-                      <span className='ml-3 flex-col text-left'>
-                        <span
-                          className=' text-sm font-semibold leading-6 text-gray-900'
-                          aria-hidden='true'
-                        >
-                          {user?.displayName ?? user?.email}
-                        </span>
-                        <p className='text-xs text-gray-700' aria-hidden='true'>
-                          Quizmaster
-                        </p>
-                      </span>
-
-                      <BsChevronDown
-                        className='ml-2 text-gray-400'
-                        aria-hidden='true'
-                        size={14}
+                {user ? (
+                  <Menu as='div' className='relative'>
+                    <Menu.Button className='-m-1.5 flex items-center p-1.5'>
+                      <span className='sr-only'>Open user menu</span>
+                      <NextImage
+                        height={40}
+                        width={40}
+                        imgClassName='h-8 w-8 rounded-full bg-gray-50 border border-black'
+                        src={
+                          user?.photoURL ??
+                          'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+                        }
+                        alt=''
                       />
-                    </span>
-                  </Menu.Button>
-                  <Transition
-                    as={Fragment}
-                    enter='transition ease-out duration-100'
-                    enterFrom='transform opacity-0 scale-95'
-                    enterTo='transform opacity-100 scale-100'
-                    leave='transition ease-in duration-75'
-                    leaveFrom='transform opacity-100 scale-100'
-                    leaveTo='transform opacity-0 scale-95'
+                      <span className='hidden lg:flex lg:items-center'>
+                        <span className='flex-col text-left'>
+                          <span
+                            className=' text-sm font-semibold leading-6 text-gray-900'
+                            aria-hidden='true'
+                          >
+                            {user?.displayName ?? user?.email}
+                          </span>
+                          <p
+                            className='text-xs text-gray-700'
+                            aria-hidden='true'
+                          >
+                            Quizmaster
+                          </p>
+                        </span>
+
+                        <BsChevronDown
+                          className='ml-2 text-gray-400'
+                          aria-hidden='true'
+                          size={14}
+                        />
+                      </span>
+                    </Menu.Button>
+                    <Transition
+                      as={Fragment}
+                      enter='transition ease-out duration-100'
+                      enterFrom='transform opacity-0 scale-95'
+                      enterTo='transform opacity-100 scale-100'
+                      leave='transition ease-in duration-75'
+                      leaveFrom='transform opacity-100 scale-100'
+                      leaveTo='transform opacity-0 scale-95'
+                    >
+                      <Menu.Items className='absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md border border-black bg-white py-2 ring-1 ring-gray-900/5 focus:outline-none'>
+                        {userNavigation.map((item) => (
+                          <Menu.Item key={item.name}>
+                            {({ active }) => (
+                              <>
+                                {item.clicked ? (
+                                  <div
+                                    onClick={item.clicked}
+                                    className={classNames(
+                                      active ? 'bg-gray-50' : '',
+                                      'block cursor-pointer px-3 py-1 text-sm leading-6 text-gray-900'
+                                    )}
+                                  >
+                                    {item.name}
+                                  </div>
+                                ) : (
+                                  <Link
+                                    passHref
+                                    href={item.href}
+                                    className={classNames(
+                                      active ? 'bg-gray-50' : '',
+                                      'block px-3 py-1 text-sm leading-6 text-gray-900'
+                                    )}
+                                  >
+                                    {item.name}
+                                  </Link>
+                                )}
+                              </>
+                            )}
+                          </Menu.Item>
+                        ))}
+                      </Menu.Items>
+                    </Transition>
+                  </Menu>
+                ) : (
+                  <button
+                    onClick={() => signInWithGoogle()}
+                    className='hover:text-green font-semibold '
                   >
-                    <Menu.Items className='absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md border border-black bg-white py-2 ring-1 ring-gray-900/5 focus:outline-none'>
-                      {userNavigation.map((item) => (
-                        <Menu.Item key={item.name}>
-                          {({ active }) => (
-                            <>
-                              {item.clicked ? (
-                                <div
-                                  onClick={item.clicked}
-                                  className={classNames(
-                                    active ? 'bg-gray-50' : '',
-                                    'block cursor-pointer px-3 py-1 text-sm leading-6 text-gray-900'
-                                  )}
-                                >
-                                  {item.name}
-                                </div>
-                              ) : (
-                                <Link
-                                  passHref
-                                  href={item.href}
-                                  className={classNames(
-                                    active ? 'bg-gray-50' : '',
-                                    'block px-3 py-1 text-sm leading-6 text-gray-900'
-                                  )}
-                                >
-                                  {item.name}
-                                </Link>
-                              )}
-                            </>
-                          )}
-                        </Menu.Item>
-                      ))}
-                    </Menu.Items>
-                  </Transition>
-                </Menu>
+                    Logga in
+                  </button>
+                )}
               </div>
             </div>
           </div>

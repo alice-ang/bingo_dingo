@@ -4,13 +4,25 @@ import {
   signInWithPopup,
   signOut,
 } from 'firebase/auth';
-import { collection } from 'firebase/firestore';
+import {
+  addDoc,
+  collection,
+  CollectionReference,
+  deleteDoc,
+  doc,
+  DocumentData,
+  getDocs,
+  query,
+  where,
+} from 'firebase/firestore';
+import { FieldValues } from 'react-hook-form';
 
 import { db } from '@/config/firebase';
 import { auth, googleProvider } from '@/config/firebase';
 
 export const quizzesCollectionRef = collection(db, 'quizzes');
 export const questionsCollectionRef = collection(db, 'questions');
+
 export const signIn = async (email: string, password: string) => {
   try {
     await createUserWithEmailAndPassword(auth, email, password);
@@ -38,6 +50,7 @@ export const signInWithGoogle = async () => {
     console.log(err);
   }
 };
+
 const characters =
   'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
@@ -49,4 +62,48 @@ export const generateString = (length: number) => {
   }
 
   return result;
+};
+
+export const createQuiz = async (
+  data: FieldValues,
+  downloadURL: string,
+  userId: string
+) => {
+  return await addDoc(quizzesCollectionRef, {
+    media: downloadURL,
+    name: data.name,
+    distance: data.distance,
+    description: data.description,
+    isPublic: data.isPublic,
+    isContributing: data.isContributing,
+    userId: userId,
+  });
+};
+
+export const deleteItem = async (collectionName: string, docId: string) => {
+  return deleteDoc(doc(db, collectionName, docId))
+    .then(() => {
+      console.log('Entire Document has been deleted successfully.');
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+};
+
+export const getDocumentsByUser = async (
+  collectionRef: CollectionReference<DocumentData>,
+  uid?: string
+) => {
+  try {
+    const quiz = await getDocs(
+      query(collectionRef, where('userId', '==', uid))
+    );
+
+    return quiz.docs.map((doc) => ({
+      ...doc.data(),
+      id: doc.id,
+    }));
+  } catch (err) {
+    console.error(err);
+  }
 };

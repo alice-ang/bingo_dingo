@@ -4,7 +4,7 @@ import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyBnfwwDBuIUenJbHqaEyf7rHEKbqpC-UVg',
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: 'quizzly-e98c0.firebaseapp.com',
   projectId: 'quizzly-e98c0',
   storageBucket: 'quizzly-e98c0.appspot.com',

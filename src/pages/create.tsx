@@ -3,18 +3,22 @@
 import { Disclosure } from '@headlessui/react';
 import { addDoc, arrayUnion, doc, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { useState } from 'react';
 import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
 import { MdArrowDropDown, MdDelete } from 'react-icons/md';
 import { v4 } from 'uuid';
 
-import { classNames, quizzesCollectionRef } from '@/lib';
+import { classNames, Question, quizzesCollectionRef } from '@/lib';
 
 import {
   DashboardCard,
   FloatingInput,
   FloatingLabel,
+  FloatingSelect,
   FloatingTextArea,
   ImageUpload,
+  Layout,
+  MapContainer,
   QuestionOptions,
   Seo,
   Toggle,
@@ -23,15 +27,19 @@ import {
 import { db, storage } from '@/config/firebase';
 import { useAuth } from '@/context/auth';
 export default function CreatePage() {
-  const user = useAuth();
-
+  const { user, isAuthenticated, isLoading } = useAuth();
+  const [markers, setMarkers] = useState([]);
   const {
     register,
     handleSubmit,
     control,
     reset,
+    watch,
+    getValues,
     formState: { errors },
   } = useForm({});
+
+  const watchQuestions = watch('questions') as Question[];
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -44,6 +52,7 @@ export default function CreatePage() {
 
     uploadBytes(imageRef, data.media[0]).then(async () => {
       const downloadURL = await getDownloadURL(imageRef);
+
       await addDoc(quizzesCollectionRef, {
         media: downloadURL,
         name: data.name,
@@ -80,81 +89,17 @@ export default function CreatePage() {
             }
           })
         ).finally(() => {
+          // TODO: add this back in
           // reset();
+
           console.log('Quiz uploaded!');
         });
       });
     });
-
-    //     try {
-    //       if (data.media) {
-    //         const uploadTask = uploadBytesResumable(
-    //           ref(storage, `quiz/images/${user?.uid}/${v4()}`),
-    //           data.media[0]
-    //         );
-
-    //         uploadTask.on(
-    //           'state_changed',
-    //           (snapshot) => {
-    //             const progress =
-    //               (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-    //             console.log('Upload is ' + progress + '% done');
-
-    //             switch (snapshot.state) {
-    //               case 'paused':
-    //                 console.log('Upload is paused');
-    //                 break;
-    //               case 'running':
-    //                 console.log('Upload is running');
-    //                 break;
-    //             }
-    //           },
-    //           (error) => {
-    //             // Handle unsuccessful uploads
-    //             console.error(error);
-    //           },
-    //           () => {
-    //             getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-    //               console.log('File available at', downloadURL);
-    //               addDoc(quizzesCollectionRef, {
-    //                 media: downloadURL,
-    //                 name: data.name,
-    //                 distance: data.distance,
-    //                 description: data.description,
-    //                 isPublic: data.isPublic,
-    //                 isContributing: data.isContributing,
-
-    //                 userId: user?.uid,
-    //               }).then((res) => {
-    //                 const docRef = doc(db, 'quizzes', res.id);
-
-    //                  Promise.all(
-    //                      data.questions.map((question) => {
-    // updateDoc()
-    //                 })
-    //                 )
-
-    //                 updateDoc(docRef, data)
-    //                   .then((docRef) => {
-    //                     console.log(
-    //                       'A New Document Field has been added to an existing document'
-    //                     );
-    //                   })
-    //                   .catch((error) => {
-    //                     console.log(error);
-    //                   });
-    //               });
-    //             });
-    //           }
-    //         );
-    //       }
-    //     } catch (error) {
-    //       console.error(error);
-    //     }
   });
 
   return (
-    <>
+    <Layout>
       <Seo templateTitle='Skapa quiz' />
 
       <section>
@@ -203,8 +148,25 @@ export default function CreatePage() {
                 className='col-span-3 md:col-span-2'
                 register={register}
                 rules={{
-                  required: 'Ange distrans',
+                  required: 'Ange distans',
                 }}
+                errors={errors}
+              />
+              <FloatingSelect
+                name='type'
+                label='Typ'
+                placeholder='Typ av runda'
+                className='col-span-3 md:col-span-2'
+                register={register}
+                rules={{
+                  required: 'Ange typ',
+                }}
+                options={[
+                  { value: 'map', text: 'Karta' },
+                  { value: 'distance', text: 'Distans' },
+                  { value: 'live', text: 'Live' },
+                  { value: 'sitting', text: 'Stilla sittande' },
+                ]}
                 errors={errors}
               />
 
@@ -226,6 +188,11 @@ export default function CreatePage() {
                 control={control}
                 label='Bidra till aktivitetsbanken'
                 name='isContributing'
+              />
+              <Toggle
+                control={control}
+                label='Dela inom organisationen'
+                name='isShared'
               />
             </div>
           </section>
@@ -296,6 +263,18 @@ export default function CreatePage() {
                           }}
                           errors={errors}
                         />
+                        <DashboardCard className='col-span-8 min-h-[460px]'>
+                          <MapContainer
+                            control={control}
+                            name={`questions[${index}].marker`}
+                            markers={watchQuestions
+                              .filter((item) => !!item.marker)
+                              .map((question) => ({
+                                ...question.marker,
+                              }))}
+                          />
+                        </DashboardCard>
+
                         <div className='col-span-8 flex justify-end'>
                           <button
                             className='flex items-center rounded-md border border-black bg-red-500 px-4 py-2 hover:bg-red-600'
@@ -318,7 +297,7 @@ export default function CreatePage() {
               <button
                 type='button'
                 className={classNames(
-                  'w-fit justify-center text-center underline hover:text-green'
+                  'hover:text-green w-fit justify-center text-center underline'
                 )}
                 onClick={() => {
                   append({});
@@ -331,13 +310,13 @@ export default function CreatePage() {
           <div className='mx-auto w-full md:w-1/2'>
             <button
               type='submit'
-              className='text-medium inline-flex w-full justify-center rounded-md border border-black bg-yellow px-4 py-3 font-semibold shadow-sm hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2'
+              className='text-medium inline-flex w-full justify-center rounded-md border border-black bg-palette-yellow px-4 py-3 font-semibold shadow-sm hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2'
             >
               Skapa quiz
             </button>
           </div>
         </form>
       </section>
-    </>
+    </Layout>
   );
 }
