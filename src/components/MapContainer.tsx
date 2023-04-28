@@ -1,8 +1,8 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   DirectionsRenderer,
   GoogleMap,
-  MarkerF,
   useJsApiLoader,
 } from '@react-google-maps/api';
 import { useCallback, useMemo, useRef, useState } from 'react';
@@ -13,13 +13,7 @@ import {
   RegisterOptions,
 } from 'react-hook-form';
 
-import {
-  DirectionsResult,
-  LatLngLiteral,
-  libraries,
-  MapOptions,
-  Point,
-} from '@/lib';
+import { DirectionsResult, LatLngLiteral, libraries, MapOptions } from '@/lib';
 
 const mapContainerStyle = {
   height: '100%',
@@ -27,25 +21,18 @@ const mapContainerStyle = {
 };
 
 const center = {
-  lat: 37.774546,
-  lng: -122.433523,
+  lat: 58.3902782,
+  lng: 13.8461208,
 };
 
 type Props = {
   control: Control<FieldValues>;
   rules?: RegisterOptions;
   name: string;
-  markers?: google.maps.DirectionsWaypoint[];
-  onMapChange?: (point: Point) => void;
+  markers?: google.maps.LatLngLiteral[];
 };
 
-export const MapContainer = ({
-  rules,
-  onMapChange,
-  control,
-  name,
-  markers,
-}: Props) => {
+export const MapContainer = ({ rules, control, name, markers }: Props) => {
   const mapRef = useRef<GoogleMap>();
   const [marker, setMarker] = useState<LatLngLiteral | null>(null);
   const [directions, setDirections] = useState<DirectionsResult>();
@@ -64,29 +51,37 @@ export const MapContainer = ({
     []
   );
   const onLoad = useCallback((map: any) => (mapRef.current = map), []);
-  const onUnmount = useCallback(() => (mapRef.current = undefined), []);
+  const onUnmount = useCallback(() => {
+    mapRef.current = undefined;
+    console.log('unmount');
+  }, []);
   if (isLoaded === false) {
     return <div>Map not loading</div>;
   }
 
-  const fetchDirections = (newMark: LatLngLiteral) => {
+  const fetchDirections = () => {
     if (!mapRef && !markers) {
       return;
     }
-    const service = new google.maps.DirectionsService();
-    service.route(
-      {
-        origin: markers?.[0].location ?? marker ?? newMark,
-        waypoints: markers,
-        destination: newMark,
-        travelMode: google.maps.TravelMode.WALKING,
-      },
-      (response, status) => {
-        if (status === 'OK' && response) {
-          setDirections(response);
+    if (markers && marker) {
+      console.log(markers);
+      const service = new google.maps.DirectionsService();
+      service.route(
+        {
+          origin: markers?.[0],
+          waypoints: markers.map((point) => ({
+            location: new google.maps.LatLng(point.lat, point.lng),
+          })),
+          destination: marker,
+          travelMode: google.maps.TravelMode.WALKING,
+        },
+        (response, status) => {
+          if (status === 'OK' && response) {
+            setDirections(response);
+          }
         }
-      }
-    );
+      );
+    }
   };
 
   return (
@@ -99,19 +94,15 @@ export const MapContainer = ({
         <GoogleMap
           ref={ref}
           mapContainerStyle={mapContainerStyle}
-          zoom={14}
+          zoom={16}
           center={center}
           options={options}
           onLoad={onLoad}
           onClick={(e: google.maps.MapMouseEvent) => {
             if (e.latLng != null) {
-              if (onMapChange) {
-                onMapChange({ lat: e.latLng.lat(), lng: e.latLng.lng() });
-              }
               onChange({ lat: e.latLng.lat(), lng: e.latLng.lng() });
               setMarker({ lat: e.latLng.lat(), lng: e.latLng.lng() });
-
-              fetchDirections({ lat: e.latLng.lat(), lng: e.latLng.lng() });
+              fetchDirections();
             }
           }}
           onUnmount={onUnmount}
@@ -128,12 +119,17 @@ export const MapContainer = ({
               }}
             />
           )}
-          {markers != undefined &&
-            markers.length > 0 &&
+          {/* {markers &&
             markers.map((marker, i) => (
-              <MarkerF position={marker.location as LatLngLiteral} key={i} />
-            ))}
-          {marker && <MarkerF position={marker} />}
+              <MarkerF
+                position={marker}
+                key={i}
+                label={(i + 1).toString()}
+                draggable
+              />
+            ))} */}
+
+          {/* {marker && <MarkerF position={marker} />} */}
         </GoogleMap>
       )}
     />

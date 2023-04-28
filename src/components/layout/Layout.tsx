@@ -61,7 +61,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
         <Transition.Root show={sidebarOpen} as={Fragment}>
           <Dialog
             as='div'
-            className='relative z-0 lg:hidden'
+            className='relative z-10 lg:hidden'
             onClose={setSidebarOpen}
           >
             <Transition.Child
