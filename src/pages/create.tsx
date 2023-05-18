@@ -88,9 +88,6 @@ export default function CreatePage() {
         <h2 className='text-center text-4xl font-normal text-gray-900'>
           Skapa nytt Dingo
         </h2>
-        <p className='text-center text-sm text-gray-500'>
-          Lorem ipsum dolor sit amet
-        </p>
         <form onSubmit={onSubmitDingo}>
           <section className='pb-3'>
             <span className='flex items-baseline justify-between'>
@@ -120,20 +117,6 @@ export default function CreatePage() {
                 }}
                 errors={errors}
               />
-              {/*  
-              <FloatingSelect
-                name='type'
-                label='Typ'
-                placeholder='Typ av runda'
-                className='col-span-3 md:col-span-2'
-                register={register}
-                rules={{
-                  required: 'Ange typ',
-                }}
-                options={[{ value: 'bingo', text: 'Bingo' }]}
-                errors={errors}
-              /> */}
-
               <FloatingTextArea
                 id='description'
                 name='description'
