@@ -35,6 +35,7 @@ export const logOut = async () => {
   try {
     await signOut(auth);
     console.log(auth?.currentUser?.email);
+    window.location.replace('/');
   } catch (err) {
     console.log(err);
   }
