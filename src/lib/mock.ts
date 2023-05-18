@@ -1,44 +1,21 @@
 /* eslint-disable unused-imports/no-unused-vars */
 
-export type Option = {
-  text: string;
-  isCorrect?: boolean;
-};
-export type Question = {
+export type Rule = {
   id: string;
+  media?: string;
   title: string;
-  options: Option[];
-  media: string;
-  quizParent: string;
-  userId: string;
-  marker: Point;
+  amount: number;
+  type: 'sips' | 'shots';
+  assign?: string;
 };
 
-export type Quiz = {
+export type Dingo = {
   id: string;
   name: string;
-  distance: number;
-  questions: Question[];
-  author: string;
-  media: string;
-  code: string;
-  // elimination: Question;
-  isPublic: boolean;
   description: string;
+  userId: string;
+  media: string;
+  isPublic: boolean;
+  isShared: boolean;
+  rules: Rule[];
 };
-
-export const libraries = String(['places']);
-export type Point = {
-  lat: number;
-  lng: number;
-};
-export type LatLngLiteral = google.maps.LatLngLiteral;
-export type DirectionsResult = google.maps.DirectionsResult;
-export type MapOptions = google.maps.MapOptions;
-
-export const quizSettings = [
-  { title: '12', subtitle: 'Kilometer', icon: '🏃‍♀️', color: 'bg-palette-beige' },
-  { title: '8', subtitle: 'Frågor', icon: '✏️', color: 'bg-palette-green' },
-  { title: '2', subtitle: 'Priser', icon: '🏆', color: 'bg-palette-purple' },
-  { title: '24', subtitle: 'Deltagare', icon: '🏁', color: 'bg-palette-pink' },
-];

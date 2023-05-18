@@ -3,14 +3,9 @@ import { Disclosure } from '@headlessui/react';
 import { getDocs, query, where } from 'firebase/firestore';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import {
-  MdArrowDropDown,
-  MdCheckCircle,
-  MdDelete,
-  MdEdit,
-} from 'react-icons/md';
+import { MdArrowDropDown, MdDelete, MdEdit } from 'react-icons/md';
 
-import { classNames, deleteItem, Quiz, quizzesCollectionRef } from '@/lib';
+import { deleteItem, Dingo, dingosCollectionRef } from '@/lib';
 import { useModal } from '@/lib/useModal';
 
 import { DashboardCard, Layout, Modal, Seo } from '@/components';
@@ -19,14 +14,14 @@ import { useAuth } from '@/context/auth';
 
 export default function ContributionsPage() {
   const { user } = useAuth();
-  const [quizList, setQuizList] = useState<Quiz[]>([]);
+  const [dingoList, setDingoList] = useState<Dingo[]>([]);
   const { isShown, toggle } = useModal();
 
   useEffect(() => {
-    const getQuizList = async () => {
+    const getDingoList = async () => {
       try {
         const quiz = await getDocs(
-          query(quizzesCollectionRef, where('userId', '==', user?.uid))
+          query(dingosCollectionRef, where('userId', '==', user?.uid))
         );
 
         const filteredData = quiz.docs.map(
@@ -34,15 +29,15 @@ export default function ContributionsPage() {
             ({
               ...doc.data(),
               id: doc.id,
-            } as Quiz)
+            } as Dingo)
         );
 
-        setQuizList(filteredData);
+        setDingoList(filteredData);
       } catch (err) {
         console.error(err);
       }
     };
-    getQuizList();
+    getDingoList();
   }, [user?.uid]);
 
   return (
@@ -54,9 +49,8 @@ export default function ContributionsPage() {
         <h3 className='py-4 text-base font-semibold leading-6 text-gray-900'>
           Lorem ipsum dolor
         </h3>
-        {/* <Badges items={['Aktiva', 'Arkiverade', 'Längst runda', 'A-Ö']} /> */}
         <dl className='mt-6 space-y-6 divide-y divide-gray-900/10'>
-          {quizList.map((quiz) => (
+          {dingoList.map((quiz) => (
             <Disclosure as='div' key={quiz.id} className='my-2'>
               {({ open }) => (
                 <>
@@ -65,8 +59,7 @@ export default function ContributionsPage() {
                       <span className='flex w-full items-center justify-between text-base font-semibold text-white'>
                         <span>{quiz.name}</span>
                         <span className='text-sm'>
-                          {quiz.distance}km | {quiz?.questions.length ?? 0}{' '}
-                          frågor
+                          {quiz?.rules.length ?? 0} regler
                         </span>
                       </span>
                       <span className='ml-6 flex h-7 items-center'>
@@ -114,22 +107,22 @@ export default function ContributionsPage() {
                       </p>
                       <div className='col-span-6'>
                         <h3 className='my-3 text-base font-semibold text-gray-900'>
-                          Frågor
+                          Regler
                         </h3>
                         <div className='grid grid-cols-4 gap-4 text-center'>
-                          {quiz.questions.length > 0 ? (
-                            quiz.questions.map((question) => (
+                          {quiz.rules.length > 0 ? (
+                            quiz.rules.map((rule) => (
                               <>
                                 <DashboardCard
-                                  key={question.id}
+                                  key={rule.id}
                                   className='col-span-4 shadow md:col-span-1'
                                   onClick={toggle}
                                 >
-                                  {question.media && (
+                                  {rule.media && (
                                     <div className='relative min-h-[180px]'>
                                       <Image
-                                        src={question.media}
-                                        alt={question.title}
+                                        src={rule.media}
+                                        alt={rule.title}
                                         width='0'
                                         height='0'
                                         sizes='100vw'
@@ -138,54 +131,34 @@ export default function ContributionsPage() {
                                     </div>
                                   )}
 
-                                  <p className='font-semibold'>{`${question.title}`}</p>
-
-                                  {question.options.map((option) => (
-                                    <div
-                                      key={option.text}
-                                      className={classNames(
-                                        'flex items-center justify-between border-b text-left'
-                                      )}
-                                    >
-                                      <p
-                                        className={classNames(
-                                          option.isCorrect
-                                            ? 'text-green font-semibold'
-                                            : '',
-                                          ''
-                                        )}
-                                      >
-                                        {option.text}
-                                      </p>
-                                      {option.isCorrect && (
-                                        <MdCheckCircle className='text-green' />
-                                      )}
-                                    </div>
-                                  ))}
+                                  <p className='font-semibold'>{`${rule.title}`}</p>
                                 </DashboardCard>
                                 <Modal
                                   isShown={isShown}
                                   toggle={toggle}
                                   modalContent={
                                     <>
-                                      <DashboardCard className=''>
-                                        <Image
-                                          src={question.media}
-                                          alt={question.title}
-                                          width='0'
-                                          height='0'
-                                          sizes='100vw'
-                                          className='h-auto w-full '
-                                        />
-                                      </DashboardCard>
-                                      <h2>{question.title}</h2>
+                                      {rule.media && (
+                                        <DashboardCard className=''>
+                                          <Image
+                                            src={rule.media}
+                                            alt={rule.title}
+                                            width='0'
+                                            height='0'
+                                            sizes='100vw'
+                                            className='h-auto w-full '
+                                          />
+                                        </DashboardCard>
+                                      )}
+
+                                      <h2>{rule.title}</h2>
                                     </>
                                   }
                                 />
                               </>
                             ))
                           ) : (
-                            <h3>Inga quiz</h3>
+                            <h3>Inga dingos</h3>
                           )}
                         </div>
                       </div>

@@ -5,7 +5,6 @@ import {
   signOut,
 } from 'firebase/auth';
 import {
-  addDoc,
   collection,
   CollectionReference,
   deleteDoc,
@@ -15,13 +14,12 @@ import {
   query,
   where,
 } from 'firebase/firestore';
-import { FieldValues } from 'react-hook-form';
 
 import { db } from '@/config/firebase';
 import { auth, googleProvider } from '@/config/firebase';
 
-export const quizzesCollectionRef = collection(db, 'quizzes');
-export const questionsCollectionRef = collection(db, 'questions');
+export const dingosCollectionRef = collection(db, 'dingos');
+export const rulesCollectionRef = collection(db, 'rules');
 
 export const signIn = async (email: string, password: string) => {
   try {
@@ -49,22 +47,6 @@ export const signInWithGoogle = async () => {
   } catch (err) {
     console.log(err);
   }
-};
-
-export const createQuiz = async (
-  data: FieldValues,
-  downloadURL: string,
-  userId: string
-) => {
-  return await addDoc(quizzesCollectionRef, {
-    media: downloadURL,
-    name: data.name,
-    distance: data.distance,
-    description: data.description,
-    isPublic: data.isPublic,
-    isContributing: data.isContributing,
-    userId: userId,
-  });
 };
 
 export const deleteItem = async (collectionName: string, docId: string) => {
