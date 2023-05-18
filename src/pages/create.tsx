@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-disable unused-imports/no-unused-vars */
 import { Disclosure } from '@headlessui/react';
 import { addDoc, arrayUnion, doc, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
@@ -24,19 +22,14 @@ import {
 import { db, storage } from '@/config/firebase';
 import { useAuth } from '@/context/auth';
 export default function CreatePage() {
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { user } = useAuth();
 
   const {
     register,
     handleSubmit,
     control,
-    reset,
-    watch,
-    getValues,
     formState: { errors },
   } = useForm({});
-
-  const watchRules = watch('rules') as Rule[];
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -45,7 +38,6 @@ export default function CreatePage() {
   });
 
   const onSubmitDingo = handleSubmit(async (data: FieldValues) => {
-    console.log('Submit');
     const imageRef = ref(storage, `dingo/images/${user?.uid}/${v4()}`);
 
     uploadBytes(imageRef, data.media[0]).then(async () => {
@@ -74,6 +66,7 @@ export default function CreatePage() {
           // TODO: add this back in
           // reset();
 
+          // eslint-disable-next-line no-console
           console.log('Dingo is uploaded!');
         });
       });
@@ -209,8 +202,8 @@ export default function CreatePage() {
                             required: 'Ange typ av regel',
                           }}
                           options={[
-                            { value: 'shot', text: 'Shots' },
                             { value: 'sip', text: 'Sips' },
+                            { value: 'shot', text: 'Shots' },
                           ]}
                           errors={errors}
                         />
