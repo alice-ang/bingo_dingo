@@ -35,7 +35,7 @@ export const FloatingTextArea = <TFormValues extends Record<string, unknown>>({
           rows={4}
           name={name}
           id={id}
-          className='block w-full rounded-md border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-black placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-yellow sm:text-sm sm:leading-6'
+          className='focus:ring-yellow block w-full rounded-md border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-black placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6'
           defaultValue={defaultValue}
           {...(register && register(name, rules))}
         />

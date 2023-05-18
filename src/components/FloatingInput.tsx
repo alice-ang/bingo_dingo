@@ -42,7 +42,7 @@ export const FloatingInput = <TFormValues extends Record<string, unknown>>({
             defaultValue={defaultValue}
             step={step}
             aria-invalid={!!errors}
-            className='block w-full rounded-md border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-black placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-yellow sm:text-sm sm:leading-6'
+            className='focus:ring-yellow block w-full rounded-md border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-black placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6'
             {...props}
             {...register(name, rules)}
             min={0}

@@ -36,7 +36,7 @@ export const ImageUpload = <TFormValues extends Record<string, unknown>>({
           <div className='mx-auto mt-4 flex text-sm leading-6 text-gray-600'>
             <label
               htmlFor={name}
-              className='hover:text-grey-700 relative cursor-pointer rounded-md bg-white font-semibold text-green focus-within:outline-none focus-within:ring-2 focus-within:ring-green focus-within:ring-offset-2'
+              className='hover:text-grey-700 text-green focus-within:ring-green relative cursor-pointer rounded-md bg-white font-semibold focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2'
             >
               <input
                 type='file'
