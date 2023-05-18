@@ -17,7 +17,7 @@ import { DashboardCard, Layout, Modal, Seo } from '@/components';
 
 import { useAuth } from '@/context/auth';
 
-export default function QuizzesPage() {
+export default function ContributionsPage() {
   const { user } = useAuth();
   const [quizList, setQuizList] = useState<Quiz[]>([]);
   const { isShown, toggle } = useModal();
@@ -47,10 +47,10 @@ export default function QuizzesPage() {
 
   return (
     <Layout>
-      <Seo templateTitle='Mina quiz' />
+      <Seo templateTitle='Mina bidrag' />
 
       <section>
-        <h2 className='text-4xl font-normal text-gray-900'>Mina quiz</h2>
+        <h2 className='text-4xl font-normal text-gray-900'>Mina bidrag</h2>
         <h3 className='py-4 text-base font-semibold leading-6 text-gray-900'>
           Lorem ipsum dolor
         </h3>

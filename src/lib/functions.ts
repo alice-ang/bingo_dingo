@@ -51,19 +51,6 @@ export const signInWithGoogle = async () => {
   }
 };
 
-const characters =
-  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-export const generateString = (length: number) => {
-  let result = ' ';
-  const charactersLength = characters.length;
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  }
-
-  return result;
-};
-
 export const createQuiz = async (
   data: FieldValues,
   downloadURL: string,

@@ -14,7 +14,7 @@ export const Logo = ({ showText = true }: LogoProps) => {
         width={size}
       /> */}
       {showText && (
-        <p className='ml-2 text-xl font-bold text-gray-800'>quizzly.se</p>
+        <p className='ml-2 text-xl font-bold text-gray-800'>Bingo Dingo</p>
       )}
     </span>
   );

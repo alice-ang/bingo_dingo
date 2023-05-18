@@ -5,12 +5,12 @@ import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: 'quizzly-e98c0.firebaseapp.com',
-  projectId: 'quizzly-e98c0',
-  storageBucket: 'quizzly-e98c0.appspot.com',
-  messagingSenderId: '392397419926',
-  appId: '1:392397419926:web:c56a430b79a090eae399b7',
-  measurementId: 'G-5HS8J5QWSJ',
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase

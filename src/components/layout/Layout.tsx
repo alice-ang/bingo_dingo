@@ -7,18 +7,16 @@ import { HiOutlineMagnifyingGlass } from 'react-icons/hi2';
 import { IoMdSettings } from 'react-icons/io';
 import {
   MdArrowDropDown,
-  MdBarChart,
   MdClose,
-  MdFlag,
+  MdGamepad,
   MdMode,
   MdOutlineDashboard,
-  MdOutlineQuiz,
   MdPostAdd,
 } from 'react-icons/md';
 
 import { classNames, logOut, signInWithGoogle } from '@/lib';
 
-import { AdBanner, BackToTop, Logo, NextImage } from '@/components';
+import { BackToTop, Logo, NextImage } from '@/components';
 import { Footer } from '@/components/layout/Footer';
 
 import { useAuth } from '@/context/auth';
@@ -26,24 +24,16 @@ import { useAuth } from '@/context/auth';
 const navigation = [
   { name: 'Översikt', icon: MdOutlineDashboard, href: '/', current: true },
   {
-    name: 'Quiz',
-    icon: MdOutlineQuiz,
+    name: 'Bidrag',
+    icon: MdGamepad,
     href: null,
     count: 12,
     current: false,
     children: [
       { name: 'Skapa', href: '/create', icon: MdPostAdd },
-      { name: 'Mina quiz', href: '/quizzes', icon: MdMode },
+      { name: 'Mina bidrag', href: '/contributions', icon: MdMode },
     ],
   },
-  {
-    name: 'Checkpoints',
-    icon: MdFlag,
-    href: '/',
-    count: 12,
-    current: false,
-  },
-  { name: 'Statistik', icon: MdBarChart, href: '/stats', current: false },
 ];
 
 const userNavigation = [
@@ -136,7 +126,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                                 <item.icon
                                   className={classNames(
                                     item.current
-                                      ? 'text-yellow-500'
+                                      ? 'text-black'
                                       : 'text-gray-400 group-hover:text-gray-500',
                                     'mr-3 h-6 w-6 flex-shrink-0'
                                   )}
@@ -203,8 +193,8 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                           )
                         )}
                       </nav>
-                      {/* Ad banner */}
-                      <AdBanner />
+
+                      {/* <AdBanner /> */}
                     </div>
                     <div className='flex flex-shrink-0 border-t border-gray-200 p-4'>
                       <div className='flex items-center'>
@@ -322,8 +312,8 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                   )
                 )}
               </nav>
-              {/* Ad banner */}
-              <AdBanner />
+
+              {/* <AdBanner /> */}
             </div>
             <div className='flex flex-shrink-0 border-t border-gray-200 p-4'>
               <Link
@@ -414,7 +404,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                             className='text-xs text-gray-700'
                             aria-hidden='true'
                           >
-                            Quizmaster
+                            Roll?
                           </p>
                         </span>
 

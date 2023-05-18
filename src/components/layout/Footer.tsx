@@ -1,4 +1,5 @@
 import React from 'react';
+import { AiFillHeart } from 'react-icons/ai';
 import { FaFacebook, FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
 
 const navigation = [
@@ -34,18 +35,29 @@ export const Footer = () => {
             <a
               key={item.name}
               href={item.href}
-              className='hover:text-yellow-500 text-gray-400'
+              className='text-gray-400 hover:text-yellow-500'
             >
               <span className='sr-only'>{item.name}</span>
               <item.icon className='h-6 w-6 text-black' aria-hidden='true' />
             </a>
           ))}
         </div>
-        <div className='mt-8 md:order-1 md:mt-0'>
-          <p className='text-center text-sm leading-5 text-gray-500'>
-            &copy; {new Date().getFullYear()} quizzly.se | Alla rättigheter
-            förbehållna
-          </p>
+        <div className='mt-4 md:order-1 md:mt-0 '>
+          <span className='flex items-center text-center text-sm leading-5 text-zinc-600 dark:text-zinc-400'>
+            &copy; {new Date().getFullYear()} | Utvecklad med
+            <AiFillHeart
+              size={16}
+              className='mx-1 text-palette-pink dark:text-palette-yellow'
+            />{' '}
+            av
+            <a
+              href='https://www.linkedin.com/in/alice-anglesj%C3%B6-9503121a7/'
+              target='_blank'
+              className='ml-1 hover:text-palette-green'
+            >
+              Alice Anglesjö
+            </a>
+          </span>
         </div>
       </div>
     </footer>
