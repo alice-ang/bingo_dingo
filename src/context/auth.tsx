@@ -1,4 +1,5 @@
 import { User } from 'firebase/auth';
+import { useRouter } from 'next/router';
 import {
   createContext,
   FC,
@@ -37,6 +38,28 @@ export const AuthProvider: FC<AuthProvider> = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
+};
+
+type Props = {
+  children: ReactNode;
+};
+
+export const Protected = ({ children }: Props) => {
+  const router = useRouter();
+
+  const { isAuthenticated, isLoading } = useAuth();
+  if (!isLoading && !isAuthenticated) {
+    router.replace('/login');
+  }
+
+  if (
+    isLoading ||
+    (!isAuthenticated && window.location.pathname !== '/login')
+  ) {
+    return <h1>Loading...</h1>;
+  }
+
+  return children;
 };
 
 export const useAuth = () => useContext(AuthContext);
