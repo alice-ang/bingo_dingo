@@ -59,6 +59,7 @@ export const signInWithGoogle = async () => {
   try {
     await signInWithPopup(auth, googleProvider);
     console.log(auth?.currentUser?.email);
+    window.location.replace('/create');
   } catch (err) {
     console.log(err);
   }
