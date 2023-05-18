@@ -2,7 +2,13 @@
 /* eslint-disable no-console */
 import { useState } from 'react';
 
-import { classNames, signInWithFacebook, signInWithGoogle } from '@/lib';
+import {
+  classNames,
+  signIn,
+  signInWithFacebook,
+  signInWithGoogle,
+  signUp,
+} from '@/lib';
 
 import { FloatingInput } from '@/components/FloatingInput';
 
@@ -32,8 +38,20 @@ export const Auth = ({ type = 'login' }: Props) => {
       />
       <button
         type='submit'
-        onClick={() => console.log(type)}
-        className={classNames('mx-auto w-fit bg-palette-pink')}
+        onClick={() => {
+          switch (type) {
+            case 'login':
+              signIn(email, password);
+              break;
+
+            case 'signup':
+              signUp(email, password);
+              break;
+          }
+        }}
+        className={classNames(
+          'mx-auto w-fit rounded-xl border border-black bg-palette-pink py-4 px-4 font-semibold'
+        )}
       >
         {type == 'login' ? 'Logga in' : 'Registrera konto'}
       </button>
@@ -43,23 +61,29 @@ export const Auth = ({ type = 'login' }: Props) => {
       <button
         type='button'
         onClick={signInWithGoogle}
-        className={classNames('bg-palette-yellow')}
+        className={classNames(
+          'rounded-xl border border-black bg-palette-yellow py-4 px-4 font-semibold'
+        )}
       >
-        Sign in with Google
+        Logga in med Google
       </button>
       <button
         type='button'
         onClick={signInWithFacebook}
-        className={classNames('my-2 bg-palette-purple')}
+        className={classNames(
+          'my-2 rounded-xl border border-black bg-palette-purple py-4 px-4 font-semibold'
+        )}
       >
-        Sign in with Facebook
+        Logga in med Facebook
       </button>
       <button
         type='button'
         onClick={signInWithGoogle}
-        className={classNames('bg-black text-white')}
+        className={classNames(
+          'rounded-xl border border-black bg-black py-4 px-4 font-semibold text-white'
+        )}
       >
-        Sign in with apple
+        Logga in med Apple
       </button>
     </div>
   );
