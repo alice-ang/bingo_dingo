@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import {
   createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
 } from 'firebase/auth';
@@ -15,16 +16,29 @@ import {
   where,
 } from 'firebase/firestore';
 
-import { db } from '@/config/firebase';
+import { db, facebookProvider } from '@/config/firebase';
 import { auth, googleProvider } from '@/config/firebase';
 
 export const dingosCollectionRef = collection(db, 'dingos');
 export const rulesCollectionRef = collection(db, 'rules');
 
-export const signIn = async (email: string, password: string) => {
+export const signUp = async (email: string, password: string) => {
+  console.log(email, password);
   try {
     await createUserWithEmailAndPassword(auth, email, password);
     console.log(auth?.currentUser?.email);
+    window.location.replace('/create');
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const signIn = async (email: string, password: string) => {
+  console.log(email, password);
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    console.log(auth?.currentUser?.email);
+    window.location.replace('/create');
   } catch (err) {
     console.log(err);
   }
@@ -35,7 +49,7 @@ export const logOut = async () => {
   try {
     await signOut(auth);
     console.log(auth?.currentUser?.email);
-    window.location.replace('/');
+    window.location.replace('/login');
   } catch (err) {
     console.log(err);
   }
@@ -45,6 +59,16 @@ export const signInWithGoogle = async () => {
   try {
     await signInWithPopup(auth, googleProvider);
     console.log(auth?.currentUser?.email);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const signInWithFacebook = async () => {
+  try {
+    await signInWithPopup(auth, facebookProvider);
+    console.log(auth?.currentUser?.email);
+    window.location.replace('/');
   } catch (err) {
     console.log(err);
   }

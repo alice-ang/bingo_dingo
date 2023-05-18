@@ -1,32 +1,89 @@
+/* eslint-disable unused-imports/no-unused-vars */
 /* eslint-disable no-console */
 import { useState } from 'react';
 
-import { logOut, signIn, signInWithGoogle } from '@/lib';
+import {
+  classNames,
+  signIn,
+  signInWithFacebook,
+  signInWithGoogle,
+  signUp,
+} from '@/lib';
 
-export const Auth = () => {
+import { FloatingInput } from '@/components/FloatingInput';
+
+type Props = {
+  type?: 'login' | 'signup';
+};
+export const Auth = ({ type = 'login' }: Props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   return (
-    <div>
-      <input
-        placeholder='email'
+    <div className='flex flex-col '>
+      <FloatingInput
+        id='email'
         type='email'
-        onChange={(e) => setEmail(e.target.value)}
+        name='email'
+        label='E-postadress'
+        placeholder='Ange e-post'
       />
-      <input
-        placeholder='password'
+      <FloatingInput
+        id='password'
         type='password'
-        onChange={(e) => setPassword(e.target.value)}
+        name='password'
+        label='Lösenord'
+        placeholder='Ange lösenord'
+        className='my-3'
       />
-      <button type='button' onClick={() => signIn(email, password)}>
-        Sign in
+      <button
+        type='submit'
+        onClick={() => {
+          switch (type) {
+            case 'login':
+              signIn(email, password);
+              break;
+
+            case 'signup':
+              signUp(email, password);
+              break;
+          }
+        }}
+        className={classNames(
+          'mx-auto w-fit rounded-xl border border-black bg-palette-pink py-4 px-4 font-semibold'
+        )}
+      >
+        {type == 'login' ? 'Logga in' : 'Registrera konto'}
       </button>
-      <button type='button' onClick={signInWithGoogle} className='bg-red-500'>
-        Sign in with google
+      <div className='flex items-center justify-center py-6'>
+        <p className='px-2'>Eller fortsätt med </p>
+      </div>
+      <button
+        type='button'
+        onClick={signInWithGoogle}
+        className={classNames(
+          'rounded-xl border border-black bg-palette-yellow py-4 px-4 font-semibold'
+        )}
+      >
+        Logga in med Google
       </button>
-      <button type='button' onClick={logOut} className='bg-blue-500'>
-        Log out
+      <button
+        type='button'
+        onClick={signInWithFacebook}
+        className={classNames(
+          'my-2 rounded-xl border border-black bg-palette-purple py-4 px-4 font-semibold'
+        )}
+      >
+        Logga in med Facebook
+      </button>
+      <button
+        type='button'
+        onClick={signInWithGoogle}
+        className={classNames(
+          'rounded-xl border border-black bg-black py-4 px-4 font-semibold text-white'
+        )}
+      >
+        Logga in med Apple
       </button>
     </div>
   );

@@ -11,7 +11,7 @@ import { FloatingLabel } from '@/components';
 type FormInputProps<TFormValues> = {
   name: Path<TFormValues>;
   rules?: RegisterOptions;
-  register: UseFormRegister<FieldValues>;
+  register?: UseFormRegister<FieldValues>;
   errors?: FieldValues;
   className?: string;
   id: string;
@@ -44,7 +44,7 @@ export const FloatingInput = <TFormValues extends Record<string, unknown>>({
             aria-invalid={!!errors}
             className='focus:ring-yellow block w-full rounded-md border-0 py-3 text-gray-900 shadow-sm ring-1 ring-inset ring-black placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6'
             {...props}
-            {...register(name, rules)}
+            {...(register && register(name, rules))}
             min={0}
           />
         </FloatingLabel>
