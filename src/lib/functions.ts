@@ -15,7 +15,7 @@ import {
   where,
 } from 'firebase/firestore';
 
-import { db } from '@/config/firebase';
+import { db, facebookProvider } from '@/config/firebase';
 import { auth, googleProvider } from '@/config/firebase';
 
 export const dingosCollectionRef = collection(db, 'dingos');
@@ -45,6 +45,16 @@ export const signInWithGoogle = async () => {
   try {
     await signInWithPopup(auth, googleProvider);
     console.log(auth?.currentUser?.email);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+export const signInWithFacebook = async () => {
+  try {
+    await signInWithPopup(auth, facebookProvider);
+    console.log(auth?.currentUser?.email);
+    window.location.replace('/');
   } catch (err) {
     console.log(err);
   }

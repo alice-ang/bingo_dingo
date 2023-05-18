@@ -39,15 +39,4 @@ export const AuthProvider: FC<AuthProvider> = ({ children }) => {
   );
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const ProtectedRoute = ({ children }: any) => {
-  const { isAuthenticated, isLoading } = useAuth();
-  if (
-    isLoading ||
-    (!isAuthenticated && window.location.pathname !== '/login')
-  ) {
-    return <h1>Loading...</h1>;
-  }
-  return children;
-};
 export const useAuth = () => useContext(AuthContext);

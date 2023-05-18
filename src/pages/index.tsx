@@ -7,6 +7,7 @@ export default function HomePage() {
   return (
     <Layout>
       <Seo templateTitle='Översikt' />
+
       <h2 className=' text-4xl font-normal text-gray-900'>
         Välkommen{' '}
         <span className='text-palette-green'>

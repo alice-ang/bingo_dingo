@@ -1,5 +1,6 @@
 import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { Fragment, useState } from 'react';
 import { BsBell, BsChevronDown } from 'react-icons/bs';
 import { GiHamburgerMenu } from 'react-icons/gi';
@@ -22,7 +23,7 @@ import { Footer } from '@/components/layout/Footer';
 import { useAuth } from '@/context/auth';
 
 const navigation = [
-  { name: 'Översikt', icon: MdOutlineDashboard, href: '/', current: true },
+  { name: 'Översikt', icon: MdOutlineDashboard, href: '/' },
   {
     name: 'Bidrag',
     icon: MdGamepad,
@@ -44,6 +45,7 @@ const userNavigation = [
 export const Layout = ({ children }: { children: React.ReactNode }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user } = useAuth();
+  const router = useRouter();
 
   return (
     <>
@@ -117,7 +119,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                                 href={item.href}
                                 passHref
                                 className={classNames(
-                                  item.current
+                                  router.pathname == item.href
                                     ? 'border border-black bg-palette-yellow text-black'
                                     : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                                   'group flex items-center rounded-md px-2 py-2 text-sm font-medium'
@@ -125,7 +127,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                               >
                                 <item.icon
                                   className={classNames(
-                                    item.current
+                                    router.pathname == item.href
                                       ? 'text-black'
                                       : 'text-gray-400 group-hover:text-gray-500',
                                     'mr-3 h-6 w-6 flex-shrink-0'
@@ -145,7 +147,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                                 <>
                                   <Disclosure.Button
                                     className={classNames(
-                                      item.current
+                                      router.pathname == item.href
                                         ? 'border border-black bg-palette-yellow text-black'
                                         : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                                       'group flex w-full items-center rounded-md py-2 pl-2 pr-1 text-left text-sm font-medium focus:outline-none '
@@ -153,7 +155,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                                   >
                                     <item.icon
                                       className={classNames(
-                                        item.current
+                                        router.pathname == item.href
                                           ? 'text-black'
                                           : 'text-gray-400 group-hover:text-gray-500',
                                         'mr-3 h-6 w-6 flex-shrink-0'
@@ -173,17 +175,26 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                                         key={subItem.name}
                                         as='a'
                                         href={subItem.href}
-                                        className='group flex w-full items-center rounded-md py-2 pl-11 pr-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                                        className='group flex w-full items-center rounded-md pl-11 pr-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                                       >
-                                        <subItem.icon
+                                        <div
                                           className={classNames(
-                                            item.current
-                                              ? 'text-black'
-                                              : 'text-gray-400 group-hover:text-gray-500',
-                                            'mr-3 h-6 w-6 flex-shrink-0'
+                                            router.pathname == subItem.href
+                                              ? 'w-full border border-black bg-palette-yellow text-black'
+                                              : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                                            'flex items-center rounded-md  py-2 px-2'
                                           )}
-                                        />
-                                        {subItem.name}
+                                        >
+                                          <subItem.icon
+                                            className={classNames(
+                                              router.pathname == subItem.href
+                                                ? 'text-black'
+                                                : 'text-gray-400 group-hover:text-gray-500',
+                                              'mr-3 h-6 w-6 flex-shrink-0'
+                                            )}
+                                          />
+                                          {subItem.name}
+                                        </div>
                                       </Disclosure.Button>
                                     ))}
                                   </Disclosure.Panel>
@@ -237,7 +248,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                         key={item.name}
                         href={item.href}
                         className={classNames(
-                          item.current
+                          router.pathname == item.href
                             ? 'border border-black bg-palette-yellow text-black'
                             : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                           'group flex items-center rounded-md px-2 py-2 text-sm font-medium'
@@ -245,7 +256,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                       >
                         <item.icon
                           className={classNames(
-                            item.current
+                            router.pathname == item.href
                               ? 'text-black'
                               : 'text-gray-400 group-hover:text-gray-500',
                             'mr-3 h-6 w-6 flex-shrink-0'
@@ -261,7 +272,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                         <>
                           <Disclosure.Button
                             className={classNames(
-                              item.current
+                              router.pathname == item.href
                                 ? 'border border-black bg-palette-yellow text-black'
                                 : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                               'group flex w-full items-center rounded-md py-2 pl-2 pr-1 text-left text-sm font-medium focus:outline-none '
@@ -269,7 +280,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                           >
                             <item.icon
                               className={classNames(
-                                item.current
+                                router.pathname == item.href
                                   ? 'text-yellow-500'
                                   : 'text-gray-400 group-hover:text-gray-500',
                                 'mr-3 h-6 w-6 flex-shrink-0'
@@ -290,18 +301,27 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                                   key={subItem.name}
                                   as='a'
                                   href={subItem.href}
-                                  className='group flex w-full items-center rounded-md py-2 pl-11 pr-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                                  className='group flex w-full items-center rounded-md pl-11 pr-2 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                                 >
-                                  <subItem.icon
+                                  <div
                                     className={classNames(
-                                      item.current
-                                        ? 'text-yellow-500'
-                                        : 'text-gray-400 group-hover:text-gray-500',
-                                      'mr-3 h-6 w-6 flex-shrink-0'
+                                      router.pathname == subItem.href
+                                        ? 'w-full border border-black bg-palette-yellow text-black'
+                                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                                      'flex items-center rounded-md py-2 px-2'
                                     )}
-                                    aria-hidden='true'
-                                  />
-                                  {subItem.name}
+                                  >
+                                    <subItem.icon
+                                      className={classNames(
+                                        router.pathname == subItem.href
+                                          ? 'text-black'
+                                          : 'text-gray-400 group-hover:text-gray-500',
+                                        'mr-3 h-6 w-6 flex-shrink-0'
+                                      )}
+                                      aria-hidden='true'
+                                    />
+                                    {subItem.name}
+                                  </div>
                                 </Disclosure.Button>
                               </span>
                             ))}

@@ -85,7 +85,7 @@ export default function CreatePage() {
       <Seo templateTitle='Skapa ny' />
 
       <section>
-        <h2 className='text-center text-4xl font-normal text-gray-900'>
+        <h2 className='pb-12 text-center text-4xl font-normal text-gray-900'>
           Skapa nytt Dingo
         </h2>
         <form onSubmit={onSubmitDingo}>

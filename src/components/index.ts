@@ -15,6 +15,7 @@ export * from './Logo';
 export * from './Modal';
 export * from './NextImage';
 export * from './Progressbar';
+export * from './ProtectedRoute';
 export * from './RoundedButton';
 export * from './SeeAllHeading';
 export * from './Seo';
