@@ -1,6 +1,7 @@
 import { Disclosure } from '@headlessui/react';
 import { addDoc, arrayUnion, doc, updateDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { useRouter } from 'next/router';
 import { FieldValues, useFieldArray, useForm } from 'react-hook-form';
 import { MdArrowDropDown, MdDelete } from 'react-icons/md';
 import { v4 } from 'uuid';
@@ -21,9 +22,10 @@ import {
 
 import { db, storage } from '@/config/firebase';
 import { useAuth } from '@/context/auth';
+
 export default function CreatePage() {
   const { user } = useAuth();
-
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -65,7 +67,7 @@ export default function CreatePage() {
         ).finally(() => {
           // TODO: add this back in
           // reset();
-
+          router.replace('/dingos');
           // eslint-disable-next-line no-console
           console.log('Dingo is uploaded!');
         });
@@ -79,13 +81,10 @@ export default function CreatePage() {
 
       <section>
         <h2 className='pb-12 text-center text-4xl font-normal text-gray-900'>
-          Skapa nytt Dingo
+          Skapa nytt dingo
         </h2>
         <form onSubmit={onSubmitDingo}>
           <section className='pb-3'>
-            <span className='flex items-baseline justify-between'>
-              <h3 className='pb-2 text-2xl font-normal text-gray-900'>Dingo</h3>
-            </span>
             <div className='grid grid-cols-6 gap-4'>
               <FloatingLabel label='Omslagsbild' className=' col-span-6 '>
                 <DashboardCard className='min-h-[100px]'>
@@ -140,7 +139,7 @@ export default function CreatePage() {
                 <Disclosure as='div' key={item.id} className='my-2' defaultOpen>
                   {({ open }) => (
                     <>
-                      <dt>
+                      <dt className='flex'>
                         <Disclosure.Button className='flex w-full items-start justify-between rounded-lg bg-black p-4 text-left'>
                           <span className='flex w-full items-center justify-between text-base font-semibold text-white'>
                             {`Regel ${index + 1}`}
@@ -216,16 +215,14 @@ export default function CreatePage() {
                           className='col-span-6 md:col-span-2'
                           register={register}
                         />
-                        <div className='col-span-6 flex justify-end'>
-                          <button
-                            className='flex items-center rounded-md border border-black bg-red-500 px-4 py-2 hover:bg-red-600'
+                        <div className='flex'>
+                          <span
+                            className='flex items-center hover:text-red-500'
                             onClick={() => remove(index)}
                           >
-                            <p className='mr-2 text-sm font-semibold'>
-                              Ta bort regel
-                            </p>
-                            <MdDelete className='text-black ' size={22} />
-                          </button>
+                            <p className='text-sm'>Ta bort regel</p>
+                            <MdDelete className='current' size={20} />
+                          </span>
                         </div>
                       </Disclosure.Panel>
                     </>

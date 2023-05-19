@@ -27,7 +27,7 @@ export const signUp = async (email: string, password: string) => {
   try {
     await createUserWithEmailAndPassword(auth, email, password);
     console.log(auth?.currentUser?.email);
-    window.location.replace('/create');
+    window.location.replace('/');
   } catch (err) {
     console.log(err);
   }
@@ -38,7 +38,7 @@ export const signIn = async (email: string, password: string) => {
   try {
     await signInWithEmailAndPassword(auth, email, password);
     console.log(auth?.currentUser?.email);
-    window.location.replace('/create');
+    window.location.replace('/');
   } catch (err) {
     console.log(err);
   }
@@ -59,7 +59,7 @@ export const signInWithGoogle = async () => {
   try {
     await signInWithPopup(auth, googleProvider);
     console.log(auth?.currentUser?.email);
-    window.location.replace('/create');
+    window.location.replace('/');
   } catch (err) {
     console.log(err);
   }

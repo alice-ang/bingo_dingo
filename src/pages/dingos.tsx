@@ -8,15 +8,17 @@ import { Layout, Seo } from '@/components';
 import DingoList from '@/components/DingoList';
 
 import { useAuth } from '@/context/auth';
-export default function HomePage() {
+
+export default function ContributionsPage() {
   const { user } = useAuth();
   const [dingoList, setDingoList] = useState<Dingo[]>([]);
 
   useEffect(() => {
     const getDingoList = async () => {
       try {
+        // TODO: Exclude your own dingos
         const dingo = await getDocs(
-          query(dingosCollectionRef, where('isShared', '==', true))
+          query(dingosCollectionRef, where('userId', '==', user?.uid))
         );
 
         const filteredData = dingo.docs.map(
@@ -37,18 +39,9 @@ export default function HomePage() {
 
   return (
     <Layout>
-      <Seo templateTitle='Översikt' />
-
-      <h2 className=' text-4xl font-normal text-gray-900'>
-        Välkommen{' '}
-        <span className='text-palette-green'>
-          {user?.displayName ?? user?.email}
-        </span>
-      </h2>
+      <Seo templateTitle='Mina dingos' />
       <section>
-        <h2 className='mt-6 text-2xl font-normal text-gray-900'>
-          Delade dingos
-        </h2>
+        <h2 className='text-4xl font-normal text-gray-900'>Mina bidrag</h2>
         <DingoList dingos={dingoList} user={user} />
       </section>
     </Layout>
