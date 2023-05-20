@@ -1,4 +1,3 @@
-import { User } from '@firebase/auth';
 import { Disclosure } from '@headlessui/react';
 import Image from 'next/image';
 import { MdArrowDropDown, MdDelete } from 'react-icons/md';
@@ -7,11 +6,14 @@ import { deleteItem, Dingo } from '@/lib';
 
 import { DashboardCard } from '@/components/DashboardCard';
 
+import { useAuth } from '@/context/auth';
+
 type Props = {
   dingos: Dingo[];
-  user: User | null;
 };
-const DingoList = ({ dingos, user }: Props) => {
+const DingoList = ({ dingos }: Props) => {
+  const { user } = useAuth();
+
   return (
     <dl className='space-y-6 divide-y divide-gray-900/10'>
       {dingos.length > 0 &&

@@ -49,7 +49,7 @@ export default function HomePage() {
         <h2 className='mt-6 text-2xl font-normal text-gray-900'>
           Delade dingos
         </h2>
-        <DingoList dingos={dingoList} user={user} />
+        <DingoList dingos={dingoList} />
       </section>
     </Layout>
   );

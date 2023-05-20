@@ -12,7 +12,6 @@ This repository uses:
 - 💨 Tailwind CSS 3
 - 🪝 react-hook-form
 - 🔥 Firebase
-- 🃏 Jest — Configured for unit testing
 - 📈 Absolute Import and Path Alias — Import components using `@/` prefix
 - 📏 ESLint
 - 💖 Prettier
@@ -21,6 +20,8 @@ This repository uses:
 - 🗺 Site Map — Automatically generate sitemap.xml
 
 ## Getting Started
+
+Get started by using `git clone https://github.com/alice-ang/bingo_dingo.git`
 
 ### 1. Install dependencies
 
@@ -32,7 +33,7 @@ yarn install
 
 ### 2. Enviorments variables
 
-To connect to the Firebase database you need the following:
+Change the `.env.example` to `.env.local` and contact the report owner to get the following keyes:
 
 ```bash
 NEXT_PUBLIC_FIREBASE_API_KEY=
@@ -43,8 +44,6 @@ NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
 NEXT_PUBLIC_FIREBASE_APP_ID=
 ```
 
-Contact the report owner to get the keyes 🫶
-
 ### 3. Run the development server
 
 You can start the server using this command:
@@ -53,7 +52,7 @@ You can start the server using this command:
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) and get started.
+Open [http://localhost:3000](http://localhost:3000) and get started. 🫶
 
 <div >
   <p>Built on the foundation of a ts-nextjs-tailwind-starter made by <a href="https://theodorusclarence.com">Theodorus Clarence</a></p>

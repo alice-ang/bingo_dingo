@@ -6,6 +6,7 @@ export * from './Browser';
 export * from './CategoryItem';
 export * from './DashboardCard';
 export * from './DingoList';
+export * from './DingoTile';
 export * from './FloatingInput';
 export * from './FloatingLabel';
 export * from './FloatingSelect';
