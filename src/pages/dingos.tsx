@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-import { NextPageContext } from 'next';
 
 import { Layout, Seo } from '@/components';
 
@@ -15,8 +14,7 @@ const ContributionsPage = () => {
   );
 };
 
-export async function getServerSideProps(context: NextPageContext) {
-  console.log(context);
+export async function getServerSideProps() {
   // const dingo = await getDocs(
   //   query(dingosCollectionRef, where('userId', '==', user?.uid))
   // );

@@ -2,11 +2,8 @@
 /* eslint-disable no-console */
 import { doc, DocumentData, getDoc } from 'firebase/firestore';
 import { NextPageContext } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import * as React from 'react';
-
-import { classNames } from '@/lib';
 
 import { DingoTile, Seo } from '@/components';
 
@@ -23,10 +20,8 @@ const PlayPage = (data: DocumentData) => {
   const { name, rules, media } = data.data;
 
   return (
-    <div
-      className={classNames(media == null ? 'bg-palette-yellow' : '', 'py-12')}
-    >
-      {media && (
+    <div className='min-h-screen bg-gradient-to-b from-indigo-500 via-purple-500 to-pink-500 py-12'>
+      {/* {media && (
         <Image
           src={media}
           alt='bingo background'
@@ -35,7 +30,7 @@ const PlayPage = (data: DocumentData) => {
           sizes='100vw'
           className='absolute -z-10 h-full w-full object-contain'
         />
-      )}
+      )} */}
 
       <Seo templateTitle='Spela' />
 
@@ -45,7 +40,7 @@ const PlayPage = (data: DocumentData) => {
         <div className='justify-space-between'>
           <Link href='/play'>Generate a new dingo</Link>
         </div>
-        <div className='grid grid-cols-4 border-y border-black'>
+        <div className='grid grid-cols-4 border border-black'>
           {[0, 1, 2, 3].map((row, rowIndex) => (
             <div key={rowIndex}>
               {[0, 1, 2, 3].map((colIndex) => (
