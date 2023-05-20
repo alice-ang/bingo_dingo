@@ -37,36 +37,10 @@ export const AuthProvider: FC<AuthProvider> = ({ children }) => {
   // // force refresh the token every 10 minutes
 
   return (
-    user && (
-      <AuthContext.Provider
-        value={{ isAuthenticated: !!user, user, isLoading }}
-      >
-        {children}
-      </AuthContext.Provider>
-    )
+    <AuthContext.Provider value={{ isAuthenticated: !!user, user, isLoading }}>
+      {children}
+    </AuthContext.Provider>
   );
-};
-
-type Props = {
-  children: ReactNode;
-};
-
-export const Protected = ({ children }: Props) => {
-  const router = useRouter();
-
-  const { isAuthenticated, isLoading } = useAuth();
-  if (!isLoading && !isAuthenticated) {
-    router.replace('/login');
-  }
-
-  if (
-    isLoading ||
-    (!isAuthenticated && window.location.pathname !== '/login')
-  ) {
-    return <h1>Loading...</h1>;
-  }
-
-  return children;
 };
 
 export const useAuth = () => useContext(AuthContext);

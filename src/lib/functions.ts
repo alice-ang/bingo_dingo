@@ -16,8 +16,7 @@ import {
   where,
 } from 'firebase/firestore';
 
-import { db, facebookProvider } from '@/config/firebase';
-import { auth, googleProvider } from '@/config/firebase';
+import { auth, db, facebookProvider, googleProvider } from '@/config/firebase';
 
 export const dingosCollectionRef = collection(db, 'dingos');
 export const rulesCollectionRef = collection(db, 'rules');
