@@ -15,48 +15,46 @@ const numbers = [
   ['B3', 'I18', 'N33', 'G48'],
   ['B4', 'I19', 'N34', 'G49'],
 ];
+const bingo = ['B', 'I', 'N', 'G'];
 
 const PlayPage = (data: DocumentData) => {
   const { name, rules, media } = data.data;
 
   return (
     <div className='min-h-screen bg-gradient-to-b from-indigo-500 via-purple-500 to-pink-500 py-12'>
-      {/* {media && (
-        <Image
-          src={media}
-          alt='bingo background'
-          width='0'
-          height='0'
-          sizes='100vw'
-          className='absolute -z-10 h-full w-full object-contain'
-        />
-      )} */}
-
       <Seo templateTitle='Spela' />
 
-      <h2 className='pb-12 text-center text-4xl text-gray-900'>{name}</h2>
+      <h2 className='pb-6 text-center text-4xl text-gray-900'>{name}</h2>
 
       <section className='mx-auto max-w-7xl'>
-        <div className='justify-space-between'>
-          <Link href='/play'>Generate a new dingo</Link>
-        </div>
-        <div className='grid grid-cols-4 border border-black'>
+        <div className='grid grid-cols-4'>
+          {bingo.map((letter, i) => (
+            <div
+              key={i}
+              className='flex  w-full items-center justify-center py-6 text-center text-2xl'
+            >
+              {letter}
+            </div>
+          ))}
           {[0, 1, 2, 3].map((row, rowIndex) => (
-            <div key={rowIndex}>
+            <div key={rowIndex} className='border-y border-black'>
               {[0, 1, 2, 3].map((colIndex) => (
                 <DingoTile
                   key={colIndex}
                   text={
-                    // rules[
-                    //   Math.floor(Math.random() * rules.length)
-                    // ].title.replaceAll('"', '') ?? ''
-                    [colIndex, rowIndex].toString()
+                    rules[
+                      Math.floor(Math.random() * rules.length)
+                    ].title.replaceAll('"', '') ?? ''
+                    // [colIndex, rowIndex].toString()
                   }
                   onClick={(text) => console.log(text)}
                 />
               ))}
             </div>
           ))}
+        </div>
+        <div className='justify-space-between'>
+          <Link href='/generate'>Generate a new dingo</Link>
         </div>
       </section>
     </div>

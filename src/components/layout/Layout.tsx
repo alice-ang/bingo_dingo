@@ -37,7 +37,7 @@ const navigation = [
       { name: 'Mina dingos', href: '/dingos', icon: MdMode },
     ],
   },
-  { name: 'Spela', icon: MdPlayCircle, href: '/play' },
+  { name: 'Spela', icon: MdPlayCircle, href: '/generate' },
 ];
 
 const userNavigation = [

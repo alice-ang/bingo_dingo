@@ -26,7 +26,7 @@ export const DingoTile = ({ text, onClick }: TileProps) => {
         <p className='line-clamp-2 text-xs font-semibold md:text-lg'>{text}</p>
         {isClicked && (
           <MdClose
-            className='-z absolute text-palette-green opacity-70'
+            className=' absolute text-palette-green opacity-70'
             size={90}
           />
         )}
