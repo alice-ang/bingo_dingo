@@ -47,9 +47,10 @@ const PlayPage = (data: DocumentData) => {
                 <DingoTile
                   key={colIndex}
                   text={
-                    rules[
-                      Math.floor(Math.random() * rules.length)
-                    ].title.replaceAll('"', '') ?? ''
+                    // rules[
+                    //   Math.floor(Math.random() * rules.length)
+                    // ].title.replaceAll('"', '') ?? ''
+                    [colIndex, rowIndex].toString()
                   }
                   onClick={(text) => console.log(text)}
                 />
