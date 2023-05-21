@@ -1,5 +1,4 @@
 import { User } from 'firebase/auth';
-import { useRouter } from 'next/router';
 import {
   createContext,
   FC,
@@ -24,16 +23,17 @@ type AuthProvider = {
 export const AuthProvider: FC<AuthProvider> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const router = useRouter();
 
   useEffect(() => {
     return auth.onAuthStateChanged(async (firebaseUser) => {
       if (firebaseUser) {
         setUser(firebaseUser);
         setIsLoading(false);
+      } else {
+        setIsLoading(false);
       }
     });
-  }, [user, router]);
+  }, [user]);
 
   // // force refresh the token every 10 minutes
 
@@ -41,6 +41,8 @@ export const AuthProvider: FC<AuthProvider> = ({ children }) => {
     <AuthContext.Provider value={{ isAuthenticated: !!user, user, isLoading }}>
       {children}
     </AuthContext.Provider>
+  ) : isLoading ? (
+    <div>Loading...</div>
   ) : (
     <Login />
   );
