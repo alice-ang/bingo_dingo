@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
       <Component {...pageProps} />
-      <div id='modal'></div>
+      <div id='modal'></div>{' '}
     </AuthProvider>
   );
 }

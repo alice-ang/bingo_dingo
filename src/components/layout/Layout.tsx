@@ -12,6 +12,7 @@ import {
   MdGamepad,
   MdMode,
   MdOutlineDashboard,
+  MdPlayCircle,
   MdPostAdd,
 } from 'react-icons/md';
 
@@ -25,20 +26,21 @@ import { useAuth } from '@/context/auth';
 const navigation = [
   { name: 'Översikt', icon: MdOutlineDashboard, href: '/' },
   {
-    name: 'Bidrag',
+    name: 'Dingos',
     icon: MdGamepad,
     href: null,
     count: 12,
     current: false,
     children: [
       { name: 'Skapa', href: '/create', icon: MdPostAdd },
-      { name: 'Mina bidrag', href: '/contributions', icon: MdMode },
+      { name: 'Mina dingos', href: '/dingos', icon: MdMode },
     ],
   },
+  { name: 'Spela', icon: MdPlayCircle, href: '/play' },
 ];
 
 const userNavigation = [
-  { name: 'Användarprofil', href: '#' },
+  // { name: 'Användarprofil', href: '#' },
   { name: 'Logga ut', href: '#', clicked: logOut },
 ];
 
@@ -119,7 +121,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                                 href={item.href}
                                 passHref
                                 className={classNames(
-                                  router.pathname == item.href
+                                  router.asPath == item.href
                                     ? 'border border-black bg-palette-yellow text-black'
                                     : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                                   'group flex items-center rounded-md px-2 py-2 text-sm font-medium'
@@ -127,7 +129,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                               >
                                 <item.icon
                                   className={classNames(
-                                    router.pathname == item.href
+                                    router.asPath == item.href
                                       ? 'text-black'
                                       : 'text-gray-400 group-hover:text-gray-500',
                                     'mr-3 h-6 w-6 flex-shrink-0'
@@ -147,7 +149,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                                 <>
                                   <Disclosure.Button
                                     className={classNames(
-                                      router.pathname == item.href
+                                      router.asPath == item.href
                                         ? 'border border-black bg-palette-yellow text-black'
                                         : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                                       'group flex w-full items-center rounded-md py-2 pl-2 pr-1 text-left text-sm font-medium focus:outline-none '
@@ -155,7 +157,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                                   >
                                     <item.icon
                                       className={classNames(
-                                        router.pathname == item.href
+                                        router.asPath == item.href
                                           ? 'text-black'
                                           : 'text-gray-400 group-hover:text-gray-500',
                                         'mr-3 h-6 w-6 flex-shrink-0'
@@ -179,7 +181,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                                       >
                                         <div
                                           className={classNames(
-                                            router.pathname == subItem.href
+                                            router.asPath == subItem.href
                                               ? 'w-full border border-black bg-palette-yellow text-black'
                                               : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                                             'flex items-center rounded-md  py-2 px-2'
@@ -187,7 +189,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                                         >
                                           <subItem.icon
                                             className={classNames(
-                                              router.pathname == subItem.href
+                                              router.asPath == subItem.href
                                                 ? 'text-black'
                                                 : 'text-gray-400 group-hover:text-gray-500',
                                               'mr-3 h-6 w-6 flex-shrink-0'
@@ -248,7 +250,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                         key={item.name}
                         href={item.href}
                         className={classNames(
-                          router.pathname == item.href
+                          router.asPath == item.href
                             ? 'border border-black bg-palette-yellow text-black'
                             : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                           'group flex items-center rounded-md px-2 py-2 text-sm font-medium'
@@ -256,7 +258,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                       >
                         <item.icon
                           className={classNames(
-                            router.pathname == item.href
+                            router.asPath == item.href
                               ? 'text-black'
                               : 'text-gray-400 group-hover:text-gray-500',
                             'mr-3 h-6 w-6 flex-shrink-0'
@@ -272,7 +274,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                         <>
                           <Disclosure.Button
                             className={classNames(
-                              router.pathname == item.href
+                              router.asPath == item.href
                                 ? 'border border-black bg-palette-yellow text-black'
                                 : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                               'group flex w-full items-center rounded-md py-2 pl-2 pr-1 text-left text-sm font-medium focus:outline-none '
@@ -280,7 +282,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                           >
                             <item.icon
                               className={classNames(
-                                router.pathname == item.href
+                                router.asPath == item.href
                                   ? 'text-yellow-500'
                                   : 'text-gray-400 group-hover:text-gray-500',
                                 'mr-3 h-6 w-6 flex-shrink-0'
@@ -305,7 +307,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                                 >
                                   <div
                                     className={classNames(
-                                      router.pathname == subItem.href
+                                      router.asPath == subItem.href
                                         ? 'w-full border border-black bg-palette-yellow text-black'
                                         : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
                                       'flex items-center rounded-md py-2 px-2'
@@ -313,7 +315,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                                   >
                                     <subItem.icon
                                       className={classNames(
-                                        router.pathname == subItem.href
+                                        router.asPath == subItem.href
                                           ? 'text-black'
                                           : 'text-gray-400 group-hover:text-gray-500',
                                         'mr-3 h-6 w-6 flex-shrink-0'
@@ -402,17 +404,21 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                   <Menu as='div' className='relative'>
                     <Menu.Button className='-m-1.5 flex items-center p-1.5'>
                       <span className='sr-only'>Open user menu</span>
-                      <NextImage
-                        height={40}
-                        width={40}
-                        imgClassName='h-8 w-8 rounded-full bg-gray-50 border border-black'
-                        src={
-                          user?.photoURL ??
-                          'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-                        }
-                        alt=''
-                      />
-                      <span className='hidden lg:flex lg:items-center'>
+                      {user?.photoURL ? (
+                        <NextImage
+                          height={40}
+                          width={40}
+                          imgClassName='h-8 w-8 rounded-full bg-gray-50 border border-black'
+                          src={user?.photoURL}
+                          alt='User profile picture'
+                        />
+                      ) : (
+                        <div className='flex h-8 w-8 items-center justify-center rounded-full border border-black bg-palette-green'>
+                          hej
+                        </div>
+                      )}
+
+                      <span className='ml-3 hidden lg:flex lg:items-center'>
                         <span className='flex-col text-left'>
                           <span
                             className=' text-sm font-semibold leading-6 text-gray-900'

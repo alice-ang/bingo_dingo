@@ -32,7 +32,7 @@ export const Tabs = ({ tabs }: Props) => {
           <Tab.Panel
             key={idx}
             className={classNames(
-              'rounded-xl p-3',
+              'rounded-xl',
               'ring-offset-2focus:outline-none ring-white ring-opacity-60 focus:ring-2'
             )}
           >
