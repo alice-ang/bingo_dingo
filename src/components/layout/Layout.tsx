@@ -14,6 +14,7 @@ import {
   MdOutlineDashboard,
   MdPlayCircle,
   MdPostAdd,
+  MdSentimentVerySatisfied,
 } from 'react-icons/md';
 
 import { classNames, logOut, signInWithGoogle } from '@/lib';
@@ -400,7 +401,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                   aria-hidden='true'
                 />
                 {/* Profile dropdown */}
-                {user ? (
+                {user != null ? (
                   <Menu as='div' className='relative'>
                     <Menu.Button className='-m-1.5 flex items-center p-1.5'>
                       <span className='sr-only'>Open user menu</span>
@@ -413,8 +414,8 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
                           alt='User profile picture'
                         />
                       ) : (
-                        <div className='flex h-8 w-8 items-center justify-center rounded-full border border-black bg-palette-green'>
-                          hej
+                        <div className='flex h-7 w-7 items-center justify-center rounded-full border border-black bg-palette-pink'>
+                          <MdSentimentVerySatisfied />
                         </div>
                       )}
 

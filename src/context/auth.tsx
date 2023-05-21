@@ -10,6 +10,7 @@ import {
 } from 'react';
 
 import { auth } from '@/config/firebase';
+import Login from '@/pages/login';
 
 export const AuthContext = createContext({
   user: {} as User | null,
@@ -36,10 +37,12 @@ export const AuthProvider: FC<AuthProvider> = ({ children }) => {
 
   // // force refresh the token every 10 minutes
 
-  return (
+  return user ? (
     <AuthContext.Provider value={{ isAuthenticated: !!user, user, isLoading }}>
       {children}
     </AuthContext.Provider>
+  ) : (
+    <Login />
   );
 };
 
